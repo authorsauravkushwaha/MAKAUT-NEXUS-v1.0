@@ -1,0 +1,22 @@
+{
+  "id": "non-theory",
+  "title": "Non-Theory Requirements",
+  "short": "Sessionials",
+  "kind": "sessional",
+  "credits": 0,
+  "hours": 20,
+  "color": "#facc15",
+  "glow": "amber",
+  "description": "NCC / NSS / Yoga / Sports — attendance and participation tracked separately from written exams.",
+  "requirement_pct": 80,
+  "items": [
+    { "id": "ncc", "label": "NCC" },
+    { "id": "nss", "label": "NSS" },
+    { "id": "yoga", "label": "Yoga" },
+    { "id": "sports", "label": "Sports" }
+  ],
+  "source_ref": "SRC-005",
+  "source_type": "internal",
+  "verification_status": "provisional",
+  "checked": "2026-09-24"
+}

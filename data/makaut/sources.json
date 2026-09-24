@@ -1,0 +1,47 @@
+[
+  {
+    "id": "SRC-001",
+    "label": "MAKAUT 2026 first-year syllabus research dossier",
+    "source_type": "secondary",
+    "verification_status": "provisional",
+    "checked": "2026-09-25",
+    "note": "Compiled research on the 2026 syllabus structure. Flags unresolved structure conflicts; recommends verifying against the college's official registration list.",
+    "url": null
+  },
+  {
+    "id": "SRC-002",
+    "label": "CEMK (College of Engineering & Management, Kolaghat) published timetable / academic notice",
+    "source_type": "secondary",
+    "verification_status": "provisional",
+    "checked": "2026-09-24",
+    "note": "College-level timetable and subject allotment. Conflicts with SRC-001 on contact hours for at least one course.",
+    "url": null
+  },
+  {
+    "id": "SRC-003",
+    "label": "MAKAUT regulations — assessment & grading (applicable regulation circular)",
+    "source_type": "primary",
+    "verification_status": "pending",
+    "checked": "2026-09-25",
+    "note": "Official applicable regulation not yet in hand. SGPA engine uses a provisional rule table until this is obtained.",
+    "url": null
+  },
+  {
+    "id": "SRC-004",
+    "label": "Internal lab record audit (prototype dataset)",
+    "source_type": "internal",
+    "verification_status": "provisional",
+    "checked": "2026-09-23",
+    "note": "Experiment lists modelled from common MAKAUT first-year lab manuals; must be replaced by the lab manual issued for the current session.",
+    "url": null
+  },
+  {
+    "id": "SRC-005",
+    "label": "Student's own study activity (device-local)",
+    "source_type": "internal",
+    "verification_status": "verified",
+    "checked": "2026-09-24",
+    "note": "Progress, sessions, marks and streaks are first-party data entered or generated on this device.",
+    "url": null
+  }
+]

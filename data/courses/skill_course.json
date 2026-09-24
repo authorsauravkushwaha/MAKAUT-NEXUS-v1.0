@@ -1,0 +1,16 @@
+{
+  "id": "skill-course",
+  "title": "Skill Course (MOOC)",
+  "short": "Skill Course",
+  "kind": "sessional",
+  "credits": 0,
+  "hours": 24,
+  "color": "#2dd4bf",
+  "glow": "emerald",
+  "description": "MOOC / skill-course completion that counts toward non-theory requirements alongside NCC-NSS-Yoga-Sports.",
+  "target_pct": 100,
+  "source_ref": "SRC-005",
+  "source_type": "internal",
+  "verification_status": "provisional",
+  "checked": "2026-09-24"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "sem-1",
+  "index": 1,
+  "label": "Semester 1",
+  "year": "1st Year",
+  "academic_year": "2026-27",
+  "total_credits": 20,
+  "credits_note": "20 credits* — reported by the 2026 syllabus research dossier (SRC-001); conflicts with the CEMK timetable are unresolved (CONF-01), so treat as provisional until the official registration list is in hand.",
+  "components_count": 10,
+  "theoretical_hours": 186,
+  "courses": [
+    { "id": "mathematics-1", "kind": "theory", "credits": 3, "hours": 36, "modules": 4 },
+    { "id": "physics", "kind": "theory", "credits": 4, "hours": 40, "modules": 4 },
+    { "id": "beee", "kind": "theory", "credits": 4, "hours": 44, "modules": 6 },
+    { "id": "english", "kind": "theory", "credits": 3, "hours": 30, "modules": 4 },
+    { "id": "graphics", "kind": "theory", "credits": 3, "hours": 36, "modules": 4 },
+    { "id": "physics-lab", "kind": "lab", "credits": 1, "hours": 30, "experiments": 8 },
+    { "id": "beee-lab", "kind": "lab", "credits": 1, "hours": 30, "experiments": 6 },
+    { "id": "graphics-lab", "kind": "lab", "credits": 1, "hours": 24, "experiments": 6 },
+    { "id": "non-theory", "kind": "sessional", "credits": 0, "hours": 20, "note": "NCC / NSS / Yoga / Sports — attendance & participation based" },
+    { "id": "skill-course", "kind": "sessional", "credits": 0, "hours": 24, "note": "MOOC / skill course progress" }
+  ],
+  "source_ref": "SRC-001",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}

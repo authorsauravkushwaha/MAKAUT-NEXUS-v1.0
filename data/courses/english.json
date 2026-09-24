@@ -1,0 +1,85 @@
+{
+  "id": "english",
+  "code": "HS-101 (provisional)",
+  "title": "English for Engineers",
+  "short": "English",
+  "kind": "theory",
+  "credits": 3,
+  "hours": 30,
+  "color": "#f59e0b",
+  "glow": "amber",
+  "group": "group-a",
+  "description": "Technical communication — speaking, writing and presenting engineering work with precision.",
+  "outcomes": [
+    "CO1 — Structure technical arguments orally and in writing.",
+    "CO2 — Deliver presentations with clear visual and verbal hierarchy.",
+    "CO3 — Produce engineering documents, reports and emails.",
+    "CO4 — Apply professional ethics in workplace communication."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "index": "01",
+      "title": "Technical Communication Fundamentals",
+      "hours": 8,
+      "co": "CO1",
+      "bloom": "Understand",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "Language & register" },
+        { "id": "c2", "label": "Listening & comprehension" },
+        { "id": "c3", "label": "Technical vocabulary" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m2",
+      "index": "02",
+      "title": "Speaking & Presentation Skills",
+      "hours": 8,
+      "co": "CO2",
+      "bloom": "Apply",
+      "questions": 10,
+      "concepts": [
+        { "id": "c1", "label": "Group discussion" },
+        { "id": "c2", "label": "Presentation structure" },
+        { "id": "c3", "label": "Voice & body language" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m3",
+      "index": "03",
+      "title": "Technical Writing & Documentation",
+      "hours": 8,
+      "co": "CO3",
+      "bloom": "Create",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "Report writing" },
+        { "id": "c2", "label": "Technical letters & emails" },
+        { "id": "c3", "label": "Procedure & specification writing" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m4",
+      "index": "04",
+      "title": "Workplace Communication & Ethics",
+      "hours": 6,
+      "co": "CO4",
+      "bloom": "Evaluate",
+      "questions": 10,
+      "concepts": [
+        { "id": "c1", "label": "Interviews & résumés" },
+        { "id": "c2", "label": "Professional ethics" },
+        { "id": "c3", "label": "Cross-cultural communication" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    }
+  ],
+  "source_ref": "SRC-001",
+  "source_type": "secondary",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}

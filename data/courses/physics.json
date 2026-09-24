@@ -1,0 +1,86 @@
+{
+  "id": "physics",
+  "code": "PH-101 (provisional)",
+  "title": "Physics",
+  "short": "Physics",
+  "kind": "theory",
+  "credits": 4,
+  "hours": 40,
+  "color": "#3b82f6",
+  "glow": "blue",
+  "group": "group-a",
+  "description": "Oscillations, waves, electromagnetism, optics and the quantum picture — the physics layer of the first-year core.",
+  "outcomes": [
+    "CO1 — Analyse oscillatory and wave systems mathematically.",
+    "CO2 — Apply electromagnetic field laws to engineering problems.",
+    "CO3 — Solve problems in ray and wave optics.",
+    "CO4 — Explain quantum and semiconductor behaviour at device level."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "index": "01",
+      "title": "Oscillations & Waves",
+      "hours": 10,
+      "co": "CO1",
+      "bloom": "Understand",
+      "questions": 16,
+      "concepts": [
+        { "id": "c1", "label": "SHM & differential equations" },
+        { "id": "c2", "label": "Damped & forced oscillations" },
+        { "id": "c3", "label": "Wave equation & superposition" },
+        { "id": "c4", "label": "Applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m2",
+      "index": "02",
+      "title": "Electromagnetic Theory",
+      "hours": 10,
+      "co": "CO2",
+      "bloom": "Apply",
+      "questions": 14,
+      "concepts": [
+        { "id": "c1", "label": "Electrostatics & Gauss's law" },
+        { "id": "c2", "label": "Capacitance & dielectrics" },
+        { "id": "c3", "label": "Magnetostatics & Maxwell's equations" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m3",
+      "index": "03",
+      "title": "Optics",
+      "hours": 10,
+      "co": "CO3",
+      "bloom": "Apply",
+      "questions": 15,
+      "concepts": [
+        { "id": "c1", "label": "Interference" },
+        { "id": "c2", "label": "Diffraction & polarisation" },
+        { "id": "c3", "label": "Lasers & fibre optics" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m4",
+      "index": "04",
+      "title": "Quantum & Semiconductor Physics",
+      "hours": 10,
+      "co": "CO4",
+      "bloom": "Analyse",
+      "questions": 13,
+      "concepts": [
+        { "id": "c1", "label": "Schrödinger equation (1D)" },
+        { "id": "c2", "label": "Band theory" },
+        { "id": "c3", "label": "Semiconductor basics" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    }
+  ],
+  "source_ref": "SRC-001",
+  "source_type": "secondary",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}
