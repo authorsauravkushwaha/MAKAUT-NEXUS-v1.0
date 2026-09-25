@@ -178,7 +178,7 @@ export function PlannerPage() {
                                         <span className="h-1.5 w-1.5 rounded-full" style={{ background: COURSE_MAP[t.courseId]?.color ?? '#22d3ee' }} />
                                         <span className="text-[12px] text-slate-300">{t.label}</span>
                                       </div>
-                                      <span className="font-mono text-[11px] text-slate-500">{t.minutes} min</span>
+                                      <span className="whitespace-nowrap font-mono text-[11px] text-slate-500">{t.minutes} min</span>
                                     </div>
                                   ))}
                                 </div>

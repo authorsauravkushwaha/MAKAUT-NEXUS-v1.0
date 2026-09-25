@@ -271,7 +271,13 @@ export function PracticePage() {
 
               {/* tags */}
               <div className="mt-5 flex flex-wrap gap-1.5">
-                {[COURSE_MAP[q.courseId]?.short, q.moduleTitle, q.co, q.bloom, `Paper ${q.paper}`, q.difficulty].map((t) => (
+                {Array.from(
+                  new Set(
+                    [COURSE_MAP[q.courseId]?.short, q.moduleTitle, q.co, q.bloom, `Paper ${q.paper}`, q.difficulty].filter(
+                      Boolean,
+                    ),
+                  ),
+                ).map((t) => (
                   <span key={t} className="rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] text-slate-400">
                     {t}
                   </span>
