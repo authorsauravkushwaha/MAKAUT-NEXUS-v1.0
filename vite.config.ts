@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
+  // Relative base so the same build works at `/` (dev/preview) and under a
+  // sub-path like GitHub Pages `/MAKAUT-NEXUS-v1.0/` (HashRouter-safe).
+  base: './',
   plugins: [react()],
   resolve: {
     alias: {
