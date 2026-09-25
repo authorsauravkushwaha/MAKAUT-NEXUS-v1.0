@@ -35,9 +35,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # No `environment:` binding here on purpose: the github-pages environment
+    # has a deployment-branch policy that only allows `main`, and this branch
+    # (`arena/...`) is the build branch. The deploy action works without the
+    # binding — it publishes the uploaded artifact directly to Pages.
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
