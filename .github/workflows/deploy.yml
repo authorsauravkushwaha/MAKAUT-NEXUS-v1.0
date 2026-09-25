@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - arena/01a0d566-makaut-nexus-v1-0
+      - main
   workflow_dispatch:
 
 permissions:
