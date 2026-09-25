@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { NexusProvider } from '@/state/context';
 import { AppShell } from '@/components/AppShell';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { LandingPage } from '@/pages/LandingPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { DashboardPage } from '@/pages/DashboardPage';
@@ -17,7 +18,15 @@ import { PracticePage } from '@/pages/PracticePage';
 import { ProfilePage } from '@/pages/ProfilePage';
 
 function ShellRoute({ children }: { children: React.ReactNode }) {
-  return <AppShell>{children}</AppShell>;
+  const { pathname } = useLocation();
+  return (
+    <AppShell>
+      {/* remount on navigation so a recovered route starts clean */}
+      <ErrorBoundary key={pathname} inline>
+        {children}
+      </ErrorBoundary>
+    </AppShell>
+  );
 }
 
 export function App() {

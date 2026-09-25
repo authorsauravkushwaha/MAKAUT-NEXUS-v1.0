@@ -7,6 +7,12 @@
 MAKAUT NEXUS turns a first-year student's scattered syllabus, study requirements, labs, progress and marks into one
 personalized plan for what to do next — presented as a 3D "academic galaxy" instead of a card dashboard.
 
+## Preview
+
+| Landing | 3D Dashboard | Analytics |
+| --- | --- | --- |
+| ![Landing](docs/landing-final.png) | ![Dashboard](docs/dashboard-final.png) | ![Analytics](docs/analytics-final.png) |
+
 ---
 
 ## Run it

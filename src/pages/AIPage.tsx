@@ -14,14 +14,14 @@ const mkId = () => `ui-${Date.now().toString(36)}-${(localSeq++).toString(36)}`;
 
 function TagChip({ tag }: { tag: NonNullable<Extract<ChatMessage, { kind: 'text' }>['tag']> }) {
   const map = {
-    academic: { icon: GraduationCap, label: 'Academic explanation', cls: 'border-cyan-400/30 bg-cyan-400/10 text-cyan-300' },
-    makaut: { icon: Building2, label: 'MAKAUT-specific · structured data', cls: 'border-amber-400/30 bg-amber-400/10 text-amber-300' },
-    system: { icon: Cpu, label: 'NEXUS core', cls: 'border-violet-400/30 bg-violet-400/10 text-violet-300' },
+    academic: { icon: GraduationCap, emoji: '📘', label: 'Academic explanation', cls: 'border-cyan-400/30 bg-cyan-400/10 text-cyan-300' },
+    makaut: { icon: Building2, emoji: '🏫', label: 'MAKAUT-specific · structured data', cls: 'border-amber-400/30 bg-amber-400/10 text-amber-300' },
+    system: { icon: Cpu, emoji: '', label: 'NEXUS core', cls: 'border-violet-400/30 bg-violet-400/10 text-violet-300' },
   } as const;
   const s = map[tag ?? 'system'];
   return (
     <span className={cn('inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-[0.14em]', s.cls)}>
-      <s.icon size={9} /> {s.label}
+      {s.emoji ? <span aria-hidden>{s.emoji}</span> : <s.icon size={9} />} {s.label}
     </span>
   );
 }
