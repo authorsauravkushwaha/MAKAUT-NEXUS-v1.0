@@ -8,7 +8,7 @@ import { allComponentProgress, explainSemester, readiness } from '@/lib/derive';
 import { ACHIEVEMENTS, evaluateAchievements } from '@/lib/achievements';
 import { deriveContext } from '@/lib/derive';
 import { THEORY_COURSES, LAB_COURSES, SEMESTER_1 } from '@/data';
-import { todayISO, weekdayShort, formatDuration } from '@/lib/dates';
+import { todayISO, weekdayShort, formatDuration, isSunday } from '@/lib/dates';
 
 /* ── Academic Radar ──────────────────────────────────────────────── */
 function RadarChart({ axes }: { axes: { label: string; value: number; color: string }[] }) {
@@ -105,7 +105,7 @@ export function AnalyticsPage() {
       const d = new Date(start);
       d.setDate(start.getDate() + i);
       const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      return { iso, label: weekdayShort(iso), done: state.streak.days.includes(iso), isToday: iso === today, future: iso > today };
+      return { iso, label: weekdayShort(iso), done: state.streak.days.includes(iso), isToday: iso === today, future: iso > today, rest: isSunday(iso) };
     });
   }, [state.streak.days]);
 
@@ -202,14 +202,16 @@ export function AnalyticsPage() {
                 <span
                   className={cn(
                     'flex h-8 w-full items-center justify-center rounded-lg border text-[12px]',
-                    d.done
-                      ? 'border-emerald-400/50 bg-emerald-400/15 text-emerald-300'
-                      : d.isToday
-                        ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-300'
-                        : 'border-white/[0.07] text-slate-700',
+                    d.rest
+                      ? 'border-white/[0.07] bg-white/[0.015] text-slate-600'
+                      : d.done
+                        ? 'border-emerald-400/50 bg-emerald-400/15 text-emerald-300'
+                        : d.isToday
+                          ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-300'
+                          : 'border-white/[0.07] text-slate-700',
                   )}
                 >
-                  {d.done ? '✓' : d.isToday ? '•' : '○'}
+                  {d.rest ? '○' : d.done ? '✓' : d.isToday ? '•' : '○'}
                 </span>
               </div>
             ))}

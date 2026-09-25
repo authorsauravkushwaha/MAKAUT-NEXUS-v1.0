@@ -5,6 +5,13 @@ import { generatePlan } from '@/lib/planner';
 import { computeSGPA } from '@/lib/sgpa';
 import { respond } from '@/ai/chatEngine';
 import { THEORY_COURSES, LAB_COURSES } from '@/data';
+import { addDays, computeStreak } from '@/lib/dates';
+
+function assertEq(name: string, got: unknown, want: unknown) {
+  const ok = JSON.stringify(got) === JSON.stringify(want);
+  console.log(ok ? `  ✓ ${name}` : `  ✗ ${name}: got ${JSON.stringify(got)} want ${JSON.stringify(want)}`);
+  if (!ok) process.exitCode = 1;
+}
 
 const s = createSeedState();
 const r = readiness(s);
@@ -43,4 +50,18 @@ console.log('\n— Chat intents —');
 for (const q of ['What should I study today?', 'Explain my semester', "I don't understand Kirchhoff's laws", 'How is my SGPA looking?']) {
   const out = respond(q, { state: s });
   console.log(`  [${q}] → kinds: ${out.map((o) => o.kind + (o.kind === 'text' ? `(${o.tag})` : '')).join(', ')}`);
+}
+
+console.log('\n— Streak (Mon–Sat, Sunday optional) —');
+{
+  const base = '2026-09-21'; // Monday
+  const week: string[] = [];
+  for (let i = 0; i <= 5; i++) week.push(addDays(base, i)); // Mon..Sat
+  // Sunday skipped, continues into next week
+  assertEq('unlogged Sunday never breaks the streak', computeStreak([...week, addDays(base, 7), addDays(base, 8)], addDays(base, 8)), 8);
+  // missing Saturday breaks it
+  const noSat = week.filter((d) => d !== addDays(base, 5));
+  assertEq('missing Saturday breaks the streak', computeStreak([...noSat, addDays(base, 7), addDays(base, 8)], addDays(base, 8)), 2);
+  // seed recompute matches the demo headline
+  assertEq('seed streak recomputes to 6', computeStreak(s.streak.days, addDays(s.streak.days[s.streak.days.length - 1], 0)), 6);
 }

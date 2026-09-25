@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ExperimentState, Mission, Profile, StudentState } from '@/types';
 import { createSeedState, createEmptyState } from '@/state/seed';
-import { todayISO, addDays } from '@/lib/dates';
+import { todayISO, addDays, computeStreak } from '@/lib/dates';
 import { generateMission } from '@/lib/mission';
 import { deriveContext } from '@/lib/derive';
 import { evaluateAchievements, diffNewAchievements } from '@/lib/achievements';
@@ -130,13 +130,8 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       commit((prev) => {
         const today = todayISO();
         const days = prev.streak.days.includes(today) ? prev.streak.days : [...prev.streak.days, today];
-        // recompute consecutive streak ending today
-        let current = 0;
-        let cursor = today;
-        while (days.includes(cursor)) {
-          current++;
-          cursor = addDays(cursor, -1);
-        }
+        // recompute consecutive streak ending today — Sunday is an optional rest day
+        const current = computeStreak(days, today);
         const log = [...prev.studyLog];
         const idx = log.findIndex((l) => l.date === today);
         if (idx >= 0) log[idx] = { date: today, minutes: log[idx].minutes + minutes };

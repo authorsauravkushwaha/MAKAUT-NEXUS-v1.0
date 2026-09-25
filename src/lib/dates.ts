@@ -28,6 +28,23 @@ export function weekdayShort(iso: string): string {
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()];
 }
 
+/** Streak rule: Mon–Sat count; Sunday is an optional rest day. */
+export function isSunday(iso: string): boolean {
+  return new Date(iso + 'T00:00:00').getDay() === 0;
+}
+
+/** Consecutive-day streak ending `today`. Unlogged Sundays never break it; any other missing day does. */
+export function computeStreak(days: string[], today: string): number {
+  let current = 0;
+  let cursor = today;
+  for (;;) {
+    if (days.includes(cursor)) current++;
+    else if (!isSunday(cursor)) break;
+    cursor = addDays(cursor, -1);
+  }
+  return current;
+}
+
 export function formatDate(iso: string): string {
   const d = new Date(iso + 'T00:00:00');
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });

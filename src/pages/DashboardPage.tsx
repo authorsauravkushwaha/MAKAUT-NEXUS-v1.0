@@ -7,7 +7,7 @@ import { AcademicCore3D } from '@/components/three/AcademicCore3D';
 import { GlassPanel, Button, ProgressRing, StatBar, SectionLabel, StatusPill, cn } from '@/components/ui';
 import { StudySessionModal, type SessionRequest } from '@/components/StudySessionModal';
 import { allComponentProgress, courseProgress, readiness, biggestGap } from '@/lib/derive';
-import { daysUntil, greeting, formatDuration, formatMissionClock, todayISO, weekdayShort } from '@/lib/dates';
+import { daysUntil, greeting, formatDuration, formatMissionClock, todayISO, weekdayShort, isSunday } from '@/lib/dates';
 import { THEORY_COURSES, LAB_COURSES, SESSIONAL_COURSES } from '@/data';
 
 export function DashboardPage() {
@@ -59,6 +59,7 @@ export function DashboardPage() {
         done: state.streak.days.includes(iso),
         isToday: iso === today,
         future: iso > today,
+        rest: isSunday(iso),
       };
     });
   }, [state.streak.days]);
@@ -102,7 +103,11 @@ export function DashboardPage() {
             <div>
               <div className="font-display text-lg font-bold leading-none text-white">{state.streak.current} DAY STREAK</div>
               <div className="text-[10px] uppercase tracking-[0.16em] text-slate-500">
-                {state.streak.todayDone ? 'Today logged ✓' : 'Log a session to keep it alive'}
+                {state.streak.todayDone
+                  ? 'Today logged ✓'
+                  : isSunday(todayISO())
+                    ? 'Sunday rest day — streak safe'
+                    : 'Log a session to keep it alive'}
               </div>
             </div>
           </div>
@@ -113,16 +118,18 @@ export function DashboardPage() {
                 <span
                   className={cn(
                     'flex h-5 w-5 items-center justify-center rounded-md border text-[9px]',
-                    d.done
-                      ? 'border-emerald-400/50 bg-emerald-400/15 text-emerald-300'
-                      : d.isToday
-                        ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-300 animate-pulse-ring'
-                        : d.future
-                          ? 'border-white/5 text-slate-700'
-                          : 'border-white/10 text-slate-600',
+                    d.rest
+                      ? 'border-white/[0.07] bg-white/[0.015] text-slate-600'
+                      : d.done
+                        ? 'border-emerald-400/50 bg-emerald-400/15 text-emerald-300'
+                        : d.isToday
+                          ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-300 animate-pulse-ring'
+                          : d.future
+                            ? 'border-white/5 text-slate-700'
+                            : 'border-white/10 text-slate-600',
                   )}
                 >
-                  {d.done ? '✓' : d.isToday ? '•' : '○'}
+                  {d.rest ? '○' : d.done ? '✓' : d.isToday ? '•' : '○'}
                 </span>
               </div>
             ))}
