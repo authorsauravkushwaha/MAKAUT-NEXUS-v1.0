@@ -27,8 +27,20 @@ Other scripts:
 ```bash
 npm run typecheck  # tsc --noEmit
 npm run build      # production build → dist/
-node scripts/run-check.mjs   # engine self-check (readiness, mission, gap, SGPA, plan, chat intents)
+node scripts/run-check.mjs   # engine self-check (readiness, mission, gap, SGPA, plan, chat intents, streak)
 ```
+
+## Deployment (GitHub Pages)
+
+Every push to the build branch runs `.github/workflows/deploy.yml`
+(typecheck → engine self-check → build → deploy). One-time repo-owner setup:
+
+1. Open **Settings → Pages → Build and deployment**
+2. Set **Source** to **GitHub Actions**
+
+After that the site publishes automatically at
+`https://authorsauravkushwaha.github.io/MAKAUT-NEXUS-v1.0/` (the build uses a
+relative `base`, so it works under any sub-path).
 
 ## The experience
 
