@@ -1,0 +1,85 @@
+{
+  "id": "graphics",
+  "code": "ME-101 (provisional)",
+  "title": "Engineering Graphics",
+  "short": "Graphics",
+  "kind": "theory",
+  "credits": 3,
+  "hours": 36,
+  "color": "#fb7185",
+  "glow": "rose",
+  "group": "group-a",
+  "description": "Engineering drawing language — projections, sections and the 3D thinking every design starts with.",
+  "outcomes": [
+    "CO1 — Apply drawing standards and geometric constructions.",
+    "CO2 — Produce orthographic projections of objects.",
+    "CO3 — Section solids and develop surfaces accurately.",
+    "CO4 — Visualise and draw isometric and perspective views."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "index": "01",
+      "title": "Engineering Drawing Fundamentals",
+      "hours": 9,
+      "co": "CO1",
+      "bloom": "Remember",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "Drawing instruments & line types" },
+        { "id": "c2", "label": "Geometric constructions" },
+        { "id": "c3", "label": "Scales & lettering" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m2",
+      "index": "02",
+      "title": "Orthographic Projections",
+      "hours": 9,
+      "co": "CO2",
+      "bloom": "Apply",
+      "questions": 14,
+      "concepts": [
+        { "id": "c1", "label": "First-angle vs third-angle" },
+        { "id": "c2", "label": "Projection of points & lines" },
+        { "id": "c3", "label": "Projection of planes" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m3",
+      "index": "03",
+      "title": "Sections & Development of Surfaces",
+      "hours": 9,
+      "co": "CO3",
+      "bloom": "Apply",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "Sectional views" },
+        { "id": "c2", "label": "True shape of sections" },
+        { "id": "c3", "label": "Surface development" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m4",
+      "index": "04",
+      "title": "Isometric & Perspective Views",
+      "hours": 9,
+      "co": "CO4",
+      "bloom": "Create",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "Isometric scales & shapes" },
+        { "id": "c2", "label": "Isometric projection of solids" },
+        { "id": "c3", "label": "Perspective basics" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    }
+  ],
+  "source_ref": "SRC-001",
+  "source_type": "secondary",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}

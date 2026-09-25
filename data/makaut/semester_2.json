@@ -1,0 +1,15 @@
+{
+  "id": "sem-2",
+  "index": 2,
+  "label": "Semester 2",
+  "year": "1st Year",
+  "academic_year": "2026-27",
+  "total_credits": 20,
+  "credits_note": "Semester 2 is intentionally not modelled in v1.0 — years/semesters beyond the prototype scope are listed in the project's explicit non-goals.",
+  "components_count": 0,
+  "courses": [],
+  "status": "out-of-scope",
+  "source_ref": "SRC-001",
+  "verification_status": "unverified",
+  "checked": "2026-09-25"
+}

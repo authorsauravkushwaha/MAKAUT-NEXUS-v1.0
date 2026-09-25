@@ -1,0 +1,89 @@
+{
+  "id": "mathematics-1",
+  "code": "MA-101 (provisional)",
+  "title": "Mathematics-I",
+  "short": "Math-I",
+  "kind": "theory",
+  "credits": 3,
+  "hours": 36,
+  "color": "#22d3ee",
+  "glow": "cyan",
+  "group": "group-a",
+  "description": "Single and multivariable calculus, multiple integrals and the matrix algebra that underpins every engineering semester that follows.",
+  "outcomes": [
+    "CO1 — Apply limits, continuity and differentiation to single-variable problems.",
+    "CO2 — Solve partial differentiation and optimization problems in several variables.",
+    "CO3 — Evaluate multiple integrals and apply integral theorems to physical problems.",
+    "CO4 — Model and solve systems of linear equations using matrix methods."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "index": "01",
+      "title": "Calculus of a Single Variable",
+      "hours": 9,
+      "co": "CO1",
+      "bloom": "Understand",
+      "questions": 20,
+      "concepts": [
+        { "id": "c1", "label": "Limits" },
+        { "id": "c2", "label": "Continuity" },
+        { "id": "c3", "label": "Differentiation" },
+        { "id": "c4", "label": "Applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m2",
+      "index": "02",
+      "title": "Calculus of Several Variables",
+      "hours": 9,
+      "co": "CO2",
+      "bloom": "Apply",
+      "questions": 16,
+      "concepts": [
+        { "id": "c1", "label": "Partial derivatives" },
+        { "id": "c2", "label": "Total derivative & chain rule" },
+        { "id": "c3", "label": "Extrema & Lagrange multipliers" },
+        { "id": "c4", "label": "Applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m3",
+      "index": "03",
+      "title": "Multiple Integrals",
+      "hours": 8,
+      "co": "CO3",
+      "bloom": "Apply",
+      "questions": 14,
+      "concepts": [
+        { "id": "c1", "label": "Double integrals" },
+        { "id": "c2", "label": "Change of order" },
+        { "id": "c3", "label": "Triple integrals" },
+        { "id": "c4", "label": "Area & volume applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m4",
+      "index": "04",
+      "title": "Matrices & Linear Algebra",
+      "hours": 10,
+      "co": "CO4",
+      "bloom": "Analyse",
+      "questions": 18,
+      "concepts": [
+        { "id": "c1", "label": "Rank & systems of equations" },
+        { "id": "c2", "label": "Eigenvalues & eigenvectors" },
+        { "id": "c3", "label": "Diagonalisation" },
+        { "id": "c4", "label": "Applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    }
+  ],
+  "source_ref": "SRC-001",
+  "source_type": "secondary",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}

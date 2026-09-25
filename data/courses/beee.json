@@ -1,0 +1,117 @@
+{
+  "id": "beee",
+  "code": "EE-101 (provisional)",
+  "title": "Basic Electrical & Electronics Engineering",
+  "short": "BEEE",
+  "kind": "theory",
+  "credits": 4,
+  "hours": 44,
+  "color": "#8b5cf6",
+  "glow": "violet",
+  "group": "group-a",
+  "description": "From Kirchhoff to op-amps — the circuit and device foundation every first-year engineer is examined on.",
+  "outcomes": [
+    "CO1 — Analyse DC networks using network theorems.",
+    "CO2 — Evaluate rectifier and semiconductor device behaviour.",
+    "CO3 — Analyse BJT/MOSFET biasing and switching circuits.",
+    "CO4 — Design basic op-amp amplifiers and comparators."
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "index": "01",
+      "title": "DC Circuit Fundamentals",
+      "hours": 8,
+      "co": "CO1",
+      "bloom": "Understand",
+      "questions": 16,
+      "concepts": [
+        { "id": "c1", "label": "Ohm's law & network reduction" },
+        { "id": "c2", "label": "Series–parallel networks" },
+        { "id": "c3", "label": "Power & energy" },
+        { "id": "c4", "label": "Applications" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m2",
+      "index": "02",
+      "title": "Network Theorems",
+      "hours": 8,
+      "co": "CO1",
+      "bloom": "Apply",
+      "questions": 18,
+      "concepts": [
+        { "id": "c1", "label": "Kirchhoff's laws (KCL/KVL)" },
+        { "id": "c2", "label": "Thevenin & Norton" },
+        { "id": "c3", "label": "Superposition" },
+        { "id": "c4", "label": "Maximum power transfer" },
+        { "id": "c5", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m3",
+      "index": "03",
+      "title": "Diodes & Rectifiers",
+      "hours": 7,
+      "co": "CO2",
+      "bloom": "Apply",
+      "questions": 15,
+      "concepts": [
+        { "id": "c1", "label": "PN junction diode" },
+        { "id": "c2", "label": "Zener & applications" },
+        { "id": "c3", "label": "Rectifiers & filters" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m4",
+      "index": "04",
+      "title": "Transistors (BJT) & Biasing",
+      "hours": 7,
+      "co": "CO3",
+      "bloom": "Apply",
+      "questions": 15,
+      "concepts": [
+        { "id": "c1", "label": "BJT configurations" },
+        { "id": "c2", "label": "Biasing & stability" },
+        { "id": "c3", "label": "Switching applications" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m5",
+      "index": "05",
+      "title": "MOSFET & Applications",
+      "hours": 7,
+      "co": "CO3",
+      "bloom": "Understand",
+      "questions": 12,
+      "concepts": [
+        { "id": "c1", "label": "MOSFET structure & types" },
+        { "id": "c2", "label": "Transfer characteristics" },
+        { "id": "c3", "label": "Digital switching" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    },
+    {
+      "id": "m6",
+      "index": "06",
+      "title": "Operational Amplifiers",
+      "hours": 7,
+      "co": "CO4",
+      "bloom": "Analyse",
+      "questions": 16,
+      "concepts": [
+        { "id": "c1", "label": "Ideal op-amp model" },
+        { "id": "c2", "label": "Inverting & non-inverting amplifiers" },
+        { "id": "c3", "label": "Comparators & applications" },
+        { "id": "c4", "label": "Revision" }
+      ]
+    }
+  ],
+  "source_ref": "SRC-001",
+  "source_type": "secondary",
+  "verification_status": "provisional",
+  "checked": "2026-09-25"
+}

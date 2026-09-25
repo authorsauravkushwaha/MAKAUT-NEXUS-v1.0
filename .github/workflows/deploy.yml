@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - arena/01a0d566-makaut-nexus-v1-0
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: node scripts/run-check.mjs
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # No `environment:` binding here on purpose: the github-pages environment
+    # has a deployment-branch policy that only allows `main`, and this branch
+    # (`arena/...`) is the build branch. The deploy action works without the
+    # binding — it publishes the uploaded artifact directly to Pages.
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

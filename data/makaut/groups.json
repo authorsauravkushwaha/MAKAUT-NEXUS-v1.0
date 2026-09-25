@@ -1,0 +1,24 @@
+[
+  {
+    "id": "group-a",
+    "label": "Group A",
+    "semester": "sem-1",
+    "courses": ["mathematics-1", "physics", "beee", "english", "graphics", "physics-lab", "beee-lab", "graphics-lab", "non-theory", "skill-course"],
+    "default": true,
+    "verification_status": "provisional",
+    "source_ref": "SRC-001",
+    "checked": "2026-09-25",
+    "note": "Default demo group. Confirm against the official Semester-1 registration list."
+  },
+  {
+    "id": "group-b",
+    "label": "Group B",
+    "semester": "sem-1",
+    "courses": ["mathematics-1", "physics", "chemistry", "english", "programming", "physics-lab", "chemistry-lab", "programming-lab", "non-theory", "skill-course"],
+    "default": false,
+    "verification_status": "unverified",
+    "source_ref": "SRC-001",
+    "checked": "2026-09-25",
+    "note": "Reported alternative first-year group. Not modelled in this prototype (out of scope for v1.0)."
+  }
+]

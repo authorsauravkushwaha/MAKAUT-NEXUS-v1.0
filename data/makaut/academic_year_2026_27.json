@@ -1,0 +1,31 @@
+{
+  "academic_year": "2026-27",
+  "status": "provisional",
+  "semester_plan": [
+    { "id": "sem-1", "index": 1, "label": "Semester 1", "window": "Jul 2026 – Dec 2026" },
+    { "id": "sem-2", "index": 2, "label": "Semester 2", "window": "Jan 2027 – Jun 2027" }
+  ],
+  "scope_note": "This prototype covers Semester 1 for first-year students only. Years 2–4, other branches in detail, and historical question-paper archives are explicitly out of scope for v1.0.",
+  "conflicts": [
+    {
+      "id": "CONF-01",
+      "summary": "Reported MAKAUT 2026 first-year syllabus structure differs from CEMK's published timetable in subject contact hours.",
+      "resolution": "Obtain the college's official Semester-1 registration / subject list before treating the structure as final.",
+      "severity": "high"
+    },
+    {
+      "id": "CONF-02",
+      "summary": "Assessment weightage (internal vs ESE) rules for the applicable regulation are not yet confirmed by an official circular.",
+      "resolution": "SGPA engine uses a clearly labelled provisional rule table; do not hard-code uncertain university rules as official.",
+      "severity": "medium"
+    },
+    {
+      "id": "CONF-03",
+      "summary": "Group structure (Group A/B/...) for first-year elective/subject split is reported differently across secondary sources.",
+      "resolution": "Group data marked provisional; student can switch groups when the official registration list is published.",
+      "severity": "medium"
+    }
+  ],
+  "source_ref": "SRC-001",
+  "checked": "2026-09-25"
+}

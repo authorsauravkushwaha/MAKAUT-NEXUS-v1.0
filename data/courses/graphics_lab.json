@@ -1,0 +1,25 @@
+{
+  "id": "graphics-lab",
+  "code": "MEL-101 (provisional)",
+  "title": "Engineering Graphics Laboratory",
+  "short": "Graphics Lab",
+  "kind": "lab",
+  "credits": 1,
+  "hours": 24,
+  "color": "#fda4af",
+  "glow": "rose",
+  "group": "group-a",
+  "description": "Drawing-sheet operations — from lettering standards to sectional views of solids.",
+  "experiments": [
+    { "id": "gr-01", "index": "01", "title": "Lettering & line types (SPO pattern)", "hours": 4, "record_required": true },
+    { "id": "gr-02", "index": "02", "title": "Geometric constructions", "hours": 4, "record_required": true },
+    { "id": "gr-03", "index": "03", "title": "Orthographic views of a block", "hours": 4, "record_required": true },
+    { "id": "gr-04", "index": "04", "title": "Projection of solids", "hours": 4, "record_required": true },
+    { "id": "gr-05", "index": "05", "title": "Sectional view of a cylinder", "hours": 4, "record_required": true },
+    { "id": "gr-06", "index": "06", "title": "Isometric view of a component", "hours": 4, "record_required": true }
+  ],
+  "source_ref": "SRC-004",
+  "source_type": "internal",
+  "verification_status": "provisional",
+  "checked": "2026-09-23"
+}

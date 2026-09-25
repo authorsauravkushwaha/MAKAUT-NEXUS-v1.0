@@ -1,0 +1,27 @@
+{
+  "id": "physics-lab",
+  "code": "PHL-101 (provisional)",
+  "title": "Physics Laboratory",
+  "short": "Physics Lab",
+  "kind": "lab",
+  "credits": 1,
+  "hours": 30,
+  "color": "#34d399",
+  "glow": "emerald",
+  "group": "group-a",
+  "description": "Eight experiments spanning mechanics, optics and semiconductor devices — each with record and teacher-verification gates.",
+  "experiments": [
+    { "id": "ph-01", "index": "01", "title": "Simple pendulum — determination of g", "hours": 4, "record_required": true },
+    { "id": "ph-02", "index": "02", "title": "Compound pendulum — radius of gyration", "hours": 4, "record_required": true },
+    { "id": "ph-03", "index": "03", "title": "Resonance tube — speed of sound", "hours": 4, "record_required": true },
+    { "id": "ph-04", "index": "04", "title": "Newton's rings — wavelength of light", "hours": 4, "record_required": true },
+    { "id": "ph-05", "index": "05", "title": "Diffraction grating — wavelength", "hours": 4, "record_required": true },
+    { "id": "ph-06", "index": "06", "title": "PN junction diode characteristics", "hours": 4, "record_required": true },
+    { "id": "ph-07", "index": "07", "title": "Zener diode — voltage regulation", "hours": 3, "record_required": true },
+    { "id": "ph-08", "index": "08", "title": "Transistor CE output characteristics", "hours": 3, "record_required": true }
+  ],
+  "source_ref": "SRC-004",
+  "source_type": "internal",
+  "verification_status": "provisional",
+  "checked": "2026-09-23"
+}
