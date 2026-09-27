@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home, BookOpen, BrainCircuit, CalendarRange, Radar, FlaskConical, Sigma,
-  Settings, Target, Bell, CheckCircle2, X, Library,
+  Settings, Target, Bell, CheckCircle2, X, Library, Zap,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
+import { levelProgress, levelTitle } from '@/lib/gamify';
 import { cn } from '@/components/ui';
 
 const NAV = [
@@ -57,6 +58,71 @@ export function FloatingNav() {
   );
 }
 
+/** Global XP level chip — the heartbeat of the study world. */
+export function LevelPill() {
+  const { state } = useNexus();
+  const p = levelProgress(state.xp);
+  return (
+    <NavLink
+      to="/library"
+      data-testid="level-pill"
+      title={`Level ${p.level} · ${levelTitle(p.level)} — open the Study World`}
+      className="group hidden items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 transition-colors hover:border-violet-300/60 sm:flex"
+    >
+      <Zap size={12} className="text-violet-300" />
+      <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-violet-200">
+        Lv {p.level}
+      </span>
+      <span className="h-1.5 w-14 overflow-hidden rounded-full bg-white/10">
+        <span
+          className="block h-full rounded-full bg-gradient-to-r from-violet-400 to-cyan-400"
+          style={{ width: `${Math.max(4, p.pct)}%` }}
+        />
+      </span>
+      <span className="hidden font-mono text-[10px] text-slate-400 lg:inline">
+        {p.into}/{p.need}
+      </span>
+    </NavLink>
+  );
+}
+
+/** Ambient knowledge drifting through the whole NEXUS world. */
+const DRIFT_GLYPHS = ['∑', 'π', '∫', 'λ', 'Δ', 'Ω', '∂', '√', 'θ', '≈', '⚛', '⌁'];
+
+export function WorldDrift() {
+  const glyphs = useMemo(
+    () =>
+      DRIFT_GLYPHS.map((g, i) => ({
+        g,
+        left: 3 + ((i * 8.3) % 93),
+        dur: 30 + (i % 5) * 8,
+        delay: i * 3.2,
+        size: 14 + ((i * 5) % 16),
+        color: ['#22d3ee', '#8b5cf6', '#38bdf8', '#f59e0b', '#34d399'][i % 5],
+      })),
+    [],
+  );
+  return (
+    <div data-testid="world-drift" aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      {glyphs.map((it, i) => (
+        <span
+          key={i}
+          className="drift-glyph"
+          style={{
+            left: `${it.left}%`,
+            fontSize: it.size,
+            color: it.color,
+            animationDuration: `${it.dur}s`,
+            animationDelay: `${it.delay}s`,
+          }}
+        >
+          {it.g}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function TopBar() {
   const { state } = useNexus();
   const initials = (state.profile.name || 'C').slice(0, 1).toUpperCase();
@@ -73,6 +139,7 @@ export function TopBar() {
         </NavLink>
 
         <div className="flex items-center gap-3">
+          <LevelPill />
           <div className="hidden md:flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-blink" />
             <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Mission Control</span>
@@ -123,8 +190,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-nexus-bg text-slate-200 font-sans selection:bg-cyan-400/30">
       <div className="pointer-events-none fixed inset-0 bg-grid-faint bg-[size:44px_44px] opacity-[0.5]" />
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.07),transparent_55%)]" />
+      <WorldDrift />
       <TopBar />
-      <main className="relative mx-auto max-w-[1600px] px-5 pb-28 pt-6">{children}</main>
+      <main className="relative z-10 mx-auto max-w-[1600px] px-5 pb-28 pt-6">{children}</main>
       <FloatingNav />
       <Toasts />
     </div>

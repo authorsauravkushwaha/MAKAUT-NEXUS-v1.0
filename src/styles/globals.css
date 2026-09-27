@@ -448,3 +448,49 @@ canvas {
     min-height: 240mm;
   }
 }
+
+/* ───────── Study-world motion (library world + ambient drift) ───────── */
+@keyframes driftUp {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.14;
+  }
+  85% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(-118vh) rotate(24deg);
+    opacity: 0;
+  }
+}
+.drift-glyph {
+  position: absolute;
+  bottom: -48px;
+  font-weight: 300;
+  opacity: 0;
+  animation-name: driftUp;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  text-shadow: 0 0 18px currentColor;
+}
+@keyframes noteFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drift-glyph {
+    animation: none !important;
+    opacity: 0;
+  }
+  [class*='animate-'] {
+    animation-duration: 0.001s !important;
+  }
+}

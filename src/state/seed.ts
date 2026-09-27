@@ -131,6 +131,7 @@ export function createSeedState(): StudentState {
     studyMinutesToday: 0,
     studyLog,
     library: { notesRead: ['mathematics-1-m1-n1'], dppSolved: ['dpp-ma-m1-q1'] },
+    xp: 420,
   };
 }
 
@@ -172,6 +173,7 @@ export function createEmptyState(profile: StudentState['profile']): StudentState
     studyMinutesToday: 0,
     studyLog: [],
     library: { notesRead: [], dppSolved: [] },
+    xp: 0,
   };
 }
 

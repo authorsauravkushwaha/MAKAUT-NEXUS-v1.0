@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronRight, Flame, CalendarClock, Sparkles, CircleCheck } from 'lucide-react';
+import { ChevronRight, Flame, CalendarClock, Sparkles, CircleCheck, Zap, Library, Play } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { AcademicCore3D } from '@/components/three/AcademicCore3D';
+import { levelFromXp, levelTitle } from '@/lib/gamify';
+import { libraryProgress } from '@/lib/library';
 import { GlassPanel, Button, ProgressRing, StatBar, SectionLabel, StatusPill, cn } from '@/components/ui';
 import { StudySessionModal, type SessionRequest } from '@/components/StudySessionModal';
 import { allComponentProgress, courseProgress, readiness, biggestGap } from '@/lib/derive';
@@ -279,6 +281,72 @@ export function DashboardPage() {
           </motion.button>
         ))}
       </div>
+
+      {/* ── The Study World gateway ─────────────────────────────── */}
+      <GlassPanel className="relative mt-4 overflow-hidden p-0" glow="rgba(34,211,238,0.1)">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_120%_at_100%_0%,rgba(139,92,246,0.14),transparent_55%),radial-gradient(70%_100%_at_0%_100%,rgba(34,211,238,0.12),transparent_55%)]" />
+        <div className="relative grid gap-5 p-5 lg:grid-cols-[1.35fr_1fr]">
+          <div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.26em] text-cyan-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-blink" />
+              The Study World — notes & books, gamified
+            </div>
+            <h2 className="mt-2 font-display text-xl font-bold text-white md:text-2xl">
+              Your library world is{' '}
+              <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">
+                {libraryProgress(state).pct}% powered
+              </span>
+              .
+            </h2>
+            <p className="mt-1.5 max-w-xl text-[13px] leading-relaxed text-slate-400">
+              Walk a full 3D library — book shelves, drifting notes, a portal to your next level.
+              Every note read, DPP solved and mission finished feeds XP straight back into it.
+              Read → solve → level up → repeat.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {[
+                { xp: '+10', label: 'Read a note', c: '#22d3ee' },
+                { xp: '+15', label: 'Solve a DPP', c: '#8b5cf6' },
+                { xp: '+10', label: 'Mission task', c: '#f59e0b' },
+                { xp: '+5…30', label: 'Study session', c: '#34d399' },
+              ].map((b) => (
+                <span
+                  key={b.label}
+                  className="rounded-full border px-2.5 py-1 text-[11px] font-medium"
+                  style={{ borderColor: `${b.c}44`, color: b.c, background: `${b.c}10` }}
+                >
+                  {b.xp} XP · {b.label}
+                </span>
+              ))}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button onClick={() => nav('/library')} data-testid="open-study-world">
+                <Library size={15} /> Enter the Study World
+              </Button>
+              <Button variant="ghost" onClick={() => nav('/library#books')}>
+                <Library size={15} /> Books library
+              </Button>
+              <Button variant="ghost" onClick={() => nav('/library#videos')}>
+                <Play size={15} /> Video library
+              </Button>
+            </div>
+          </div>
+
+          <div className="relative flex items-center justify-center">
+            <div className="absolute h-40 w-40 rounded-full border border-cyan-400/25 bg-cyan-400/[0.05] animate-spin-slow" />
+            <div className="absolute h-32 w-32 rounded-full border border-violet-400/30" />
+            <div
+              data-testid="study-world-orb"
+              className="relative flex h-24 w-24 animate-floaty items-center justify-center rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-cyan-400/20 to-violet-500/20 text-4xl shadow-glow-cyan"
+            >
+              📖
+            </div>
+            <div className="absolute bottom-1 flex items-center gap-1.5 rounded-full border border-violet-400/35 bg-violet-500/10 px-3 py-1 text-[11px] font-semibold text-violet-200">
+              <Zap size={11} /> Lv {levelFromXp(state.xp)} · {levelTitle(levelFromXp(state.xp))}
+            </div>
+          </div>
+        </div>
+      </GlassPanel>
 
       <StudySessionModal request={session} onClose={() => setSession(null)} />
     </div>

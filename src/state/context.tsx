@@ -5,6 +5,7 @@ import { todayISO, addDays, computeStreak } from '@/lib/dates';
 import { generateMission } from '@/lib/mission';
 import { deriveContext } from '@/lib/derive';
 import { evaluateAchievements, diffNewAchievements } from '@/lib/achievements';
+import { levelFromXp, levelTitle, sessionXp, XP_REWARDS } from '@/lib/gamify';
 
 const STORAGE_KEY = 'makaut-nexus:v1';
 
@@ -18,6 +19,12 @@ function loadState(): StudentState {
         if (parsed.mission && parsed.mission.date !== todayISO()) parsed.mission = null;
         // Migrate states saved before the library feature existed.
         if (!parsed.library) parsed.library = { notesRead: [], dppSolved: [] };
+        // Migrate states saved before the study-world XP system existed —
+        // backfill from what the student already earned.
+        if (typeof parsed.xp !== 'number') {
+          parsed.xp =
+            parsed.library.notesRead.length * 10 + parsed.library.dppSolved.length * 15;
+        }
         return parsed;
       }
     }
@@ -56,6 +63,8 @@ interface NexusContextValue {
   logStudy: (minutes: number) => void;
   markNoteRead: (noteId: string) => void;
   markDppSolved: (questionId: string) => void;
+  /** Award study-world XP (streak touch + level-up toast handled internally). */
+  awardXp: (amount: number, reason: string) => void;
   resetAll: () => void;
   loadDemo: () => void;
 }
@@ -151,26 +160,68 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
     [commit],
   );
 
+  /** Study-world XP: bumps xp, touches today's streak, celebrates level-ups. */
+  const awardXp = useCallback(
+    (amount: number, reason: string) => {
+      if (amount <= 0) return;
+      const preXp = stateRef.current.xp ?? 0;
+      const preLevel = levelFromXp(preXp);
+      const postLevel = levelFromXp(preXp + amount);
+      commit((prev) => {
+        const today = todayISO();
+        const days = prev.streak.days.includes(today) ? prev.streak.days : [...prev.streak.days, today];
+        const current = computeStreak(days, today);
+        return {
+          ...prev,
+          xp: (prev.xp ?? 0) + amount,
+          streak: {
+            ...prev.streak,
+            days,
+            current,
+            longest: Math.max(prev.streak.longest, current),
+            todayDone: true,
+          },
+        };
+      });
+      if (postLevel > preLevel) {
+        setTimeout(
+          () =>
+            pushToast({
+              emoji: '🚀',
+              title: `Level ${postLevel} — ${levelTitle(postLevel)}!`,
+              body: `+${amount} XP · ${reason}. The library world grows with you — keep going.`,
+            }),
+          350,
+        );
+      }
+    },
+    [commit, pushToast],
+  );
+
   const markNoteRead = useCallback(
     (noteId: string) => {
+      if (stateRef.current.library.notesRead.includes(noteId)) return;
       commit((prev) =>
         prev.library.notesRead.includes(noteId)
           ? prev
           : { ...prev, library: { ...prev.library, notesRead: [...prev.library.notesRead, noteId] } },
       );
+      awardXp(XP_REWARDS.noteRead, 'Note read');
     },
-    [commit],
+    [commit, awardXp],
   );
 
   const markDppSolved = useCallback(
     (questionId: string) => {
+      if (stateRef.current.library.dppSolved.includes(questionId)) return;
       commit((prev) =>
         prev.library.dppSolved.includes(questionId)
           ? prev
           : { ...prev, library: { ...prev.library, dppSolved: [...prev.library.dppSolved, questionId] } },
       );
+      awardXp(XP_REWARDS.dppSolved, 'DPP problem solved');
     },
-    [commit],
+    [commit, awardXp],
   );
 
   const addSession = useCallback(
@@ -200,8 +251,9 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
       logStudy(input.minutes);
+      awardXp(sessionXp(input.minutes), input.kind === 'practice' ? 'Practice set' : 'Study session');
     },
-    [commit, logStudy],
+    [commit, logStudy, awardXp],
   );
 
   const completeMissionItem = useCallback(
@@ -240,8 +292,9 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
           mission: { ...prev.mission!, completedItemIds: [...prev.mission!.completedItemIds, itemId] },
         }));
       }
+      awardXp(XP_REWARDS.missionItem, 'Mission task');
     },
-    [addSession, commit, logStudy],
+    [addSession, commit, logStudy, awardXp],
   );
 
   const completeMissionAll = useCallback(() => {
@@ -366,13 +419,14 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       logStudy,
       markNoteRead,
       markDppSolved,
+      awardXp,
       resetAll,
       loadDemo,
     }),
     [
       state, toasts, dismissToast, commit, startOnboarding, updateProfile, ensureMission,
       completeMissionItem, completeMissionAll, addSession, setConcept, setLabExperiment,
-      markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, markNoteRead, markDppSolved, resetAll, loadDemo,
+      markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, markNoteRead, markDppSolved, awardXp, resetAll, loadDemo,
     ],
   );
 

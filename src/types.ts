@@ -237,6 +237,8 @@ export interface StudentState {
   studyLog: { date: string; minutes: number }[];
   /** Free library progress — notes read & DPP problems solved. */
   library: LibraryProgress;
+  /** Study-world experience points (drives level & rank). */
+  xp: number;
 }
 
 /** Alias used by AI modules. */

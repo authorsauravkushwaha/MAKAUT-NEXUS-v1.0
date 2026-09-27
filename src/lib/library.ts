@@ -24,6 +24,63 @@ export function booksForSubject(subjectId?: string): typeof FREE_BOOKS {
   return FREE_BOOKS.filter((b) => b.subjects.includes(subjectId));
 }
 
+export interface LibraryVideo {
+  subjectId: string;
+  subject: string;
+  color: string;
+  moduleId: string;
+  chapter: string;
+  note: ChapterNote;
+  url: string;
+  /** Human label derived from the video search/source, when available. */
+  label: string;
+}
+
+function videoLabel(url: string): string {
+  try {
+    const u = new URL(url);
+    const q = u.searchParams.get('search_query') ?? u.searchParams.get('q');
+    if (q) return q.trim();
+  } catch {
+    /* fall through */
+  }
+  return 'Chapter video';
+}
+
+/** Every free lecture video shipped with a chapter note (deduped by URL). */
+export function libraryVideos(): LibraryVideo[] {
+  const out: LibraryVideo[] = [];
+  const seen = new Set<string>();
+  for (const course of THEORY_COURSES) {
+    const lib = LIBRARY_MAP[course.id];
+    if (!lib) continue;
+    for (const ch of lib.chapters) {
+      const mod = COURSE_MAP[course.id]?.modules?.find((m) => m.id === ch.moduleId);
+      for (const n of ch.notes) {
+        for (const r of n.resources ?? []) {
+          if (r.kind !== 'video' || !r.url || seen.has(r.url)) continue;
+          seen.add(r.url);
+          out.push({
+            subjectId: course.id,
+            subject: course.title,
+            color: course.color ?? '#22d3ee',
+            moduleId: ch.moduleId,
+            chapter: mod?.title ?? ch.moduleId,
+            note: n,
+            url: r.url,
+            label: videoLabel(r.url),
+          });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+export function libraryVideoCount(): number {
+  return libraryVideos().length;
+}
+
 export interface LibraryTotals {
   subjects: number;
   chapters: number;

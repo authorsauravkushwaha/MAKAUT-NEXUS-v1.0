@@ -1,32 +1,236 @@
-import React, { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight, BookOpen, Check, ChevronRight, ExternalLink, FileText,
   HelpCircle, Lightbulb, Printer, Puzzle, Target, GraduationCap, Youtube,
+  Sparkles, Play,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { COURSE_MAP, THEORY_COURSES } from '@/data';
 import { QUESTIONS } from '@/ai/questionBank';
 import { PrintSheet } from '@/components/PrintSheet';
 import { NotePaper, SlidesPaper, DppPaper, McqTestPaper } from '@/components/PrintPapers';
+import LibraryWorldScene from '@/components/three/LibraryWorldScene';
 import {
   booksForSubject, dppQuestionSolved, getChapterLibrary, getSubjectLibrary,
-  libraryProgress, librarySubjects, libraryTotals, noteIsRead, subjectLibraryStats,
+  libraryProgress, librarySubjects, libraryTotals, libraryVideoCount, libraryVideos,
+  noteIsRead, subjectLibraryStats,
 } from '@/lib/library';
+import { levelFromXp, levelProgress, levelTitle } from '@/lib/gamify';
 import { Button, GlassPanel, PageHeader, ProgressRing, SectionLabel, StatusPill, cn } from '@/components/ui';
 import type { ChapterNote, Dpp } from '@/types';
+
+/* ───────────── DEDICATED BOOKS & VIDEOS WINGS ───────────── */
+
+const KIND_META: Record<string, { label: string; color: string }> = {
+  book: { label: 'Book', color: '#22d3ee' },
+  course: { label: 'Course', color: '#a78bfa' },
+  reference: { label: 'Reference', color: '#fbbf24' },
+  tool: { label: 'Tool', color: '#34d399' },
+};
+
+function SubjectChips({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const subjects = librarySubjects();
+  const chips = [{ id: 'all', title: 'All subjects', color: '#22d3ee' }, ...subjects];
+  return (
+    <div className="mb-4 flex flex-wrap gap-2">
+      {chips.map((c) => {
+        const active = value === c.id;
+        return (
+          <button
+            key={c.id}
+            type="button"
+            aria-pressed={active}
+            onClick={() => onChange(c.id)}
+            className={cn(
+              'rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all',
+              active ? 'shadow-[0_0_14px_rgba(34,211,238,0.15)]' : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/25 hover:text-slate-200',
+            )}
+            style={active ? { borderColor: `${c.color}99`, color: c.color, background: `${c.color}14` } : undefined}
+          >
+            {c.title}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** The Books wing — every free book, course & reference, filterable by subject. */
+function BooksSection() {
+  const [filter, setFilter] = useState('all');
+  const all = booksForSubject();
+  const books = booksForSubject(filter === 'all' ? undefined : filter);
+  return (
+    <section id="books" data-testid="books-view" className="scroll-mt-24">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <SectionLabel>📚 The Books Library — free & legal, forever</SectionLabel>
+        <span className="text-[11px] uppercase tracking-[0.16em] text-cyan-400/90" data-testid="books-count">
+          {books.length} of {all.length} resources
+        </span>
+      </div>
+      <SubjectChips value={filter} onChange={setFilter} />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {books.map((b, i) => {
+          const kind = KIND_META[b.kind] ?? KIND_META.book;
+          return (
+            <motion.div
+              key={b.id}
+              data-testid="book-card"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: Math.min(0.3, i * 0.03) }}
+            >
+              <GlassPanel className="flex h-full flex-col p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="font-display text-[15px] font-bold leading-snug text-white">{b.title}</div>
+                    <div className="mt-0.5 text-[12px] text-slate-500">{b.author}</div>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <span
+                      className="rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wider"
+                      style={{ borderColor: `${kind.color}44`, color: kind.color, background: `${kind.color}12` }}
+                    >
+                      {kind.label}
+                    </span>
+                    <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-emerald-300">
+                      Free
+                    </span>
+                  </div>
+                </div>
+                <p className="mt-3 flex-1 text-[12.5px] leading-relaxed text-slate-400">{b.why}</p>
+                <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                  {b.subjects.map((sid) => (
+                    <span key={sid} className="rounded-md bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-slate-400">
+                      {COURSE_MAP[sid]?.short ?? sid}
+                    </span>
+                  ))}
+                  <span className="rounded-md bg-violet-500/10 px-1.5 py-0.5 text-[10px] text-violet-300">{b.license}</span>
+                </div>
+                <a
+                  href={b.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-medium text-cyan-300 hover:text-cyan-200"
+                >
+                  Open free {kind.label.toLowerCase()} <ExternalLink size={12} />
+                </a>
+              </GlassPanel>
+            </motion.div>
+          );
+        })}
+      </div>
+      {books.length === 0 && (
+        <GlassPanel className="p-6 text-center text-[13px] text-slate-500">
+          No books tagged for this subject yet — try “All subjects”.
+        </GlassPanel>
+      )}
+    </section>
+  );
+}
+
+/** The Videos wing — chapter-wise free lecture videos, filterable by subject. */
+function VideosSection() {
+  const [filter, setFilter] = useState('all');
+  const all = useMemo(() => libraryVideos(), []);
+  const videos = filter === 'all' ? all : all.filter((v) => v.subjectId === filter);
+  return (
+    <section id="videos" data-testid="videos-view" className="scroll-mt-24">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <SectionLabel>🎬 Video Lectures — chapter-wise, watch free</SectionLabel>
+        <span className="text-[11px] uppercase tracking-[0.16em] text-rose-400/90" data-testid="videos-count">
+          {videos.length} of {all.length} videos
+        </span>
+      </div>
+      <SubjectChips value={filter} onChange={setFilter} />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {videos.map((v, i) => (
+          <motion.div
+            key={v.url}
+            data-testid="video-card"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: Math.min(0.3, i * 0.02) }}
+          >
+            <GlassPanel className="flex h-full flex-col p-5 transition-all hover:border-rose-400/40">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="flex h-9 w-9 items-center justify-center rounded-xl"
+                    style={{ background: `${v.color}18`, color: v.color }}
+                  >
+                    <Youtube size={18} />
+                  </span>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.16em] text-slate-500">{v.subject}</div>
+                    <div className="text-[11px] text-slate-500">{v.chapter}</div>
+                  </div>
+                </div>
+                <span
+                  className="shrink-0 rounded-md px-2 py-0.5 text-[10px]"
+                  style={{ color: v.color, background: `${v.color}14` }}
+                >
+                  {v.moduleId.toUpperCase()}
+                </span>
+              </div>
+              <div className="mt-3 flex-1 font-display text-[14.5px] font-bold leading-snug text-white">
+                {v.note.title}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                <span className="rounded-md bg-white/[0.05] px-1.5 py-0.5 text-[10px] capitalize text-slate-400">
+                  {v.note.kind}
+                </span>
+                <span className="rounded-md bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-slate-400">
+                  {v.note.readMinutes} min read
+                </span>
+                <span className="rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] text-rose-300">free video</span>
+              </div>
+              <p className="mt-1.5 line-clamp-1 text-[11px] text-slate-500">{v.label}</p>
+              <a
+                href={v.url}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-medium text-rose-300 hover:text-rose-200"
+              >
+                <Play size={12} /> Watch free on YouTube <ExternalLink size={12} />
+              </a>
+            </GlassPanel>
+          </motion.div>
+        ))}
+      </div>
+      {videos.length === 0 && (
+        <GlassPanel className="p-6 text-center text-[13px] text-slate-500">
+          No videos tagged for this subject yet — try “All subjects”.
+        </GlassPanel>
+      )}
+    </section>
+  );
+}
 
 /* ────────────────────────────── HUB ─────────────────────────────── */
 
 function LibraryHub() {
   const { state } = useNexus();
+  const location = useLocation();
   const totals = libraryTotals();
   const progress = libraryProgress(state);
   const subjects = librarySubjects();
   const [paperSubject, setPaperSubject] = useState<string | null>(null);
   const paperCourse = paperSubject ? COURSE_MAP[paperSubject] : undefined;
   const paperQs = paperSubject ? QUESTIONS.filter((q) => q.courseId === paperSubject) : [];
+
+  // Deep links like /library#videos should land on the wing, not the top.
+  useEffect(() => {
+    if (!location.hash) return;
+    const t = window.setTimeout(() => {
+      document
+        .getElementById(location.hash.slice(1))
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+    return () => window.clearTimeout(t);
+  }, [location]);
 
   return (
     <div className="space-y-8">
@@ -37,13 +241,58 @@ function LibraryHub() {
         right={<ProgressRing value={progress.pct} size={110} stroke={8} sublabel="explored" color="#22d3ee" />}
       />
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {/* ── The 3D Study World ── */}
+      <section data-testid="study-world">
+        <LibraryWorldScene progressPct={progress.pct} level={levelFromXp(state.xp)} xp={state.xp} />
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { k: 'Level', v: `${levelFromXp(state.xp)}`, sub: levelTitle(levelFromXp(state.xp)), c: '#22d3ee' },
+            { k: 'Total XP', v: state.xp.toLocaleString(), sub: `${levelProgress(state.xp).need} to next level`, c: '#a78bfa' },
+            { k: 'Streak', v: `${state.streak.current}🔥`, sub: `best ${state.streak.longest} days`, c: '#f59e0b' },
+            { k: 'Library', v: `${progress.pct}%`, sub: `${progress.read} notes · ${progress.solved} DPPs`, c: '#34d399' },
+          ].map((s) => (
+            <GlassPanel key={s.k} className="p-4">
+              <div className="text-[10px] uppercase tracking-[0.16em] text-slate-500">{s.k}</div>
+              <div className="font-display text-xl font-bold" style={{ color: s.c }}>{s.v}</div>
+              <div className="mt-0.5 truncate text-[10.5px] text-slate-500">{s.sub}</div>
+            </GlassPanel>
+          ))}
+        </div>
+        <p className="mt-3 flex items-center gap-2 text-[12.5px] text-slate-400">
+          <Sparkles size={14} className="shrink-0 text-cyan-300" />
+          The loop that makes studying stick: read a note <b className="text-cyan-300">+10 XP</b> · solve a
+          DPP <b className="text-violet-300">+15 XP</b> · finish missions <b className="text-amber-300">+10 XP</b> —
+          every session levels up your world.
+        </p>
+      </section>
+
+      {/* ── Quick jump ── */}
+      <nav aria-label="Library sections" className="flex flex-wrap gap-2">
+        {[
+          { href: '#books', label: '📚 Books', testid: 'jump-books' },
+          { href: '#videos', label: '🎬 Videos', testid: 'jump-videos' },
+          { href: '#notes', label: '📖 Notes & DPPs', testid: 'jump-notes' },
+          { href: '#print', label: '🖨️ Printable papers', testid: 'jump-print' },
+        ].map((j) => (
+          <a
+            key={j.href}
+            href={j.href}
+            data-testid={j.testid}
+            className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-[12.5px] font-medium text-slate-200 transition-colors hover:border-cyan-400/50 hover:text-cyan-200"
+          >
+            {j.label}
+          </a>
+        ))}
+      </nav>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
         {[
           { label: 'Subjects', v: totals.subjects },
           { label: 'Chapters', v: totals.chapters },
           { label: 'Notes', v: totals.notes },
           { label: 'DPP problems', v: totals.dppProblems },
           { label: 'Free books', v: totals.books },
+          { label: 'Videos', v: libraryVideoCount() },
           { label: 'Bank questions', v: totals.bankQuestions },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
@@ -54,6 +303,9 @@ function LibraryHub() {
           </motion.div>
         ))}
       </div>
+
+      <BooksSection />
+      <VideosSection />
 
       {import.meta.env.DEV && (
         <a
@@ -99,7 +351,7 @@ function LibraryHub() {
         </div>
       </div>
 
-      <div>
+      <div id="print" className="scroll-mt-24">
         <SectionLabel className="mb-3">Printable test papers — download, print & attempt on hard copy</SectionLabel>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {subjects.map((s, i) => {
@@ -135,7 +387,7 @@ function LibraryHub() {
         </div>
       </div>
 
-      <div>
+      <div id="notes" className="scroll-mt-24">
         <SectionLabel className="mb-3">Notes & DPP by subject — every chapter covered</SectionLabel>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {subjects.map((s, i) => {
@@ -166,42 +418,6 @@ function LibraryHub() {
               </motion.div>
             );
           })}
-        </div>
-      </div>
-
-      <div>
-        <SectionLabel className="mb-3">Top free books & open resources</SectionLabel>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {booksForSubject().map((b, i) => (
-            <motion.div key={b.id} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 * i }}>
-              <GlassPanel className="flex h-full flex-col p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="font-display text-[15px] font-bold leading-snug text-white">{b.title}</div>
-                    <div className="mt-0.5 text-[12px] text-slate-500">{b.author}</div>
-                  </div>
-                  <span className="shrink-0 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-emerald-300">Free</span>
-                </div>
-                <p className="mt-3 flex-1 text-[12.5px] leading-relaxed text-slate-400">{b.why}</p>
-                <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                  {b.subjects.map((sid) => (
-                    <span key={sid} className="rounded-md bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-slate-400">
-                      {COURSE_MAP[sid]?.short ?? sid}
-                    </span>
-                  ))}
-                  <span className="rounded-md bg-violet-500/10 px-1.5 py-0.5 text-[10px] text-violet-300">{b.license}</span>
-                </div>
-                <a
-                  href={b.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-medium text-cyan-300 hover:text-cyan-200"
-                >
-                  Open free resource <ExternalLink size={12} />
-                </a>
-              </GlassPanel>
-            </motion.div>
-          ))}
         </div>
       </div>
 
