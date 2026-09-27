@@ -1,0 +1,221 @@
+{
+  "subjectId": "english",
+  "chapters": [
+    {
+      "moduleId": "m1",
+      "notes": [
+        {
+          "id": "english-m1-n1",
+          "title": "Technical Communication Fundamentals — notes",
+          "kind": "summary",
+          "readMinutes": 7,
+          "sections": [
+            {
+              "heading": "What technical communication is",
+              "bullets": [
+                "Definition: transferring technical information so a specific audience can act on it accurately.",
+                "Properties: accuracy, clarity, conciseness, completeness, audience-appropriateness.",
+                "Channels: written (reports, mail), oral (meetings, demos), visual (diagrams, slides)."
+              ]
+            },
+            {
+              "heading": "Process model",
+              "bullets": [
+                "7-step flow: defining purpose → analysing audience → selecting & organising content → choosing style/format → drafting → editing/proofreading → delivering.",
+                "Audience analysis: expertise level, expectations, resistance — decides jargon, tone, depth.",
+                "Purpose split: to inform, to persuade, to instruct, to entertain (technical rarely the last)."
+              ]
+            },
+            {
+              "heading": "Language fundamentals",
+              "bullets": [
+                "Sentence types (simple/compound/complex/compound-complex) — vary them, but prefer short sentences in instructions.",
+                "Voice: active for clarity ('The technician switched off the supply'), passive when the actor is irrelevant.",
+                "Tense consistency: methods sections stay past; universal facts present.",
+                "Common errors: dangling modifiers, faulty parallelism, ambiguous pronoun reference."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Purdue OWL — grammar & style", "url": "https://owl.purdue.edu/", "kind": "reference" },
+            { "title": "British Council LearnEnglish", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "english-m1-d1",
+          "title": "DPP-01 · Process, audience & sentence craft",
+          "questions": [
+            { "id": "dpp-en-m1-q1", "prompt": "List the 7 steps of the technical communication process in order.", "answer": "Purpose → Audience → Content/organise → Format/style → Draft → Edit/proof → Deliver", "solution": ["Start with why the document exists.", "Audience analysis shapes everything downstream.", "Draft then revise — writing IS rewriting."] },
+            { "id": "dpp-en-m1-q2", "prompt": "Rewrite for clarity: 'The results were obtained by us being conducted in the lab yesterday.'", "answer": "'We obtained the results in the lab yesterday.'", "solution": ["Original mixes passive ('were obtained') with dangling agent ('by us being').", "Use active voice with a clear actor.", "Result: shorter, unambiguous."] },
+            { "id": "dpp-en-m1-q3", "prompt": "Which channel suits: (a) step-by-step safety procedure (b) quarterly project update?", "answer": "(a) Written instruction sheet; (b) Oral presentation + one-page summary", "solution": ["Procedures must be referenceable & unambiguous → written, numbered steps.", "Updates need dialogue & emphasis → oral, backed by a take-away document."] },
+            { "id": "dpp-en-m1-q4", "prompt": "Identify the fault: 'After reviewing the report, the data seemed unreliable.'", "answer": "Dangling modifier — 'the data' did not review the report", "solution": ["The introductory phrase must attach to the subject that performed it.", "Fix: 'After we reviewed the report, the data seemed unreliable.' or 'After reviewing the report, we found the data unreliable.'"] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m2",
+      "notes": [
+        {
+          "id": "english-m2-n1",
+          "title": "Speaking & Presentation Skills — notes",
+          "kind": "summary",
+          "readMinutes": 7,
+          "sections": [
+            {
+              "heading": "Oral fundamentals",
+              "bullets": [
+                "Elements: pronunciation, articulation, pitch, pace, pause, stress, intonation.",
+                "Pace target ≈ 120–150 words/min; silence after key points lets them land.",
+                "Filler control ('um', 'like') — replace with a pause; pausing sounds confident."
+              ]
+            },
+            {
+              "heading": "Presentation structure",
+              "bullets": [
+                "Rule of three: opening (hook + roadmap), body (3 points max), close (call to action).",
+                "One idea per slide; 6×6 heuristic (≤6 words per line, ≤6 lines) as a starting cap.",
+                "Signposting: 'First… Next… Finally…' — the audience should always know where they are.",
+                "Q&A: listen fully, rephrase, answer, check — never argue with the room."
+              ]
+            },
+            {
+              "heading": "Voice & body",
+              "bullets": [
+                "Eye contact in triangles (left-back, right-back, centre) — not at the slides.",
+                "Gestures above the waist, open palms; avoid pacing and pocketed hands.",
+                "Handle nervousness: prepare aloud twice, breathe low & slow, first sentence memorised."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "British Council — speaking courses", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" },
+            { "title": "Purdue OWL — presentation aids", "url": "https://owl.purdue.edu/", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "english-m2-d1",
+          "title": "DPP-02 · Speech design & delivery",
+          "questions": [
+            { "id": "dpp-en-m2-q1", "prompt": "Design a 3-part opening for a 5-minute project demo.", "answer": "Hook (problem stat/slide) → Relevance ('why you care') → Roadmap ('3 things I'll show')", "solution": ["Open with tension: a problem the audience feels.", "Promise the payoff.", "Preview structure so they can follow easily."] },
+            { "id": "dpp-en-m2-q2", "prompt": "You say 'um' 20 times a minute. Two concrete fixes?", "answer": "Replace with deliberate pauses; drill the talk aloud twice before presenting", "solution": ["Silence > filler — count 2 beats after every key claim.", "Preparation reduces cognitive load where fillers sneak in."] },
+            { "id": "dpp-en-m2-q3", "prompt": "Ideal speaking pace and words-per-slide guidance?", "answer": "120–150 wpm; one idea per slide (≈6×6 words)", "solution": ["Faster than 160 wpm rushes comprehension; slower than 100 drags.", "Slides are signposts, not teleprompters — details go in speech or handouts."] },
+            { "id": "dpp-en-m2-q4", "prompt": "Audience asks a hostile question. Best response sequence?", "answer": "Listen → rephrase → answer briefly → confirm", "solution": ["Rephrasing buys thinking time and disarms hostility by validating the question.", "Stay factual; take grudges offline after the session."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m3",
+      "notes": [
+        {
+          "id": "english-m3-n1",
+          "title": "Technical Writing & Documentation — notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Report architecture",
+              "bullets": [
+                "Front matter: title page, abstract/executive summary, table of contents.",
+                "IMRaD spine for technical reports: Introduction → Methods → Results → Discussion.",
+                "Conclusion restates findings without new data; recommendations are actionable (who, what, when)."
+              ]
+            },
+            {
+              "heading": "Style for documents",
+              "bullets": [
+                "Para = one idea (topic sentence + support); 3–5 sentences typical.",
+                "Lists for anything enumerable — parallel grammatical structure across items.",
+                "Headings are navigation: noun-heavy, scannable ('3. Calibration Procedure' not 'More').",
+                "Figures need: number, caption, units, reference in text before appearance."
+              ]
+            },
+            {
+              "heading": "Mechanics & ethics",
+              "bullets": [
+                "Tense: past for what you did, present for what the data shows.",
+                "Numbers: consistent units (SI), consistent decimal places; spell out one–nine at sentence start.",
+                "Plagiarism & citation: quote verbatim with quotes; paraphrase + cite; reference manager (Zotero free).",
+                "Editing pass order: content → structure → sentences → typos (never the reverse)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Purdue OWL — technical report formatting", "url": "https://owl.purdue.edu/", "kind": "reference" },
+            { "title": "Hemingway Editor — plain-English pass", "url": "https://hemingwayapp.com/", "kind": "tool" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "english-m3-d1",
+          "title": "DPP-03 · Reports, referencing & style",
+          "questions": [
+            { "id": "dpp-en-m3-q1", "prompt": "Order the sections of a standard experimental report.", "answer": "Abstract → Introduction → Methods → Results → Discussion → Conclusion → References", "solution": ["Abstract summarises all (write last).", "IMRaD is the backbone.", "References support every non-original claim."] },
+            { "id": "dpp-en-m3-q2", "prompt": "Rewrite for parallel structure: 'The task involves collecting samples, analysis of data, and reports are written.'", "answer": "'The task involves collecting samples, analysing data, and writing reports.'", "solution": ["All three items must be the same grammatical form (gerunds here).", "Parallel lists are easier to scan and remember."] },
+            { "id": "dpp-en-m3-q3", "prompt": "When must a paraphrased idea be cited?", "answer": "Always — citing is required even with your own words", "solution": ["Ideas are attributed; only YOUR original analysis goes uncited.", "Include page/section and list it in references."] },
+            { "id": "dpp-en-m3-q4", "prompt": "Figure caption checklist (3 items)?", "answer": "Figure number + descriptive title, units/scale, conditions/legends explained", "solution": ["A figure must be understandable standalone.", "Reference it in the body text before it appears."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m4",
+      "notes": [
+        {
+          "id": "english-m4-n1",
+          "title": "Workplace Communication & Ethics — notes",
+          "kind": "summary",
+          "readMinutes": 7,
+          "sections": [
+            {
+              "heading": "Professional writing",
+              "bullets": [
+                "Email: informative subject line, BLUF (bottom line up front), scannable body, clear ask + deadline, professional close.",
+                "Meetings: agenda before, decisions & owners during, minutes after — 'no action items = wasted hour'.",
+                "Bad news: buffer → reason → bad news → close; never bury the ask."
+              ]
+            },
+            {
+              "heading": "Team & intercultural communication",
+              "bullets": [
+                "Active listening: paraphrase, question, summarise before responding.",
+                "Feedback model SBI: Situation–Behaviour–Impact — personalise the behaviour, never the person.",
+                "Intercultural: avoid idiom/slang, check understanding, vary communication styles, respect holidays/names."
+              ]
+            },
+            {
+              "heading": "Engineering ethics",
+              "bullets": [
+                "Core duties: public safety first, competence, honesty, IP respect, confidentiality, conflict-of-interest disclosure.",
+                "Indian context: consumer safety, IS standards, data privacy (DPDP Act), no falsification of lab/exam data.",
+                "Whistle-blowing ladder: raise internally → documented escalation → authority as last resort."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "British Council — workplace English", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" },
+            { "title": "Purdue OWL — professional correspondence", "url": "https://owl.purdue.edu/", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "english-m4-d1",
+          "title": "DPP-04 · Emails, meetings & ethics",
+          "questions": [
+            { "id": "dpp-en-m4-q1", "prompt": "Draft a one-line email subject that follows best practice for requesting a lab sign-off.", "answer": "Action needed: Physics Lab 04 record sign-off by Fri 3 Oct", "solution": ["Include action + object + deadline.", "Recipient triages correctly without opening.", "Specific beats vague ('Query' or 'Hi' are failures)."] },
+            { "id": "dpp-en-m4-q2", "prompt": "Give feedback to a teammate who missed deadlines, using the SBI model.", "answer": "Situation: two sprint deadlines; Behaviour: submissions arrived 2 days late; Impact: reviewer time shifted and demo slipped", "solution": ["State observable facts, not labels ('you're careless' → unactionable).", "Impact connects behaviour to the team.", "End with agreed remedy and follow-up date."] },
+            { "id": "dpp-en-m4-q3", "prompt": "Your manager asks you to adjust experimental data to 'look consistent'. What do you do?", "answer": "Refuse — data falsification violates engineering ethics and safety duties", "solution": ["Public safety & honesty outrank hierarchy in every professional code.", "Offer legitimate alternatives: more trials, error bars, methodology note.", "Escalate through proper channels if pressured."] },
+            { "id": "dpp-en-m4-q4", "prompt": "List 3 rules for intercultural team emails.", "answer": "No idiom/slang; short plain sentences; confirm understanding politely", "solution": ["Idioms ('hit it out of the park') don't translate.", "Plain English also helps non-native readers at speed.", "Ask 'does this match your understanding?' rather than assuming."] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,14 @@ import graphicsLab from '@data/courses/graphics_lab.json';
 import nonTheory from '@data/courses/non_theory.json';
 import skillCourse from '@data/courses/skill_course.json';
 
+import libMath from '@data/library/mathematics_1.json';
+import libPhysics from '@data/library/physics.json';
+import libBeee from '@data/library/beee.json';
+import libEnglish from '@data/library/english.json';
+import libGraphics from '@data/library/graphics.json';
+import libBooks from '@data/library/books.json';
+import type { SubjectLibrary, FreeBook } from '@/types';
+
 export const UNIVERSITY = universityJson;
 export const ACADEMIC_YEAR = academicYearJson;
 export const SOURCES: SourceEntry[] = sourcesJson as SourceEntry[];
@@ -36,6 +44,22 @@ export const THEORY_COURSES = [
 export const LAB_COURSES = [physicsLab, beeeLab, graphicsLab] as unknown as CourseDef[];
 
 export const SESSIONAL_COURSES = [nonTheory, skillCourse] as unknown as CourseDef[];
+
+/* ── Free student library (notes · DPP · books) ───────────────────── */
+
+export const LIBRARY: SubjectLibrary[] = [
+  libMath,
+  libPhysics,
+  libBeee,
+  libEnglish,
+  libGraphics,
+] as unknown as SubjectLibrary[];
+
+export const FREE_BOOKS: FreeBook[] = libBooks.books as FreeBook[];
+
+export const LIBRARY_MAP: Record<string, SubjectLibrary> = Object.fromEntries(
+  LIBRARY.map((l) => [l.subjectId, l]),
+);
 
 export const ALL_COURSES: CourseDef[] = [
   ...THEORY_COURSES,

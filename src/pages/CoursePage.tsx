@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Clock3, Target, TrendingUp, ChevronRight, BookOpenCheck, CircleHelp, History } from 'lucide-react';
 import { useNexus } from '@/state/context';
@@ -153,6 +153,12 @@ export function CoursePage() {
                     Module {activeModule.index} · {activeModule.hours} hours · {activeModule.co} · {activeModule.bloom}
                   </div>
                   <h2 className="mt-1 font-display text-xl font-bold text-white">{activeModule.title}</h2>
+                  <Link
+                    to={`/library/${course.id}/${activeModule.id}`}
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 text-[12px] font-medium text-cyan-200 transition-colors hover:border-cyan-300/60 hover:text-cyan-100"
+                  >
+                    <BookOpenCheck size={13} /> Notes &amp; DPP for this chapter →
+                  </Link>
                 </div>
                 <div className="flex items-center gap-5">
                   <ProgressRing

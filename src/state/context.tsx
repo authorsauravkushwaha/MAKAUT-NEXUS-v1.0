@@ -16,6 +16,8 @@ function loadState(): StudentState {
       if (parsed && parsed.version === 1 && parsed.profile) {
         // Keep the mission fresh for the current day.
         if (parsed.mission && parsed.mission.date !== todayISO()) parsed.mission = null;
+        // Migrate states saved before the library feature existed.
+        if (!parsed.library) parsed.library = { notesRead: [], dppSolved: [] };
         return parsed;
       }
     }
@@ -52,6 +54,8 @@ interface NexusContextValue {
   setNonTheory: (patch: Partial<StudentState['nonTheory']>) => void;
   setMooc: (pct: number) => void;
   logStudy: (minutes: number) => void;
+  markNoteRead: (noteId: string) => void;
+  markDppSolved: (questionId: string) => void;
   resetAll: () => void;
   loadDemo: () => void;
 }
@@ -143,6 +147,28 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
           studyLog: log.slice(-30),
         };
       });
+    },
+    [commit],
+  );
+
+  const markNoteRead = useCallback(
+    (noteId: string) => {
+      commit((prev) =>
+        prev.library.notesRead.includes(noteId)
+          ? prev
+          : { ...prev, library: { ...prev.library, notesRead: [...prev.library.notesRead, noteId] } },
+      );
+    },
+    [commit],
+  );
+
+  const markDppSolved = useCallback(
+    (questionId: string) => {
+      commit((prev) =>
+        prev.library.dppSolved.includes(questionId)
+          ? prev
+          : { ...prev, library: { ...prev.library, dppSolved: [...prev.library.dppSolved, questionId] } },
+      );
     },
     [commit],
   );
@@ -338,13 +364,15 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       setNonTheory,
       setMooc,
       logStudy,
+      markNoteRead,
+      markDppSolved,
       resetAll,
       loadDemo,
     }),
     [
       state, toasts, dismissToast, commit, startOnboarding, updateProfile, ensureMission,
       completeMissionItem, completeMissionAll, addSession, setConcept, setLabExperiment,
-      markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, resetAll, loadDemo,
+      markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, markNoteRead, markDppSolved, resetAll, loadDemo,
     ],
   );
 

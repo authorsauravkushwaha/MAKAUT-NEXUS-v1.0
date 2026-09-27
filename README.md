@@ -30,6 +30,10 @@ npm run build      # production build → dist/
 node scripts/run-check.mjs   # engine self-check (readiness, mission, gap, SGPA, plan, chat intents, streak)
 ```
 
+> **Workspace wiped?** Run `bash scripts/restore-state.sh` — it recommits the
+> working tree on top of `origin/main`, rebuilds the transfer bundle, and
+> re-verifies (typecheck + checks). No network needed.
+
 ## Deployment (GitHub Pages)
 
 Every push to the build branch runs `.github/workflows/deploy.yml`
@@ -58,7 +62,29 @@ relative `base`, so it works under any sub-path).
 | Sessionial Tracker | `/sessionals` | NCC/NSS/Yoga/Sports + MOOC (non-theory requirements) |
 | SGPA Center | `/sgpa` | Provisional-grade projection + what-if simulator |
 | Practice Arena | `/practice` | Tagged question bank + exam mode with timer & explanations |
+| **Student Library** | `/library` | **Notes & DPP for all 22 chapters + 22 top free books** |
+| Chapter Library | `/library/:subject/:module` | Chapter notes, solved DPPs, bank questions — all free |
+| Mock Tests | `/mock` | Timed presets (Quick 10 / Semester Mock / per-subject) with scoring & review |
 | Profile | `/profile` | Mission parameters, knowledge sources, data policy, reset |
+
+## Free student library — everyone can afford this
+
+Education here costs **₹0, forever**. The library ships with the app:
+
+- **Chapter-wise Notes** — one curated note per module across all 5 subjects (22 notes): headings + bullet
+  sections, reading time, and a "mark as read" tracker that feeds your library progress.
+- **DPP (Daily Practice Problems)** — one problem set per chapter, **88 worked problems** with answers and
+  step-by-step solutions; mark each solved and watch chapter progress fill.
+- **Questions** — every chapter links to the in-app question bank (43 MCQs) for instant-check practice with
+  explanations.
+- **Top free books** — 22 genuinely free & legal resources: OpenStax (CC), Project Gutenberg, MIT OCW,
+  Khan Academy, NPTEL, Caltech Feynman Lectures, HyperPhysics, allaboutcircuits / ibiblio (Kuphaldt),
+  Purdue OWL, British Council, GeoGebra, FreeCAD — each tagged with its license and the subjects it serves.
+- **Mock Tests** (`/mock`) — timed simulations on the same bank: Quick 10 (15 min), Semester Mock
+  (25 Q / 45 min, −0.25 negative) and per-subject sprints, with live countdown, question palette,
+  auto-submit, scoring and a full review screen.
+
+Progress persists per student (`notesRead` / `dppSolved`) alongside the rest of the state.
 
 ## The AI is a real engine (no canned answers)
 
@@ -69,7 +95,8 @@ relative `base`, so it works under any sub-path).
 - **SGPA** — credit-weighted grade points through a clearly-labelled 🟡 **provisional** rule table
   (official regulation SRC-003 still pending — uncertain rules are never hard-coded as final).
 - **Chat intents** — mission, semester explanation, concept tutoring (e.g. Kirchhoff's → grounded in BEEE Module 2),
-  SGPA projection, lab audit, progress — all computed from live student state.
+  SGPA projection, lab audit, progress, **free-library navigation** (notes · DPP · books · mock tests) — all computed
+  from live student state.
 
 ## Data provenance rule
 

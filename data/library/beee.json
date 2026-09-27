@@ -1,0 +1,352 @@
+{
+  "subjectId": "beee",
+  "chapters": [
+    {
+      "moduleId": "m1",
+      "notes": [
+        {
+          "id": "beee-m1-n1",
+          "title": "DC Circuit Fundamentals — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Charge, current, voltage, power",
+              "bullets": [
+                "I = dQ/dt; conventional current flows + to −; electrons drift the other way.",
+                "V = work per unit charge (volt = J/C); voltage is always a difference between two points.",
+                "P = VI = I²R = V²/R; energy = P·t — the unit ladder W·h → kW·h is how bills are computed."
+              ]
+            },
+            {
+              "heading": "Resistors & networks",
+              "bullets": [
+                "Series: R_eq = ΣR (same current); parallel: 1/R_eq = Σ1/R (same voltage).",
+                "Two parallel shortcut: R₁R₂/(R₁+R₂).",
+                "Voltage divider: V_out = V_in·R₂/(R₁+R₂); current divider: I₁ = I·R₂/(R₁+R₂).",
+                "Conductance G = 1/R; siemens S."
+              ]
+            },
+            {
+              "heading": "Kirchhoff's laws (BEEE Module 2 preview)",
+              "bullets": [
+                "KCL at a node: ΣI_in = ΣI_out — charge cannot pile up.",
+                "KVL around a loop: ΣV = 0 — energy around a closed path is zero.",
+                "Sign discipline: assign directions first, let algebra confirm (negative result = opposite direction)."
+              ]
+            },
+            {
+              "heading": "Practical DC",
+              "bullets": [
+                "Real sources: V_terminal = V_emf − I·r_internal — terminal drops under load.",
+                "Wheatstone bridge balance: R₁/R₂ = R₃/R₄ ⇒ null detector current = 0.",
+                "Maximum power transfer: R_load = R_internal, efficiency then = 50%."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits Vol 1 (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "All About Circuits — DC analysis", "url": "https://www.allaboutcircuits.com/", "kind": "book" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m1-d1",
+          "title": "DPP-01 · Networks, dividers & Kirchhoff",
+          "questions": [
+            { "id": "dpp-be-m1-q1", "prompt": "Find R_eq of 6 Ω ∥ (4 Ω + 8 Ω) in series with 3 Ω.", "answer": "7 Ω", "solution": ["Branch: 4 + 8 = 12 Ω (series).", "6 ∥ 12 = (6×12)/(6+12) = 72/18 = 4 Ω.", "Total: 4 + 3 = 7 Ω."] },
+            { "id": "dpp-be-m1-q2", "prompt": "A 12 V source with internal resistance 1 Ω feeds a 5 Ω load. Load voltage?", "answer": "10 V", "solution": ["I = 12/(1+5) = 2 A.", "V_load = I·R = 2 × 5 = 10 V.", "(2 V dropped inside the source.)"] },
+            { "id": "dpp-be-m1-q3", "prompt": "Voltage divider: 10 V across 10 kΩ + 4 kΩ; output across 4 kΩ?", "answer": "≈ 2.86 V", "solution": ["V_out = 10 × 4/(10+4).", "= 40/14 ≈ 2.857 V."] },
+            { "id": "dpp-be-m1-q4", "prompt": "Two 100 Ω lamps in parallel on 50 V. Total power?", "answer": "50 W", "solution": ["Each lamp: P = V²/R = 2500/100 = 25 W.", "Two in parallel ⇒ 50 W total.", "Check: R_eq = 50 Ω, P = V²/R = 2500/50 = 50 W ✓"] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m2",
+      "notes": [
+        {
+          "id": "beee-m2-n1",
+          "title": "Network Theorems — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Superposition",
+              "bullets": [
+                "Response in a linear network with several sources = sum of responses from each source alone.",
+                "Kill other sources: voltage sources → short, current sources → open.",
+                "Never turn OFF the source you're analysing across; power is NOT superposable (recompute VI at the end)."
+              ]
+            },
+            {
+              "heading": "Thevenin & Norton",
+              "bullets": [
+                "Thevenin: any two-terminal linear network ⇒ V_TH (open-circuit voltage) + R_TH (dead sources, look-in resistance).",
+                "Norton: I_N = V_TH/R_TH in parallel with same R_TH — source transformation between the two.",
+                "Steps: remove load → find V_OC → kill sources → find R_TH → reattach load: I_L = V_TH/(R_TH+R_L)."
+              ]
+            },
+            {
+              "heading": "Maximum power & reciprocity",
+              "bullets": [
+                "Max power in R_L when R_L = R_TH; P_max = V_TH²/(4R_TH).",
+                "Efficiency at max power = 50% — you cannot win both.",
+                "Reciprocity (unilateral networks): transfer ratio same when source and detector swap."
+              ]
+            },
+            {
+              "heading": "Millman & compensation",
+              "bullets": [
+                "Millman: common voltage V = Σ(Vᵢ/Rᵢ) / Σ(1/Rᵢ) for parallel branches.",
+                "Tellegen's theorem: Σ v_k i_k = 0 over all branches (power conservation, any topology)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits — network theorems (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "NPTEL — Basic Electrical Circuits video course", "url": "https://nptel.ac.in/", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m2-d1",
+          "title": "DPP-02 · Thevenin, Norton & superposition",
+          "questions": [
+            { "id": "dpp-be-m2-q1", "prompt": "Find Thevenin voltage across the open terminals of a 10 V source in series with 2 kΩ (terminals after the resistor).", "answer": "V_TH = 10 V, R_TH = 2 kΩ", "solution": ["Open terminals ⇒ no current ⇒ no drop across 2 kΩ.", "V_TH = 10 V.", "Kill source (short) ⇒ look-in sees 2 kΩ ⇒ R_TH = 2 kΩ."] },
+            { "id": "dpp-be-m2-q2", "prompt": "Network seen from load has V_TH = 12 V, R_TH = 3 Ω. Load R_L = 6 Ω — current and load power?", "answer": "I = 0.8 A, P_L = 3.84 W", "solution": ["I = 12/(3+6) = 1.33... compute: 12/9 = 1.333 A? Recompute: 12/9 = 1.33 A.", "P_L = I²R = (1.33)² × 6 ≈ 10.67 W."] },
+            { "id": "dpp-be-m2-q3", "prompt": "Two batteries 10 V/1 Ω and 6 V/1 Ω drive a 7 Ω load in the SAME aiding direction. Superpose current.", "answer": "≈ 1.78 A (16/9 A)", "solution": ["Only the 10 V source active (6 V shorted): I′ = 10/(1+1+7) = 10/9 A.", "Only the 6 V source active (10 V shorted): I″ = 6/(1+1+7) = 6/9 A.", "Aiding direction: I = I′ + I″ = 16/9 ≈ 1.78 A — same as direct (10+6)/9 ✓"] },
+            { "id": "dpp-be-m2-q4", "prompt": "For max power, R_L must equal…? State P_max when V_TH = 20 V, R_TH = 10 Ω.", "answer": "R_L = 10 Ω; P_max = 10 W", "solution": ["Matched load: R_L = R_TH = 10 Ω.", "P_max = V_TH²/(4R_TH) = 400/40 = 10 W."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m3",
+      "notes": [
+        {
+          "id": "beee-m3-n1",
+          "title": "Diodes & Rectifiers — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "p-n diode behaviour",
+              "bullets": [
+                "Forward bias (p to +): barrier shrinks, diffusion current grows exponentially.",
+                "Reverse bias: only tiny reverse saturation current Iₛ flows (until breakdown).",
+                "Shockley equation I = Iₛ(e^{V/ηV_T} − 1); V_T ≈ 26 mV at 300 K, η ≈ 1 (Si).",
+                "Piecewise model: 0.7 V constant-drop for Si, 0.3 V for Ge — exam default."
+              ]
+            },
+            {
+              "heading": "Rectifiers",
+              "bullets": [
+                "Half-wave: output frequency = f_in, peak inverse voltage = V_m.",
+                "Full-wave centre-tap: PIV = 2V_m; bridge: PIV = V_m, no centre tap needed.",
+                "Average DC (full-wave) = 2V_m/π ≈ 0.636 V_m; half-wave = V_m/π.",
+                "Ripple factor improves with C filter: f_ripple = 2f for full-wave (100 Hz on 50 Hz mains)."
+              ]
+            },
+            {
+              "heading": "Special diodes",
+              "bullets": [
+                "Zener: operated in reverse breakdown, regulates V across R_L — series R limits current.",
+                "LED: forward-biased, ~1.8–3 V depending on colour; needs series resistor.",
+                "Photodiode: reverse-biased, photocurrent ∝ light; solar cell delivers power."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits — Semiconductors (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "HyperPhysics — diode basics", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m3-d1",
+          "title": "DPP-03 · Diode circuits & rectifiers",
+          "questions": [
+            { "id": "dpp-be-m3-q1", "prompt": "A Si diode in series with 1 kΩ across 10 V (ideal-ish with 0.7 V drop). Current?", "answer": "9.3 mA", "solution": ["V_R = 10 − 0.7 = 9.3 V.", "I = 9.3/1k = 9.3 mA.", "Direction: anode side if forward-connected."] },
+            { "id": "dpp-be-m3-q2", "prompt": "Full-wave rectifier, V_m = 15 V. Average output voltage (no filter)?", "answer": "9.54 V", "solution": ["V_dc = 2V_m/π.", "= 2(15)/3.1416 ≈ 9.55 V."] },
+            { "id": "dpp-be-m3-q3", "prompt": "PIV required for bridge rectifier with secondary V_m = 20 V?", "answer": "20 V", "solution": ["In a bridge, two diodes conduct while two block.", "Each blocking diode sees ≈ V_m.", "PIV = V_m = 20 V (centre-tap design would need 40 V)."] },
+            { "id": "dpp-be-m3-q4", "prompt": "Zener at 5.1 V regulates a 12 V supply through 340 Ω with R_L = 1 kΩ. Estimate load current.", "answer": "≈ 5.1 mA", "solution": ["V_load clamped at 5.1 V.", "I_L = 5.1/1000 = 5.1 mA.", "(Series current = (12−5.1)/340 ≈ 20 mA ⇒ I_Z ≈ 15 mA — Zener well in regulation.)"] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m4",
+      "notes": [
+        {
+          "id": "beee-m4-n1",
+          "title": "Transistors (BJT) & Biasing — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Regions & symbols",
+              "bullets": [
+                "BJT = NPN or PNP; terminals E, B, C; current gain β = I_C/I_B (≈100 typical), α = I_C/I_E.",
+                "I_E = I_B + I_C always.",
+                "Regions: cutoff (both junctions reverse) — switch OFF; active (EB fwd, CB reverse) — amplifier; saturation (both fwd) — switch ON."
+              ]
+            },
+            {
+              "heading": "Biasing for stable Q-point",
+              "bullets": [
+                "Fixed bias is thermally unstable; voltage-divider bias with stiff divider (βR_E ≫ R₂) makes I_C ≈ V_TH/R_E almost β-independent.",
+                "Load line: I_C = (V_CC − V_CE)/R_C; Q-point sits mid-line for max swing.",
+                "Emitter resistor gives negative feedback: I_C↑ ⇒ V_E↑ ⇒ V_BE↓ ⇒ I_C↓."
+              ]
+            },
+            {
+              "heading": "Small-signal view",
+              "bullets": [
+                "r_π = β·V_T/I_C (≈ 2.6 kΩ at 1 mA, β=100); g_m = I_C/V_T.",
+                "CE amplifier: A_v ≈ −g_m·(R_C ∥ R_L) — inverting gain.",
+                "Common collector (emitter follower): gain ≈ 1, high input Z — used as buffer."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits — BJT chapters (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "OpenStax / OER — digital & device notes", "url": "https://openstax.org/", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m4-d1",
+          "title": "DPP-04 · BJT currents & divider bias",
+          "questions": [
+            { "id": "dpp-be-m4-q1", "prompt": "β = 120, I_B = 40 µA. Find I_C and I_E.", "answer": "I_C = 4.8 mA, I_E ≈ 4.84 mA", "solution": ["I_C = βI_B = 120 × 40µ = 4.8 mA.", "I_E = I_B + I_C = 4.84 mA."] },
+            { "id": "dpp-be-m4-q2", "prompt": "Voltage-divider bias: V_CC = 12 V, R₁ = 47 kΩ, R₂ = 10 kΩ, R_E = 1 kΩ. Approx I_C.", "answer": "≈ 1.4 mA", "solution": ["Divider: V_TH = 12 × 10/(47+10) ≈ 2.1 V.", "V_E = V_TH − 0.7 ≈ 1.4 V ⇒ I_E = 1.4 V / 1 kΩ = 1.4 mA.", "I_C ≈ I_E = 1.4 mA (almost independent of β — that's why this bias is stable)."] },
+            { "id": "dpp-be-m4-q3", "prompt": "CE stage with R_C = 2.2 kΩ, I_C = 2 mA. Estimate voltage gain (β large).", "answer": "|A_v| ≈ 170", "solution": ["g_m = I_C/V_T = 2/0.026 ≈ 77 mS.", "A_v = −g_m R_C = −0.077 × 2200 ≈ −169.", "≈ −170 (inverting)."] },
+            { "id": "dpp-be-m4-q4", "prompt": "In which region does a BJT act as a closed switch?", "answer": "Saturation", "solution": ["Both junctions forward-biased.", "V_CE(sat) ≈ 0.2 V — almost short across C–E.", "Cutoff (I_C ≈ 0) is the open-switch state."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m5",
+      "notes": [
+        {
+          "id": "beee-m5-n1",
+          "title": "MOSFET & Applications — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Structure & operation",
+              "bullets": [
+                "MOSFET: gate insulated by SiO₂ — voltage-controlled, essentially zero gate current.",
+                "n-channel enhancement: V_GS > V_th forms the inversion channel; drain current flows.",
+                "Cut-off: V_GS < V_th (open switch); linear/ohmic: small V_DS (resistor); saturation: pinched channel (amplifier region for depletion types — for enhancement, 'saturation' = V_DS ≥ V_GS − V_th)."
+              ]
+            },
+            {
+              "heading": "Transfer & switching",
+              "bullets": [
+                "Shockley for FET: I_D = I_DSS(1 − V_GS/V_P)² (depletion/JFET form).",
+                "CMOS inverter: one pMOS + one nMOS — rail-to-rail output, near-zero static power.",
+                "Gate drive: C_gs charging sets switching speed; driver ICs supply the spike current."
+              ]
+            },
+            {
+              "heading": "Applications",
+              "bullets": [
+                "MOSFET as load switch / motor driver / chopper — chosen for low R_DS(on).",
+                "Power MOSFETs in SMPS: fast, but body diode & avalanche ratings must be respected.",
+                "Comparison: BJT current-driven & higher drop; MOSFET voltage-driven & lower conduction loss at low voltage."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits — FET chapters (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "All About Circuits — FETs section", "url": "https://www.allaboutcircuits.com/", "kind": "book" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m5-d1",
+          "title": "DPP-05 · MOSFET regions & CMOS",
+          "questions": [
+            { "id": "dpp-be-m5-q1", "prompt": "n-channel enhancement MOSFET with V_th = 2 V: what happens at V_GS = 1 V, V_DS = 10 V?", "answer": "Cut-off — no drain current", "solution": ["V_GS < V_th ⇒ no inversion channel.", "I_D = 0 (open switch).", "Drain–source blocks the full 10 V."] },
+            { "id": "dpp-be-m5-q2", "prompt": "JFET: I_DSS = 8 mA, V_P = −4 V. I_D at V_GS = −2 V?", "answer": "2 mA", "solution": ["I_D = 8(1 − (−2)/(−4))² = 8(1 − 0.5)².", "= 8 × 0.25 = 2 mA."] },
+            { "id": "dpp-be-m5-q3", "prompt": "Why does a CMOS inverter consume almost no static power?", "answer": "One transistor is off at a time — no direct V_DD→GND path", "solution": ["pMOS on/nMOS off for input 0; reverse for input 1.", "No steady crowbar current.", "Only dynamic power = C·V²·f during transitions."] },
+            { "id": "dpp-be-m5-q4", "prompt": "MOSFET R_DS(on) = 0.05 Ω carrying 10 A. Conduction loss?", "answer": "5 W", "solution": ["P = I²R = 100 × 0.05 = 5 W.", "Compare BJT: V_CE(sat)≈0.2 V ⇒ 2 W? — actually 10×0.2 = 20 W — MOSFET wins at high current.", "Heatsink sized for the 5 W."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m6",
+      "notes": [
+        {
+          "id": "beee-m6-n1",
+          "title": "Operational Amplifiers — complete revision notes (your biggest-gap module)",
+          "kind": "summary",
+          "readMinutes": 10,
+          "sections": [
+            {
+              "heading": "Ideal op-amp model (the whole game)",
+              "bullets": [
+                "Two golden rules: (1) i₊ = i₋ = 0 (infinite input Z), (2) V₊ = V₋ (virtual short when negative feedback exists).",
+                "Open-loop gain A → ∞; bandwidth → ∞; output can source/sink whatever the rails allow.",
+                "Virtual short only holds WITH feedback — never apply it open-loop."
+              ]
+            },
+            {
+              "heading": "Core configurations",
+              "bullets": [
+                "Inverting amp: A_v = −R_f/R_in; V₋ node is virtual ground.",
+                "Non-inverting: A_v = 1 + R_f/R_in; input Z huge — buffer at A_v = 1 (R_f = 0).",
+                "Summer: V_out = −R_f·(V₁/R₁ + V₂/R₂).",
+                "Integrator: C in feedback, V_out = −(1/RC)∫V_in dt; differentiator: C at input (add series R for stability).",
+                "Difference amp: V_out = (R_f/R_in)(V₂ − V₁) when resistors are matched pairs."
+              ]
+            },
+            {
+              "heading": "Applications & non-ideal notes",
+              "bullets": [
+                "Comparator: no feedback — output saturates to rail based on which input is higher.",
+                "Schmitt trigger: positive feedback gives hysteresis — cleans noisy signals.",
+                "Non-ideal: finite GBW (gain × bandwidth constant ≈ 1 MHz class parts), slew rate limits fast edges, offset voltage shifts outputs.",
+                "Bias current path: match DC resistance seen by both inputs to cancel offset."
+              ]
+            },
+            {
+              "heading": "Exam problem recipe",
+              "bullets": [
+                "1) Identify feedback path. 2) Mark V₊/V₋. 3) KCL at the inverting node. 4) Solve.",
+                "If the problem gives rails (±12 V), clamp the final answer — no output exceeds the rails.",
+                "Gain bandwidth check: closed-loop gain × signal freq must sit under GBW."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Lessons In Electric Circuits — Op-Amp chapter (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
+            { "title": "NPTEL — Analog Electronic Circuits course", "url": "https://nptel.ac.in/", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "beee-m6-d1",
+          "title": "DPP-06 · Inverting, summing & integrator op-amps",
+          "questions": [
+            { "id": "dpp-be-m6-q1", "prompt": "Inverting amplifier: R_in = 10 kΩ, R_f = 100 kΩ, V_in = 0.2 V. Find V_out.", "answer": "−2 V", "solution": ["A_v = −R_f/R_in = −10.", "V_out = −10 × 0.2 = −2 V.", "Virtual ground at V₋ = 0 ⇒ I_in = 0.2/10k = 20 µA through R_f ⇒ drop = 2 V."] },
+            { "id": "dpp-be-m6-q2", "prompt": "Non-inverting amp with R_in = 5 kΩ (to ground), R_f = 15 kΩ. Gain?", "answer": "+4 V/V", "solution": ["A_v = 1 + R_f/R_in = 1 + 15/5 = 4.", "No phase inversion; input impedance stays extremely high."] },
+            { "id": "dpp-be-m6-q3", "prompt": "Summing amplifier with R_f = 60 kΩ and inputs 1 kΩ (2 V), 2 kΩ (3 V)?", "answer": "−210 V (rail-limited in practice)", "solution": ["V_out = −60(2/1 + 3/2) = −60(2 + 1.5) = −60 × 3.5.", "= −210 V mathematically.", "With ±15 V rails the op-amp saturates near −15 V — always clamp."] },
+            { "id": "dpp-be-m6-q4", "prompt": "Integrator: R = 100 kΩ, C = 10 µF, constant V_in = 1 V. Rate of change of V_out?", "answer": "−1 V/s", "solution": ["dV_out/dt = −V_in/(RC).", "RC = 100k × 10µ = 1 s.", "Slope = −1/1 = −1 V per second."] }
+          ]
+        }
+      ]
+    }
+  ]
+}

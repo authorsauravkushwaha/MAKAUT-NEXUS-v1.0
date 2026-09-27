@@ -1,0 +1,238 @@
+{
+  "subjectId": "mathematics-1",
+  "chapters": [
+    {
+      "moduleId": "m1",
+      "notes": [
+        {
+          "id": "mathematics-1-m1-n1",
+          "title": "Calculus of a Single Variable — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Limits & Continuity",
+              "bullets": [
+                "lim f(x) = L means both one-sided limits exist and equal L — check left and right separately at break points.",
+                "Standard limits: lim sinθ/θ = 1 (θ→0), lim (1+θ)^{1/θ} = e, lim (e^θ−1)/θ = 1.",
+                "f is continuous at a iff lim_{x→a} f = f(a); discontinuities are removable, jump, or infinite.",
+                "Sandwich theorem rescues messy limits: g(x) ≤ f(x) ≤ h(x) and both ends converge ⇒ f converges."
+              ]
+            },
+            {
+              "heading": "Differentiability",
+              "bullets": [
+                "f′(a) = lim_{h→0} (f(a+h)−f(a))/h — existence requires left derivative = right derivative.",
+                "Differentiable ⇒ continuous, but NOT conversely: f(x)=|x| is continuous at 0, not differentiable.",
+                "Rules: (uv)′ = u′v + uv′, (u/v)′ = (u′v − uv′)/v², chain rule d/dx f(g) = f′(g)·g′.",
+                "L'Hôpital's rule: only for 0/0 or ∞/∞ forms — differentiate numerator and denominator separately.",
+                "Mean Value Theorem: f continuous on [a,b], differentiable on (a,b) ⇒ ∃c with f′(c) = (f(b)−f(a))/(b−a)."
+              ]
+            },
+            {
+              "heading": "Applications & series",
+              "bullets": [
+                "Maxima/minima: solve f′(x)=0, classify with f″(x) (concave up = min, down = max) or sign chart.",
+                "Taylor/Maclaurin: f(x) = Σ f⁽ⁿ⁾(0) xⁿ/n! — memorise eˣ, sin x, cos x, ln(1+x), (1+x)ⁿ expansions.",
+                "Curve sketching: monotonicity from f′ sign, concavity from f″ sign, asymptotes from limits."
+              ]
+            },
+            {
+              "heading": "Integration",
+              "bullets": [
+                "Indefinite integrals: ∫xⁿ dx = xⁿ⁺¹/(n+1) (n≠−1), ∫dx/x = ln|x|, ∫eˣ dx = eˣ.",
+                "Techniques: substitution (reverse chain rule), by parts ∫u dv = uv − ∫v du, partial fractions for rational functions.",
+                "Definite integral = net area; Fundamental Theorem: ∫ₐᵇ f = F(b) − F(a) where F′ = f.",
+                "Improper integrals: take limits before evaluating; check convergence at ∞ and at singular points."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax Calculus Vol 1 (free)", "url": "https://openstax.org/details/books/calculus-volume-1", "kind": "book" },
+            { "title": "Calculus Made Easy — free Gutenberg text", "url": "https://www.gutenberg.org/ebooks/33283", "kind": "book" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "mathematics-1-m1-d1",
+          "title": "DPP-01 · Limits, derivatives & basic integration",
+          "questions": [
+            { "id": "dpp-ma-m1-q1", "prompt": "Evaluate: lim_{x→0} sin(5x) / (3x).", "answer": "5/3", "solution": ["Write sin(5x)/(3x) = (5/3) · sin(5x)/(5x).", "As x→0, sin(5x)/(5x) → 1.", "Limit = 5/3."] },
+            { "id": "dpp-ma-m1-q2", "prompt": "Is f(x) = |x| differentiable at x = 0? Justify.", "answer": "No — left derivative −1, right derivative +1.", "solution": ["Right difference quotient: (|h|−0)/h = +1 for h>0.", "Left difference quotient: −1 for h<0.", "Limits differ ⇒ derivative does not exist (function is still continuous)."] },
+            { "id": "dpp-ma-m1-q3", "prompt": "Evaluate: ∫ x·eˣ dx.", "answer": "x·eˣ − eˣ + C", "solution": ["By parts: u = x, dv = eˣ dx ⇒ du = dx, v = eˣ.", "∫ x eˣ dx = x eˣ − ∫ eˣ dx.", "= x eˣ − eˣ + C = eˣ(x−1) + C."] },
+            { "id": "dpp-ma-m1-q4", "prompt": "Find the local nature of the critical point of f(x) = x² − 4x + 7.", "answer": "Local minimum at x = 2, f(2) = 3", "solution": ["f′(x) = 2x − 4 = 0 ⇒ x = 2.", "f″(x) = 2 > 0 ⇒ concave up ⇒ minimum.", "f(2) = 4 − 8 + 7 = 3."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m2",
+      "notes": [
+        {
+          "id": "mathematics-1-m2-n1",
+          "title": "Calculus of Several Variables — revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Partial derivatives",
+              "bullets": [
+                "∂f/∂x differentiates f with respect to x holding all other variables constant.",
+                "Total differential: df = (∂f/∂x)dx + (∂f/∂y)dy — the linear approximation engine.",
+                "Chain rule for z = f(u,v) with u(t), v(t): dz/dt = f_u·u′ + f_v·v′.",
+                "Clairaut's theorem: if f_xy and f_yx are continuous they are equal — mixed partials commute."
+              ]
+            },
+            {
+              "heading": "Extrema & Lagrange",
+              "bullets": [
+                "Critical points: ∇f = 0; classify with D = f_xx·f_yy − f_xy² (D>0 & f_xx>0 min, D>0 & f_xx<0 max, D<0 saddle).",
+                "Constrained extrema: Lagrange ∇f = λ∇g — solve alongside g(x,y)=c.",
+                "Chain of errors: Δz ≈ f_x Δx + f_y Δy for estimation problems."
+              ]
+            },
+            {
+              "heading": "Implicit & directional",
+              "bullets": [
+                "Implicit differentiation: dy/dx = −F_x/F_y for F(x,y)=0.",
+                "Directional derivative = ∇f · û — maximum in the gradient direction, |∇f| is its value.",
+                "Gradient is perpendicular to level curves; tangent to the curve has slope −F_x/F_y."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax Calculus Vol 2 — multivariable chapters", "url": "https://openstax.org/details/books/calculus-volume-2", "kind": "book" },
+            { "title": "Khan Academy — multivariable calculus", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "mathematics-1-m2-d1",
+          "title": "DPP-02 · Partial derivatives & extrema",
+          "questions": [
+            { "id": "dpp-ma-m2-q1", "prompt": "f(x,y) = x³y + xy². Find f_x and f_y at (1,2).", "answer": "f_x = 3x²y + y² = 10; f_y = x³ + 2xy = 5", "solution": ["f_x = 3x²y + y² ⇒ at (1,2): 6 + 4 = 10.", "f_y = x³ + 2xy ⇒ at (1,2): 1 + 4 = 5."] },
+            { "id": "dpp-ma-m2-q2", "prompt": "Classify the critical point of f(x,y) = x² + y² − 6x + 4y + 13.", "answer": "Local minimum at (3,−2)", "solution": ["f_x = 2x − 6 = 0 ⇒ x = 3; f_y = 2y + 4 = 0 ⇒ y = −2.", "D = f_xx f_yy − f_xy² = 2·2 − 0 = 4 > 0, f_xx = 2 > 0 ⇒ minimum.", "f(3,−2) = 9 + 4 − 18 − 8 + 13 = 0."] },
+            { "id": "dpp-ma-m2-q3", "prompt": "Use Lagrange to minimise f(x,y) = x + y subject to x² + y² = 1.", "answer": "Minimum = −√2 at (−1/√2, −1/√2)", "solution": ["∇f = λ∇g ⇒ (1,1) = λ(2x,2y) ⇒ x = y.", "2x² = 1 ⇒ x = y = ±1/√2.", "f = ±√2 — minimum is −√2 at (−1/√2,−1/√2)."] },
+            { "id": "dpp-ma-m2-q4", "prompt": "z = f(u,v), u = t², v = sin t. Write dz/dt.", "answer": "dz/dt = f_u·2t + f_v·cos t", "solution": ["Chain rule for two intermediate variables.", "du/dt = 2t, dv/dt = cos t.", "dz/dt = (∂f/∂u)(du/dt) + (∂f/∂v)(dv/dt)."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m3",
+      "notes": [
+        {
+          "id": "mathematics-1-m3-n1",
+          "title": "Multiple Integrals — revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Double integrals",
+              "bullets": [
+                "∫∫_R f dA: iterate — inner integral first, outer last; sketch R every single time.",
+                "Type-I region: y from y₁(x) to y₂(x); Type-II: x from x₁(y) to x₂(y) — choose the simpler order.",
+                "Fubini holds when f is continuous on a rectangular region: dA = dx dy or dy dx."
+              ]
+            },
+            {
+              "heading": "Polar coordinates",
+              "bullets": [
+                "x = r cosθ, y = r sinθ, dA = r dr dθ (never forget the Jacobian r).",
+                "Circles, petals and annuli become trivial in polar: r from 0 to a, θ from 0 to 2π.",
+                "General Jacobian: dA = |∂(x,y)/∂(u,v)| du dv for any substitution."
+              ]
+            },
+            {
+              "heading": "Triple integrals & applications",
+              "bullets": [
+                "Triple ∫∫∫ f dz dy dx over a solid — use cylindrical (extra r) or spherical coordinates for symmetry.",
+                "Mass = ∫∫ ρ dA, centroid (x̄,ȳ) = (1/A)∫∫ x dA, (1/A)∫∫ y dA.",
+                "Area of R = ∫∫_R dA; volume = ∫∫∫ dV — set limits from the region description, not memory."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax Calculus Vol 2 — integration techniques", "url": "https://openstax.org/details/books/calculus-volume-2", "kind": "book" },
+            { "title": "Khan Academy — double/triple integrals", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "mathematics-1-m3-d1",
+          "title": "DPP-03 · Double integrals & polar forms",
+          "questions": [
+            { "id": "dpp-ma-m3-q1", "prompt": "Evaluate ∫₀¹∫₀ˣ xy dy dx.", "answer": "1/8", "solution": ["Inner: ∫₀ˣ xy dy = x·[y²/2]₀ˣ = x³/2.", "Outer: ∫₀¹ x³/2 dx = [x⁴/8]₀¹ = 1/8."] },
+            { "id": "dpp-ma-m3-q2", "prompt": "Express ∫∫_R (x²+y²) dA over the disk x²+y² ≤ 4 in polar and evaluate.", "answer": "8π", "solution": ["Polar: x²+y² = r², dA = r dr dθ.", "∫₀^{2π}∫₀² r²·r dr dθ = ∫₀^{2π} dθ · [r⁴/4]₀² = 2π·4 = 8π."] },
+            { "id": "dpp-ma-m3-q3", "prompt": "Find the area inside r = 2cosθ.", "answer": "π", "solution": ["Circle of radius 1 centred at (1,0); θ from −π/2 to π/2.", "A = ½∫ r² dθ = ½ ∫_{−π/2}^{π/2} 4cos²θ dθ = 2 · (π/2) = π."] },
+            { "id": "dpp-ma-m3-q4", "prompt": "Mass of a plate with density ρ(x,y)=x+y over the square [0,1]×[0,1].", "answer": "1", "solution": ["M = ∫₀¹∫₀¹ (x+y) dy dx.", "Inner: [xy + y²/2]₀¹ = x + 1/2.", "Outer: [x²/2 + x/2]₀¹ = 1/2 + 1/2 = 1."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m4",
+      "notes": [
+        {
+          "id": "mathematics-1-m4-n1",
+          "title": "Matrices & Linear Algebra — revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Matrix basics",
+              "bullets": [
+                "AB ≠ BA in general; (AB)ᵀ = BᵀAᵀ; (AB)⁻¹ = B⁻¹A⁻¹.",
+                "Row operations → echelon form → rank = number of non-zero rows.",
+                "det(AB) = det(A)det(B); det(A⁻¹) = 1/det(A); swapping rows flips the sign."
+              ]
+            },
+            {
+              "heading": "Systems & rank",
+              "bullets": [
+                "Ax = b is consistent iff rank(A) = rank(A|b).",
+                "Unique solution iff rank = number of unknowns; infinitely many if rank < n; none if ranks differ.",
+                "Cramer's rule works only for square systems with det ≠ 0 — prefer elimination in practice."
+              ]
+            },
+            {
+              "heading": "Eigenvalues",
+              "bullets": [
+                "Characteristic equation det(A − λI) = 0; eigenvectors satisfy (A − λI)v = 0.",
+                "Sum of eigenvalues = trace(A), product = det(A) — instant sanity checks.",
+                "Diagonalisable iff you can collect n independent eigenvectors; A = PDP⁻¹ gives Aᵏ = PDᵏP⁻¹."
+              ]
+            },
+            {
+              "heading": "Exam traps",
+              "bullets": [
+                "Never divide a row by zero — swap rows first.",
+                "A singular matrix has no inverse; det = 0 ⇔ columns linearly dependent.",
+                "For 2×2: A⁻¹ = 1/(ad−bc) · [[d,−b],[−c,a]]."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "MIT OCW 18.06 — Linear Algebra (Strang)", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/", "kind": "course" },
+            { "title": "Khan Academy — Linear algebra", "url": "https://www.khanacademy.org/math/linear-algebra", "kind": "course" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "mathematics-1-m4-d1",
+          "title": "DPP-04 · Rank, systems & eigenvalues",
+          "questions": [
+            { "id": "dpp-ma-m4-q1", "prompt": "Find the rank of A = [[1,2],[2,4]].", "answer": "1", "solution": ["R2 → R2 − 2R1 gives [[1,2],[0,0]].", "One non-zero row ⇒ rank = 1.", "Columns are proportional ⇒ linearly dependent."] },
+            { "id": "dpp-ma-m4-q2", "prompt": "Solve: x + y = 3, 2x + 2y = 6.", "answer": "Infinitely many solutions: x = 3 − t, y = t", "solution": ["Second equation = 2 × first ⇒ rank(A) = rank(A|b) = 1 < 2.", "One free parameter t.", "Family: (3−t, t)."] },
+            { "id": "dpp-ma-m4-q3", "prompt": "Eigenvalues of A = [[2,1],[0,3]]?", "answer": "λ = 2 and λ = 3", "solution": ["Upper triangular ⇒ eigenvalues are the diagonal entries.", "Verify: det(A−2I)=0 and det(A−3I)=0.", "trace = 5 = 2+3 ✓, det = 6 = 2·3 ✓."] },
+            { "id": "dpp-ma-m4-q4", "prompt": "If A is 3×3 with det(A) = 5, find det(2A) and det(A⁻¹).", "answer": "det(2A) = 40; det(A⁻¹) = 1/5", "solution": ["For n×n: det(kA) = kⁿ det(A) ⇒ 2³ × 5 = 40.", "det(A⁻¹) = 1/det(A) = 1/5."] }
+          ]
+        }
+      ]
+    }
+  ]
+}

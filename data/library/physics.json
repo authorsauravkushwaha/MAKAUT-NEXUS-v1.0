@@ -1,0 +1,224 @@
+{
+  "subjectId": "physics",
+  "chapters": [
+    {
+      "moduleId": "m1",
+      "notes": [
+        {
+          "id": "physics-m1-n1",
+          "title": "Oscillations & Waves — complete revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "SHM fundamentals",
+              "bullets": [
+                "SHM: acceleration a = −ω²x — restoring force proportional to displacement, opposite in direction.",
+                "x(t) = A cos(ωt + φ); v = −Aω sin(ωt+φ); a = −Aω² cos(ωt+φ).",
+                "Energy shuttles between ½kx² and ½mv²; total E = ½mω²A² is constant.",
+                "Spring-mass: ω = √(k/m); simple pendulum (small angle): ω = √(g/L), T = 2π√(L/g)."
+              ]
+            },
+            {
+              "heading": "Damped & driven oscillations",
+              "bullets": [
+                "Damping adds −bv: amplitude decays as e^{−bt/2m}; underdamped oscillates, overdamped creeps.",
+                "Resonance: driving at ω ≈ ω₀ maximises amplitude (Q factor = ω₀/broadness).",
+                "Phase: displacement lags driving force near resonance by π/2."
+              ]
+            },
+            {
+              "heading": "Waves",
+              "bullets": [
+                "v = fλ; transverse (string, light) vs longitudinal (sound).",
+                "y = A sin(kx − ωt), k = 2π/λ, ω = 2πf; wave equation ∂²y/∂x² = (1/v²)∂²y/∂t².",
+                "Superposition → interference; standing waves when two opposite waves lock: fₙ = n·v/2L (string fixed both ends).",
+                "Doppler: f′ = f(v ± vₒ)/(v ∓ vₛ) — approach positive, recede negative (for observer still)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax University Physics Vol 1 — oscillations", "url": "https://openstax.org/details/books/university-physics-volume-1", "kind": "book" },
+            { "title": "HyperPhysics — SHM quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "physics-m1-d1",
+          "title": "DPP-01 · SHM, energy & waves",
+          "questions": [
+            { "id": "dpp-ph-m1-q1", "prompt": "A spring-mass system has k = 200 N/m and m = 0.5 kg. Find ω and T.", "answer": "ω = 20 rad/s, T ≈ 0.314 s", "solution": ["ω = √(k/m) = √(200/0.5) = √400 = 20 rad/s.", "T = 2π/ω = 2π/20 ≈ 0.314 s."] },
+            { "id": "dpp-ph-m1-q2", "prompt": "In SHM, where is kinetic energy maximum and potential energy maximum?", "answer": "KE max at mean position (x=0); PE max at extreme (x=±A)", "solution": ["KE = ½mω²(A² − x²) ⇒ max when x = 0.", "PE = ½kx² ⇒ max when |x| = A.", "Total energy stays ½kA² throughout."] },
+            { "id": "dpp-ph-m1-q3", "prompt": "A string 1.5 m long, fixed at both ends, vibrates in 3 loops at 120 Hz. Find wave speed.", "answer": "120 m/s", "solution": ["3 loops ⇒ the string holds three half-wavelengths: L = 3·(λ/2).", "λ = 2L/3 = 2(1.5)/3 = 1 m.", "v = fλ = 120 × 1 = 120 m/s."] },
+            { "id": "dpp-ph-m1-q4", "prompt": "A 440 Hz source moves toward you at 30 m/s (v_sound = 340 m/s). Apparent frequency?", "answer": "≈ 483.5 Hz", "solution": ["Approaching source: f′ = f·v/(v − vₛ).", "f′ = 440 × 340/(340 − 30) = 440 × 340/310 ≈ 483.5 Hz."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m2",
+      "notes": [
+        {
+          "id": "physics-m2-n1",
+          "title": "Electromagnetic Theory — revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Electrostatics",
+              "bullets": [
+                "Coulomb: F = q₁q₂/(4πε₀r²); field of point charge E = q/(4πε₀r²).",
+                "Gauss: ∮E·dA = Q_enc/ε₀ — pick symmetry (plane, sphere, cylinder) before integrating.",
+                "Potential V = −∫E·dl; for point charge V = q/(4πε₀r); equipotential surfaces ⊥ field lines.",
+                " capacitor energy U = ½CV²; energy density u = ½ε₀E²."
+              ]
+            },
+            {
+              "heading": "Magnetostatics",
+              "bullets": [
+                "Biot–Savart for wires/loops; long straight wire B = μ₀I/(2πr).",
+                "Ampère: ∮B·dl = μ₀I_enc — solenoid interior B = μ₀nI uniform.",
+                "Lorentz force F = q(v × B) — circle radius r = mv/(qB), cyclotron frequency f = qB/(2πm)."
+              ]
+            },
+            {
+              "heading": "Faraday, Maxwell & EM waves",
+              "bullets": [
+                "Faraday: ε = −dΦ_B/dt (Lenz's law gives the minus sign — induced effects oppose change).",
+                "Maxwell's four equations complete the set: displacement current ε₀dΦ_E/dt adds the missing term.",
+                "EM waves in vacuum: c = 1/√(μ₀ε₀) ≈ 3×10⁸ m/s; E, B and propagation mutually ⊥.",
+                "Wave impedance Z₀ = E/B = c; intensity ∝ E²."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax University Physics Vol 2 — E&M", "url": "https://openstax.org/details/books/university-physics-volume-2", "kind": "book" },
+            { "title": "HyperPhysics — electromagnetism maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "physics-m2-d1",
+          "title": "DPP-02 · Gauss, Ampère & Faraday",
+          "questions": [
+            { "id": "dpp-ph-m2-q1", "prompt": "Electric field at distance r from an infinitely long charged wire with linear density λ?", "answer": "E = λ/(2πε₀r), radial", "solution": ["Cylindrical Gaussian surface of radius r, length L.", "E·(2πrL) = Q_enc/ε₀ = λL/ε₀.", "E = λ/(2πε₀r)."] },
+            { "id": "dpp-ph-m2-q2", "prompt": "A 10-turn coil of radius 5 cm carries 2 A. Approximate B at its centre.", "answer": "≈ 2.5×10⁻⁴ T", "solution": ["Centre of current loop: B = μ₀NI/(2R).", "= (4π×10⁻⁷ × 10 × 2)/(2 × 0.05).", "= 8π×10⁻⁶/0.1 ≈ 2.5×10⁻⁴ T."] },
+            { "id": "dpp-ph-m2-q3", "prompt": "A 0.5 H inductor sees current change from 2 A to 5 A in 4 ms. Induced emf?", "answer": "375 V", "solution": ["ε = −L·dI/dt; |dI/dt| = (5−2)/0.004 = 750 A/s.", "|ε| = 0.5 × 750 = 375 V.", "Lenz's law: the emf opposes the current increase."] },
+            { "id": "dpp-ph-m2-q4", "prompt": "In a uniform B = 0.1 T, an electron (v = 10⁶ m/s ⊥ B) moves in a circle. Find radius.", "answer": "≈ 0.057 mm", "solution": ["r = mv/(qB) with m = 9.11×10⁻³¹ kg, q = 1.6×10⁻¹⁹ C.", "r = (9.11×10⁻³¹ × 10⁶)/(1.6×10⁻¹⁹ × 0.1).", "= 9.11×10⁻²⁵/1.6×10⁻²⁰ ≈ 5.7×10⁻⁵ m ≈ 0.057 mm."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m3",
+      "notes": [
+        {
+          "id": "physics-m3-n1",
+          "title": "Optics — revision notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Ray optics",
+              "bullets": [
+                "Mirror equation 1/f = 1/v + 1/u (sign convention: real-is-positive or Cartesian — pick one and stick to it).",
+                "Refraction: n₁ sinθ₁ = n₂ sinθ₂; apparent depth = real depth × (n₂/n₁).",
+                "Critical angle θc = sin⁻¹(n₂/n₁) → total internal reflection when going dense → rare.",
+                "Lens maker: 1/f = (n−1)(1/R₁ − 1/R₂); thin-lens combination 1/F = Σ1/fᵢ."
+              ]
+            },
+            {
+              "heading": "Interference",
+              "bullets": [
+                "Young's double slit: fringe width β = λD/d — bright and dark alternate with path difference mλ / (m+½)λ.",
+                "Thin films: reflected phase shift of π at denser medium; colour depends on 2nt = (m+½)λ (reflected).",
+                "Coherent sources required — splitting one source is the classic trick."
+              ]
+            },
+            {
+              "heading": "Diffraction & instruments",
+              "bullets": [
+                "Single slit minima: a sinθ = mλ; central max width = 2λD/a (twice the double-slit fringe).",
+                "Resolving power: Rayleigh criterion θ = 1.22 λ/D for circular aperture.",
+                "Grating: d sinθ = mλ — more slits ⇒ sharper, brighter principal maxima."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "OpenStax University Physics Vol 2 — optics chapters", "url": "https://openstax.org/details/books/university-physics-volume-2", "kind": "book" },
+            { "title": "HyperPhysics — optics quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "physics-m3-d1",
+          "title": "DPP-03 · Lenses, interference & diffraction",
+          "questions": [
+            { "id": "dpp-ph-m3-q1", "prompt": "An object 10 cm tall is 30 cm from a concave mirror of f = −15 cm. Find image distance.", "answer": "v = −30 cm (real, inverted, same size)", "solution": ["1/v = 1/f − 1/u = 1/(−15) − 1/(−30) = −1/15 + 1/30.", "1/v = (−2+1)/30 = −1/30 ⇒ v = −30 cm.", "m = −v/u = −(−30)/(−30) = −1 ⇒ inverted, same height."] },
+            { "id": "dpp-ph-m3-q2", "prompt": "Double slit: d = 0.5 mm, D = 1 m, λ = 600 nm. Fringe width?", "answer": "1.2 mm", "solution": ["β = λD/d = (600×10⁻⁹ × 1)/(0.5×10⁻³).", "= 1.2×10⁻³ m = 1.2 mm."] },
+            { "id": "dpp-ph-m3-q3", "prompt": "Critical angle for glass (n = 1.5) to air?", "answer": "≈ 41.8°", "solution": ["sinθc = 1/n = 1/1.5 = 0.667.", "θc = sin⁻¹(0.667) ≈ 41.8°."] },
+            { "id": "dpp-ph-m3-q4", "prompt": "Single slit of width 0.2 mm: first diffraction minimum at what angle for λ = 500 nm?", "answer": "≈ 0.143°", "solution": ["a sinθ = λ ⇒ sinθ = 500×10⁻⁹/0.2×10⁻³ = 2.5×10⁻³.", "θ ≈ 2.5×10⁻³ rad.", "In degrees: ×180/π ≈ 0.143°."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m4",
+      "notes": [
+        {
+          "id": "physics-m4-n1",
+          "title": "Quantum & Semiconductor Physics — revision notes",
+          "kind": "summary",
+          "readMinutes": 9,
+          "sections": [
+            {
+              "heading": "Quantum foundations",
+              "bullets": [
+                "Planck: E = hν; photon momentum p = h/λ — light behaves as particles in photoelectric effect.",
+                "de Broglie: λ = h/(mv) — every particle has a wave; electron in 1 V: λ ≈ 1.2 nm.",
+                "Heisenberg: Δx·Δp ≥ ħ/2 — measurement disturbs the system.",
+                "Schrödinger equation gives ψ; |ψ|² is probability density — quantisation appears from boundary conditions."
+              ]
+            },
+            {
+              "heading": "Quantum in a box & tunnelling",
+              "bullets": [
+                "Particle in 1-D box: Eₙ = n²h²/(8mL²) — energy gaps shrink as L grows.",
+                "Tunnelling probability drops exponentially with barrier width — basis of tunnel diode & STM.",
+                "Photoelectric equation: KEmax = hν − φ — threshold frequency ν₀ = φ/h."
+              ]
+            },
+            {
+              "heading": "Semiconductors",
+              "bullets": [
+                "Intrinsic: nᵢ² = n·p; doping → n-type (donors) or p-type (acceptors).",
+                "p-n junction: depletion region, barrier ≈ 0.7 V for Si; forward bias conducts, reverse blocks.",
+                "Zener breakdown (heavily doped, sharp) vs avalanche (gradual, impact ionisation).",
+                "Diode equations: I = Iₛ(e^{V/ηV_T} − 1); half/full rectifiers convert AC → pulsating DC (filtered with C)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "HyperPhysics — quantum concepts", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
+            { "title": "Feynman Lectures — Quantum behaviour (free)", "url": "https://www.feynmanlectures.caltech.edu/", "kind": "book" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "physics-m4-d1",
+          "title": "DPP-04 · Photoelectric effect & semiconductors",
+          "questions": [
+            { "id": "dpp-ph-m4-q1", "prompt": "Light of λ = 400 nm hits a metal with φ = 2.0 eV. Find KEmax.", "answer": "≈ 1.1 eV", "solution": ["E = 1240/λ(nm) eV = 1240/400 = 3.1 eV.", "KEmax = hν − φ = 3.1 − 2.0 = 1.1 eV."] },
+            { "id": "dpp-ph-m4-q2", "prompt": "Electron accelerated through 100 V: de Broglie wavelength?", "answer": "≈ 0.123 nm", "solution": ["λ = h/√(2meV) = 1.226/√V nm (standard result).", "λ = 1.226/√100 = 0.1226 nm ≈ 0.123 nm — comparable to crystal spacing ⇒ XRD works."] },
+            { "id": "dpp-ph-m4-q3", "prompt": "In a box of length L = 1 nm, ground-state electron energy scale?", "answer": "≈ 0.38 eV", "solution": ["E₁ = h²/(8mL²).", "Plug h = 6.626×10⁻³⁴, m = 9.11×10⁻³¹, L = 10⁻⁹ ⇒ E₁ ≈ 6×10⁻²⁰ J.", "Convert: /1.6×10⁻¹⁹ ≈ 0.376 eV."] },
+            { "id": "dpp-ph-m4-q4", "prompt": "Doping silicon with phosphorus creates which carrier type and why?", "answer": "n-type — phosphorus has 5 valence electrons (extra free electron)", "solution": ["P (group 15) substitutes Si (group 14).", "Four bonds form; the fifth electron is loosely bound → donated to conduction band.", "Majority carriers = electrons; holes remain minority."] }
+          ]
+        }
+      ]
+    }
+  ]
+}

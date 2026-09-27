@@ -6,3 +6,9 @@ dist-ssr
 .vite
 *.log
 npm-debug.log*
+
+# local transfer bundle (not part of the repo)
+*.bundle
+
+# transfer archives (not part of the repo)
+*.zip

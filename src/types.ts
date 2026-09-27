@@ -154,6 +154,68 @@ export interface NonTheoryState {
   participation: boolean;
 }
 
+/* ── Free student library ─────────────────────────────────────────── */
+
+export interface LibraryResource {
+  title: string;
+  url: string;
+  kind: 'book' | 'video' | 'course' | 'reference' | 'tool';
+}
+
+export interface NoteSection {
+  heading: string;
+  bullets: string[];
+}
+
+export interface ChapterNote {
+  id: string;
+  title: string;
+  kind: 'summary' | 'formula' | 'guide';
+  readMinutes: number;
+  sections: NoteSection[];
+  resources?: LibraryResource[];
+}
+
+export interface DppQuestion {
+  id: string;
+  prompt: string;
+  answer: string;
+  solution: string[];
+}
+
+export interface Dpp {
+  id: string;
+  title: string;
+  questions: DppQuestion[];
+}
+
+export interface SubjectChapterLibrary {
+  moduleId: string;
+  notes: ChapterNote[];
+  dpps: Dpp[];
+}
+
+export interface SubjectLibrary {
+  subjectId: string;
+  chapters: SubjectChapterLibrary[];
+}
+
+export interface FreeBook {
+  id: string;
+  title: string;
+  author: string;
+  url: string;
+  license: string;
+  subjects: string[];
+  kind: 'book' | 'course' | 'reference' | 'tool';
+  why: string;
+}
+
+export interface LibraryProgress {
+  notesRead: string[];
+  dppSolved: string[];
+}
+
 export interface StudentState {
   version: number;
   onboarded: boolean;
@@ -173,6 +235,8 @@ export interface StudentState {
   mission: Mission | null;
   studyMinutesToday: number;
   studyLog: { date: string; minutes: number }[];
+  /** Free library progress — notes read & DPP problems solved. */
+  library: LibraryProgress;
 }
 
 /** Alias used by AI modules. */

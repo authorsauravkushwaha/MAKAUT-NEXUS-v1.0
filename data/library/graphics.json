@@ -1,0 +1,219 @@
+{
+  "subjectId": "graphics",
+  "chapters": [
+    {
+      "moduleId": "m1",
+      "notes": [
+        {
+          "id": "graphics-m1-n1",
+          "title": "Engineering Drawing Fundamentals — notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Lines, lettering, dimensions",
+              "bullets": [
+                "Line types: continuous (visible), dashed (hidden), chain thin (centre/symmetry), thick (cutting plane).",
+                "Lettering: single-stroke capital, inclined 75° or vertical — consistent height (3.5/5 mm standard).",
+                "Dimension = extension line + dimension line + arrowheads + number (mm by default, unit noted once).",
+                "Dimension from true size features; never chain redundant dims — use datum/dimensioning to avoid tolerance stacking."
+              ]
+            },
+            {
+              "heading": "Projection systems",
+              "bullets": [
+                "First-angle (European/Indian standard ISO): object between observer and plane — views placed: front view above top? — in FIRST angle TOP VIEW GOES BELOW the front view.",
+                "Third-angle (US): plane between observer and object — top view above front view.",
+                "IS 10714 follows first angle — always confirm the symbol on the drawing."
+              ]
+            },
+            {
+              "heading": "Sheet & scales",
+              "bullets": [
+                "Sheet sizes A0–A4; title block mandatory (title, scale, sheet no, author, standard).",
+                "Scales: 1:1, enlargement (1:2? no — 2:1), reduction (1:2); state scale in title block.",
+                "Conventions: radii marked R, diameters Ø, chamfers ×45°, repeat counts ×n."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "NPTEL — Engineering Graphics (search on NPTEL)", "url": "https://nptel.ac.in/", "kind": "course" },
+            { "title": "GeoGebra — free drawing tools", "url": "https://www.geogebra.org/", "kind": "tool" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "graphics-m1-d1",
+          "title": "DPP-01 · Conventions & projection basics",
+          "questions": [
+            { "id": "dpp-gr-m1-q1", "prompt": "In first-angle projection, where is the top view placed relative to the front view?", "answer": "Below the front view", "solution": ["First angle: object between observer & plane — the view cast onto the plane lands opposite the sight direction.", "Top sight ⇒ image falls below front view.", "Third-angle reverses both placements."] },
+            { "id": "dpp-gr-m1-q2", "prompt": "Which line type represents a hidden edge? A centre line of a hole?", "answer": "Hidden = dashed thin; centre = chain (long-short) thin", "solution": ["Hidden edges are not physically visible but exist behind surfaces.", "Centrelines run through symmetry axes & circle centres.", "Thick chain marks cutting planes."] },
+            { "id": "dpp-gr-m1-q3", "prompt": "A scale of 2:1 on a drawing of a 40 mm part — what's drawn length and type of scale?", "answer": "80 mm — enlargement scale", "solution": ["2:1 ⇒ drawing is twice real size.", "Used for small intricate parts.", "Always state scale in the title block."] },
+            { "id": "dpp-gr-m1-q4", "prompt": "Give two dimensioning rules.", "answer": "Dimension true sizes; avoid duplicate/tolerance-stacking chains", "solution": ["Dimension the feature as it truly is, not foreshortened views.", "Reference from stable datums so errors don't accumulate.", "Never dimension a hidden line."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m2",
+      "notes": [
+        {
+          "id": "graphics-m2-n1",
+          "title": "Orthographic Projections — notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "View generation",
+              "bullets": [
+                "Minimum three views (front, top, side) needed to fully describe most solids — choose the most descriptive front view.",
+                "Project horizontally from front; vertically from top; the 45° miter line (or arc compass) transfers depth between top & side.",
+                "Align views strictly — every edge appears in at least two views."
+              ]
+            },
+            {
+              "heading": "Rules that fix most mistakes",
+              "bullets": [
+                "Front & top share length; front & side share height; top & side share depth.",
+                "A slanted face appears foreshortened in two views and true-size in the third (if parallel to plane) — otherwise use auxiliary view.",
+                "Circles project as circles only in the view normal to their plane; elsewhere ellipses."
+              ]
+            },
+            {
+              "heading": "Procedure for solids",
+              "bullets": [
+                "Block in overall bounding box → add major features → project intersections → thicken visible lines → dashed hidden → centre lines.",
+                "Intersections (cylinder + plane): take generators/points method — mark points in both views and connect smoothly.",
+                "Checklist before submitting: all views aligned, hidden lines justified, dimensions on most descriptive view, no duplicate dims."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Khan Academy — descriptive geometry foundations", "url": "https://www.khanacademy.org/math/geometry", "kind": "course" },
+            { "title": "GeoGebra — project solids and views", "url": "https://www.geogebra.org/", "kind": "tool" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "graphics-m2-d1",
+          "title": "DPP-02 · Multiview projection problems",
+          "questions": [
+            { "id": "dpp-gr-m2-q1", "prompt": "Which dimensions do front and top views share?", "answer": "Length", "solution": ["Front & top are vertically aligned ⇒ same horizontal extent (length).", "Front & side share height; top & side share depth."] },
+            { "id": "dpp-gr-m2-q2", "prompt": "A rectangular plate is inclined to both projection planes. Where is its true shape?", "answer": "In neither principal view — use an auxiliary view", "solution": ["Foreshortening occurs in all three principal views.", "Auxiliary plane parallel to the inclined face reveals true size."] },
+            { "id": "dpp-gr-m2-q3", "prompt": "A circle on the horizontal plane appears as ____ in the front view.", "answer": "A straight line (edge view)", "solution": ["Front view looks perpendicular to the horizontal plane.", "The circle's plane collapses to its diameter line.", "In the top view it's a true circle."] },
+            { "id": "dpp-gr-m2-q4", "prompt": "Name the projection-transfer tool between top and side views.", "answer": "45° miter line (or compass arcs)", "solution": ["Depth measured from the side view equals depth in top view.", "Miter line reflects depth across the 45° diagonal.", "Keep all transfer lines light until final inking."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m3",
+      "notes": [
+        {
+          "id": "graphics-m3-n1",
+          "title": "Sections & Development of Surfaces — notes",
+          "kind": "summary",
+          "readMinutes": 8,
+          "sections": [
+            {
+              "heading": "Sectional views",
+              "bullets": [
+                "Cutting plane (thick chain) shows where the saw goes; arrows show viewing direction.",
+                "Section only the part between observer and cut plane; hatching at 45° for the cut material (align hatch across adjacent parts, alternate for assemblies).",
+                "Common rules: don't section through axes of bolts/rods/shafts longitudinally; ribs & spokes hatched only when cut across."
+              ]
+            },
+            {
+              "heading": "Half & revolved sections",
+              "bullets": [
+                "Half section: one quarter removed — shows inside + outside on symmetric parts (used with centre line as boundary).",
+                "Revolved section: rotate the cross-section 90° into the view (shaft spokes, bars) — removed section placed nearby for clarity."
+              ]
+            },
+            {
+              "heading": "Development of surfaces",
+              "bullets": [
+                "Parallel-line method: prisms & cylinders — stretch out rectangles, project edges as generators.",
+                "Radial-line method: cones & pyths — all slant edges radiate from apex; true lengths before unfolding.",
+                "Transitional objects: triangulate; seam allowance & bend relief noted for sheet-metal.",
+                "Always mark hole positions in BOTH the view and the development (points transfer by rotation/projection)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "NPTEL — Engineering Graphics sections module", "url": "https://nptel.ac.in/", "kind": "course" },
+            { "title": "FreeCAD — unfold practice (open source)", "url": "https://www.freecad.org/", "kind": "tool" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "graphics-m3-d1",
+          "title": "DPP-03 · Sections & developments",
+          "questions": [
+            { "id": "dpp-gr-m3-q1", "prompt": "When should a shaft NOT be sectioned longitudinally?", "answer": "When the cutting plane passes along the axis — conventions show it unsectioned", "solution": ["Solid shafts are conventionally left uncut along their length.", "Cutting across (transverse section) is fine.", "Bolts, nuts, rivets & spokes follow the same exemption."] },
+            { "id": "dpp-gr-m3-q2", "prompt": "Which development method fits a cone?", "answer": "Radial-line method", "solution": ["All slant lines radiate from the apex at equal angles.", "Compute true slant length, sector angle = 2πr/L × 360°… sector θ = (r/L)·360°.", "Unfold the sector with holes mapped by rotation from the view."] },
+            { "id": "dpp-gr-m3-q3", "prompt": "Hatch direction rule in an assembly section?", "answer": "Alternate adjacent parts; align within the same part", "solution": ["Different parts get different hatch angles/spacings to show boundaries.", "Identical parts keep matching hatch.", "45° thin continuous lines standard."] },
+            { "id": "dpp-gr-m3-q4", "prompt": "A cylinder Ø50, height 80 — dimensions of its parallel-line development rectangle?", "answer": "80 × (π×50 ≈ 157.1)", "solution": ["Length = circumference = πD = 157.08 mm.", "Height = cylinder height = 80 mm.", "Transfer hole locations along the developed circumference."] }
+          ]
+        }
+      ]
+    },
+    {
+      "moduleId": "m4",
+      "notes": [
+        {
+          "id": "graphics-m4-n1",
+          "title": "Isometric & Perspective Views — notes",
+          "kind": "summary",
+          "readMinutes": 7,
+          "sections": [
+            {
+              "heading": "Isometric drawing",
+              "bullets": [
+                "Axes at 120° to each other; horizontal lines drawn at 30° to baseline.",
+                "All lengths drawn true size along isometric lines (only those parallel to axes!).",
+                "Non-isometric lines (slants not parallel to axes): locate by coordinate/offset method — never measure them directly.",
+                "Circles become ellipses: construct with four-centre method touching the rhombus at midpoints."
+              ]
+            },
+            {
+              "heading": "Isometric projection vs drawing",
+              "bullets": [
+                "Projection is true-shape scaled by √(2/3) ≈ 0.816; drawing uses full scale for simplicity (state which you used).",
+                "Boxes first, curves second, dark final lines last; hidden lines usually omitted."
+              ]
+            },
+            {
+              "heading": "Perspective",
+              "bullets": [
+                "One-point: front face parallel to picture plane — rails/tunnels; vanishing point on horizon at eye level.",
+                "Two-point: corners toward viewer — buildings; two VPs on horizon.",
+                "Three-point: extreme height (skyscrapers looking up).",
+                "Ground line, horizon line, station point define everything — keep SP far enough for natural cone of vision (±30°)."
+              ]
+            }
+          ],
+          "resources": [
+            { "title": "Khan Academy — 3D & perspective geometry", "url": "https://www.khanacademy.org/math/geometry", "kind": "course" },
+            { "title": "GeoGebra 3D — rotate isometric solids", "url": "https://www.geogebra.org/", "kind": "tool" }
+          ]
+        }
+      ],
+      "dpps": [
+        {
+          "id": "graphics-m4-d1",
+          "title": "DPP-04 · Isometric & perspective construction",
+          "questions": [
+            { "id": "dpp-gr-m4-q1", "prompt": "In an isometric drawing, how are the three axes oriented?", "answer": "120° apart (vertical + two at ±30° to horizontal)", "solution": ["Vertical stays vertical.", "Width and depth axes recede at 30° to the baseline.", "Any line parallel to an axis is drawn at true length."] },
+            { "id": "dpp-gr-m4-q2", "prompt": "A 50 mm line lies on the top face at 45° in plan. How do you draw it isometrically?", "answer": "By coordinates — locate both endpoints from isometric references, connect", "solution": ["Non-isometric line can't be measured along its own direction.", "Project its endpoints' x,y coordinates onto the isometric axes.", "Join endpoints with a straightedge."] },
+            { "id": "dpp-gr-m4-q3", "prompt": "Drawing a Ø40 circle on an isometric top face — what shape and method?", "answer": "Ellipse via four-centre method in the 40×40 rhombus", "solution": ["Build the isometric square (rhombus) circumscribing the circle.", "Four-centre arcs from midpoints & obtuse corners approximate the ellipse.", "Tangent at midpoints — no freehand curves."] },
+            { "id": "dpp-gr-m4-q4", "prompt": "Which perspective has a single vanishing point, and when is it used?", "answer": "One-point perspective — when one face is parallel to the picture plane (corridors, railways)", "solution": ["Front face true shape; receding lines converge to one VP on the horizon.", "Two-point for corner-on objects; three-point for extreme verticals."] }
+          ]
+        }
+      ]
+    }
+  ]
+}

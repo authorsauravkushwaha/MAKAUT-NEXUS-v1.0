@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home, BookOpen, BrainCircuit, CalendarRange, Radar, FlaskConical, Sigma,
-  Settings, Target, Bell, CheckCircle2, X,
+  Settings, Target, Bell, CheckCircle2, X, Library,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { cn } from '@/components/ui';
@@ -10,6 +10,7 @@ import { cn } from '@/components/ui';
 const NAV = [
   { to: '/dashboard', label: 'Core', full: 'Core', icon: Home },
   { to: '/syllabus', label: 'Syllabus', full: 'Syllabus', icon: BookOpen },
+  { to: '/library', label: 'Library', full: 'Student Library', icon: Library },
   { to: '/ai', label: 'AI Tutor', full: 'AI Tutor', icon: BrainCircuit },
   { to: '/planner', label: 'Planner', full: 'Planner', icon: CalendarRange },
   { to: '/analytics', label: 'Analytics', full: 'Analytics', icon: Radar },
@@ -23,15 +24,24 @@ export function FloatingNav() {
   const { pathname } = useLocation();
   const isActive = (to: string) => (to === '/labs' ? pathname === '/labs' || pathname === '/sessionals' : pathname.startsWith(to));
   return (
-    <nav className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2">
-      <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-[#070b18]/85 px-2 py-1.5 backdrop-blur-xl shadow-glow-soft">
+    <nav className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 max-w-[calc(100vw-16px)]">
+      {import.meta.env.DEV && (
+        <a
+          href="MAKAUT-NEXUS-current-files.zip"
+          download
+          className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl border border-violet-400/50 bg-violet-500/20 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-violet-200 shadow-glow-soft backdrop-blur-xl transition-colors hover:bg-violet-500/30"
+        >
+          📦 Download offline pack
+        </a>
+      )}
+      <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-[#070b18]/85 px-1.5 py-1.5 backdrop-blur-xl shadow-glow-soft overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {NAV.map(({ to, label, full, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             title={full}
             className={cn(
-              'group relative flex items-center gap-1.5 rounded-xl px-2.5 py-2 transition-all duration-200',
+              'group relative flex shrink-0 items-center gap-1.5 rounded-xl px-1.5 py-2 sm:px-2.5 transition-all duration-200',
               isActive(to) ? 'bg-cyan-400/10 text-cyan-300' : 'text-slate-400 hover:text-slate-100 hover:bg-white/5',
             )}
           >

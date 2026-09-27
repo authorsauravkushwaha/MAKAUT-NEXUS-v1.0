@@ -1,5 +1,6 @@
 import type { ChatMessage, SemesterSummaryData, StateLike } from '@/types';
 import { COURSE_MAP, THEORY_COURSES, LAB_COURSES } from '@/data';
+import { libraryProgress, libraryTotals } from '@/lib/library';
 import { biggestGap, courseProgress, explainSemester, labSubStats, readiness } from '@/lib/derive';
 import { computeSGPA, formatSGPA } from '@/lib/sgpa';
 import { generateMission } from '@/lib/mission';
@@ -34,6 +35,7 @@ export const QUICK_PROMPTS = [
   'What is my biggest gap?',
   'How are my labs doing?',
   'Make me a study plan',
+  'Where are the free notes & books?',
 ];
 
 /**
@@ -149,7 +151,28 @@ export function respond(input: string, ctx: ChatContext): ChatMessage[] {
     ];
   }
 
-  /* 8 — Course-specific progress */
+  /* 8 — Free library: notes · DPP · books · mock tests */
+  if (
+    match(q, [
+      'library', 'notes', 'dpp', 'mock test', 'mock exam', 'mocks', 'free book',
+      'textbook', 'study material', 'reference book', 'afford', 'for free',
+    ])
+  ) {
+    const t = libraryTotals();
+    const p = libraryProgress(state);
+    return [
+      text(
+        `🏫 Free Student Library — built into NEXUS, ₹0 forever: ${t.subjects} subjects · ${t.chapters} chapters · ${t.notes} chapter notes · ${t.dppProblems} DPP problems · ${t.books} free books · ${t.bankQuestions} bank questions. Open LIBRARY in the bottom nav — every module has notes + a DPP, and /mock runs timed mock tests with scoring.`,
+        'makaut',
+      ),
+      text(
+        `Your library progress: ${p.read} notes read, ${p.solved} DPP problems solved (${p.pct}% explored). Top free picks from the hub: OpenStax Calculus & University Physics (CC BY), MIT OCW 18.06 Linear Algebra, the Feynman Lectures, and Kuphaldt's Lessons in Electric Circuits — all legally free with licences listed.`,
+        'makaut',
+      ),
+    ];
+  }
+
+  /* 9 — Course-specific progress */
   const courseHit = THEORY_COURSES.find((c) => match(q, [c.title.toLowerCase(), c.short.toLowerCase(), c.id.replace('-', ' ')]));
   if (courseHit) {
     const p = courseProgress(state, courseHit);
@@ -168,7 +191,7 @@ export function respond(input: string, ctx: ChatContext): ChatMessage[] {
     ];
   }
 
-  /* 9 — Readiness / analytics */
+  /* 10 — Readiness / analytics */
   if (match(q, ['readiness', 'progress', 'how am i doing', 'radar', 'analytics', 'performance'])) {
     return [
       text(
@@ -179,7 +202,7 @@ export function respond(input: string, ctx: ChatContext): ChatMessage[] {
     ];
   }
 
-  /* 10 — Streak / achievements */
+  /* 11 — Streak / achievements */
   if (match(q, ['streak', 'achievement', 'badge', 'gamification'])) {
     return [
       text(
@@ -189,7 +212,7 @@ export function respond(input: string, ctx: ChatContext): ChatMessage[] {
     ];
   }
 
-  /* 11 — Greeting / help */
+  /* 12 — Greeting / help */
   if (match(q, ['hi', 'hello', 'hey', 'who are you', 'what can you do', 'help', 'start'])) {
     return [
       text(

@@ -16,6 +16,8 @@ import { SessionalsPage } from '@/pages/SessionalsPage';
 import { SGPAPage } from '@/pages/SGPAPage';
 import { PracticePage } from '@/pages/PracticePage';
 import { ProfilePage } from '@/pages/ProfilePage';
+import { LibraryPage } from '@/pages/LibraryPage';
+import { MockTestPage } from '@/pages/MockTestPage';
 
 function ShellRoute({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -40,6 +42,10 @@ export function App() {
           <Route path="/dashboard" element={<ShellRoute><DashboardPage /></ShellRoute>} />
           <Route path="/syllabus" element={<ShellRoute><SyllabusPage /></ShellRoute>} />
           <Route path="/syllabus/:courseId" element={<ShellRoute><CoursePage /></ShellRoute>} />
+          <Route path="/library" element={<ShellRoute><LibraryPage /></ShellRoute>} />
+          <Route path="/library/:subjectId" element={<ShellRoute><LibraryPage /></ShellRoute>} />
+          <Route path="/library/:subjectId/:moduleId" element={<ShellRoute><LibraryPage /></ShellRoute>} />
+          <Route path="/mock" element={<ShellRoute><MockTestPage /></ShellRoute>} />
           <Route path="/ai" element={<ShellRoute><AIPage /></ShellRoute>} />
           <Route path="/planner" element={<ShellRoute><PlannerPage /></ShellRoute>} />
           <Route path="/analytics" element={<ShellRoute><AnalyticsPage /></ShellRoute>} />

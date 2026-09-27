@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Info } from 'lucide-react';
 import type { SourceRef } from '@/types';
 import { SOURCE_MAP } from '@/data';
@@ -239,15 +240,26 @@ export function PageHeader({
   title,
   sub,
   right,
+  backTo,
+  backLabel,
 }: {
   eyebrow?: string;
   title: string;
   sub?: string;
   right?: React.ReactNode;
+  backTo?: string;
+  backLabel?: string;
 }) {
+  const showBack = !!backTo;
   return (
     <div className="flex flex-wrap items-end justify-between gap-4 mb-7">
       <div>
+        {showBack && (
+          <RouterLink to={backTo!} className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-cyan-300 mb-2">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            {backLabel ?? 'Back'}
+          </RouterLink>
+        )}
         {eyebrow && <div className="text-[11px] uppercase tracking-[0.3em] text-cyan-400/80 mb-1.5">{eyebrow}</div>}
         <h1 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight">{title}</h1>
         {sub && <p className="text-slate-400 text-sm mt-1.5 max-w-2xl">{sub}</p>}
