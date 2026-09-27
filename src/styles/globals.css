@@ -494,3 +494,18 @@ canvas {
     animation-duration: 0.001s !important;
   }
 }
+
+/* ── NEXUS ATLAS ────────────────────────────────────────────────────── */
+@keyframes atlasAurora {
+  0%, 100% { opacity: 0.55; transform: translate3d(-2%, 0, 0) scale(1); }
+  50% { opacity: 0.9; transform: translate3d(2%, -2%, 0) scale(1.06); }
+}
+.atlas-aurora {
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(40% 45% at 30% 35%, rgba(34, 211, 238, 0.14), transparent 60%),
+    radial-gradient(45% 50% at 72% 62%, rgba(139, 92, 246, 0.16), transparent 60%);
+  filter: blur(30px);
+  animation: atlasAurora 14s ease-in-out infinite;
+  pointer-events: none;
+}

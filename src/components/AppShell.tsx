@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home, BookOpen, BrainCircuit, CalendarRange, Radar, FlaskConical, Sigma,
-  Settings, Target, Bell, CheckCircle2, X, Library, Zap,
+  Settings, Target, Bell, CheckCircle2, X, Library, Zap, Orbit,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { levelProgress, levelTitle } from '@/lib/gamify';
@@ -10,6 +10,7 @@ import { cn } from '@/components/ui';
 
 const NAV = [
   { to: '/dashboard', label: 'Core', full: 'Core', icon: Home },
+  { to: '/atlas', label: 'Atlas', full: 'Knowledge Atlas', icon: Orbit },
   { to: '/syllabus', label: 'Syllabus', full: 'Syllabus', icon: BookOpen },
   { to: '/library', label: 'Library', full: 'Student Library', icon: Library },
   { to: '/ai', label: 'AI Tutor', full: 'AI Tutor', icon: BrainCircuit },

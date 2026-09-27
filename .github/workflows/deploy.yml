@@ -25,7 +25,8 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps --no-audit --no-fund --fetch-retries=5 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=60000
+      - run: npm i --no-save --legacy-peer-deps esbuild@0.28.2 --no-audit --no-fund --fetch-retries=5 --fetch-retry-mintimeout=1000 --fetch-retry-maxtimeout=60000
       - run: npm run typecheck
       - run: node scripts/run-check.mjs
       - run: npm run build

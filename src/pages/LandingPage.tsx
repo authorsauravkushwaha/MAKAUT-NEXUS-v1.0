@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { GraduationCap, Cpu, BarChart3, ArrowRight, Sparkles, ShieldCheck, Orbit } from 'lucide-react';
+import { GraduationCap, Cpu, BarChart3, ArrowRight, Sparkles, ShieldCheck, Orbit, Compass } from 'lucide-react';
 import { HeroScene } from '@/components/three/HeroScene';
 import { GlassPanel, StatusPill } from '@/components/ui';
 
@@ -94,6 +94,14 @@ export function LandingPage() {
             >
               Build my academic core
               <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
+            </Link>
+
+            <Link
+              to="/atlas"
+              className="group inline-flex items-center gap-2 rounded-2xl border border-violet-400/40 bg-violet-500/15 px-7 py-4 text-sm font-medium uppercase tracking-[0.14em] text-violet-100 backdrop-blur-md transition-all hover:border-violet-300/70 hover:bg-violet-500/25"
+            >
+              Explore the Atlas
+              <Compass size={16} className="transition-transform group-hover:rotate-45" />
             </Link>
             <Link
               to="/dashboard"
