@@ -19,6 +19,7 @@ import { ProfilePage } from '@/pages/ProfilePage';
 import { LibraryPage } from '@/pages/LibraryPage';
 import { MockTestPage } from '@/pages/MockTestPage';
 import { AtlasPage } from '@/pages/AtlasPage';
+import { AuthPage } from '@/pages/AuthPage';
 
 function ShellRoute({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -56,6 +57,7 @@ export function App() {
           <Route path="/sgpa" element={<ShellRoute><SGPAPage /></ShellRoute>} />
           <Route path="/practice" element={<ShellRoute><PracticePage /></ShellRoute>} />
           <Route path="/profile" element={<ShellRoute><ProfilePage /></ShellRoute>} />
+          <Route path="/auth" element={<ShellRoute><AuthPage /></ShellRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Home, BookOpen, BrainCircuit, CalendarRange, Radar, FlaskConical, Sigma,
-  Settings, Target, Bell, CheckCircle2, X, Library, Zap, Orbit,
+  Settings, Target, Bell, CheckCircle2, X, Library, Zap, Orbit, Cloud, CloudOff, CloudUpload,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { levelProgress, levelTitle } from '@/lib/gamify';
@@ -87,6 +87,36 @@ export function LevelPill() {
   );
 }
 
+/** Private Cloud status chip — sign-in prompt or live sync indicator. */
+export function CloudChip() {
+  const { cloud } = useNexus();
+  if (cloud.status === 'loading' || cloud.status === 'disabled') return null;
+  const signedIn = cloud.status === 'signedin';
+  const Icon = signedIn ? (cloud.busy ? CloudUpload : Cloud) : CloudOff;
+  return (
+    <NavLink
+      to="/auth"
+      title={signedIn ? `Vault: ${cloud.email ?? ''}` : 'Sign in for encrypted cloud backup'}
+      className={cn(
+        'hidden items-center gap-1.5 rounded-full border px-3 py-1 transition-colors sm:flex',
+        signedIn
+          ? 'border-emerald-400/30 bg-emerald-500/10 hover:border-emerald-300/60'
+          : 'border-white/10 bg-white/[0.04] hover:border-cyan-400/40',
+      )}
+    >
+      <Icon size={12} className={signedIn ? 'text-emerald-300' : 'text-slate-400'} />
+      <span
+        className={cn(
+          'text-[10px] font-bold uppercase tracking-[0.14em]',
+          signedIn ? 'text-emerald-200' : 'text-slate-400',
+        )}
+      >
+        {signedIn ? (cloud.busy ? 'Syncing' : 'Synced') : 'Sign in'}
+      </span>
+    </NavLink>
+  );
+}
+
 /** Ambient knowledge drifting through the whole NEXUS world. */
 const DRIFT_GLYPHS = ['∑', 'π', '∫', 'λ', 'Δ', 'Ω', '∂', '√', 'θ', '≈', '⚛', '⌁'];
 
@@ -140,6 +170,7 @@ export function TopBar() {
         </NavLink>
 
         <div className="flex items-center gap-3">
+          <CloudChip />
           <LevelPill />
           <div className="hidden md:flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-blink" />

@@ -9,7 +9,7 @@ import { addDays, todayISO, formatDate } from '@/lib/dates';
 import { readiness } from '@/lib/derive';
 
 export function ProfilePage() {
-  const { state, updateProfile, resetAll, loadDemo } = useNexus();
+  const { state, updateProfile, resetAll, loadDemo, cloud, cloudSyncNow, cloudSignOut } = useNexus();
   const nav = useNavigate();
   const [savedTick, setSavedTick] = useState(false);
   const r = readiness(state);
@@ -139,8 +139,9 @@ export function ProfilePage() {
             <SectionLabel className="flex items-center gap-1.5"><ShieldCheck size={12} /> Data &amp; scope policy</SectionLabel>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <div className="rounded-xl border border-emerald-400/25 bg-emerald-400/[0.06] p-4 text-[12px] leading-relaxed text-emerald-200/85">
-                <b>Stored on this device.</b> Profile, progress, marks, labs, streak and missions persist in localStorage
-                only. No account, no tracking, no server.
+                <b>Yours by default.</b> Everything lives in this browser's localStorage — no account, no tracking,
+                no third parties. Optional NEXUS ID adds an end-to-end encrypted cloud vault (AES-256-GCM,
+                zero-knowledge) so a device change never costs you your progress.
               </div>
               <div className="rounded-xl border border-amber-400/25 bg-amber-400/[0.06] p-4 text-[12px] leading-relaxed text-amber-200/85">
                 <b>Provisional by default.</b> {UNIVERSITY.short_name} structure conflicts ({'CONF-01…03'}) remain
@@ -158,6 +159,20 @@ export function ProfilePage() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
+              {cloud.status === 'signedin' ? (
+                <>
+                  <Button variant="outline" size="sm" onClick={() => void cloudSyncNow()} disabled={cloud.busy}>
+                    <Database size={13} /> {cloud.busy ? 'Syncing…' : 'Sync now'}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => void cloudSignOut()}>
+                    Sign out ({cloud.email})
+                  </Button>
+                </>
+              ) : cloud.status === 'signedout' ? (
+                <Button variant="outline" size="sm" onClick={() => nav('/auth')}>
+                  <Database size={13} /> Sign in for cloud backup
+                </Button>
+              ) : null}
               <Button variant="ghost" size="sm" onClick={loadDemo}>
                 <RefreshCw size={13} /> Restore demo pilot (Saurav)
               </Button>

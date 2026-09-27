@@ -1,0 +1,5 @@
+{
+  "url": "",
+  "anonKey": "",
+  "_setup": "Paste your Supabase Project URL and anon (public) API key here, then push. Steps: docs/CLOUD_SETUP.md"
+}

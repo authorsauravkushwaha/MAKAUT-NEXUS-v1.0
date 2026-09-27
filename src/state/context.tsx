@@ -6,8 +6,24 @@ import { generateMission } from '@/lib/mission';
 import { deriveContext } from '@/lib/derive';
 import { evaluateAchievements, diffNewAchievements } from '@/lib/achievements';
 import { levelFromXp, levelTitle, sessionXp, XP_REWARDS } from '@/lib/gamify';
+import { loadCloudConfig, type CloudConfig } from '@/lib/cloud/config';
+import type { Session } from '@/lib/cloud/client';
+import { fetchVault } from '@/lib/cloud/client';
+import {
+  clearDirty, decideSync, lastSyncAt, loadSession, login, markDirty, pushVault,
+  pullVault, refreshSession, register, restoreVault, signOut, backupLocalState,
+  type UnlockedVault,
+} from '@/lib/cloud/vault';
 
 const STORAGE_KEY = 'makaut-nexus:v1';
+
+export interface CloudView {
+  status: 'loading' | 'disabled' | 'signedout' | 'signedin';
+  email?: string;
+  lastSync?: number;
+  busy?: boolean;
+  error?: string;
+}
 
 function loadState(): StudentState {
   try {
@@ -67,6 +83,14 @@ interface NexusContextValue {
   awardXp: (amount: number, reason: string) => void;
   resetAll: () => void;
   loadDemo: () => void;
+  /** Private Cloud (NEXUS ID) — zero-knowledge encrypted backup. */
+  cloud: CloudView;
+  cloudSignIn: (email: string, password: string) => Promise<{ ok: boolean; error?: string; pulled: boolean }>;
+  cloudSignUp: (email: string, password: string) => Promise<{ ok: boolean; error?: string; needsConfirm: boolean }>;
+  cloudSignOut: () => Promise<void>;
+  cloudSyncNow: () => Promise<void>;
+  exportBackup: () => void;
+  importBackup: (file: File) => Promise<void>;
 }
 
 const NexusContext = createContext<NexusContextValue | null>(null);
@@ -79,13 +103,140 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
   const stateRef = useRef(state);
   stateRef.current = state;
 
+  /* ── Private Cloud refs (mutable, never re-render) ───────────── */
+  const [cloud, setCloud] = useState<CloudView>({ status: 'loading' });
+  const cfgRef = useRef<CloudConfig | null>(null);
+  const sessionRef = useRef<Session | null>(null);
+  const vaultRef = useRef<UnlockedVault | null>(null);
+  const pushTimerRef = useRef<number | undefined>(undefined);
+  const initRanRef = useRef(false);
+  const firstSaveRef = useRef(true);
+  const suppressSyncRef = useRef(false);
+
+  const errMsg = (e: unknown) => (e instanceof Error ? e.message : 'Something went wrong.');
+
+  const doPush = useCallback(async () => {
+    const cfg = cfgRef.current;
+    const session = sessionRef.current;
+    const vault = vaultRef.current;
+    if (!cfg || !session || !vault) return;
+    setCloud((c) => ({ ...c, busy: true, error: undefined }));
+    try {
+      await pushVault(cfg, session, vault, JSON.stringify(stateRef.current));
+      setCloud((c) => ({ ...c, busy: false, status: 'signedin', lastSync: Date.now() }));
+    } catch (e) {
+      setCloud((c) => ({ ...c, busy: false, error: errMsg(e) }));
+    }
+  }, []);
+
+  const doPull = useCallback(async () => {
+    const cfg = cfgRef.current;
+    const session = sessionRef.current;
+    const vault = vaultRef.current;
+    if (!cfg || !session || !vault) return false;
+    setCloud((c) => ({ ...c, busy: true, error: undefined }));
+    try {
+      const json = await pullVault(cfg, session, vault);
+      if (!json) {
+        setCloud((c) => ({ ...c, busy: false }));
+        return false;
+      }
+      const parsed = JSON.parse(json) as StudentState;
+      if (!(parsed && parsed.version === 1 && parsed.profile)) throw new Error('Cloud backup is not a valid NEXUS state.');
+      suppressSyncRef.current = true; // pull must not mark dirty / push back
+      setState(parsed);
+      setCloud((c) => ({ ...c, busy: false, status: 'signedin', lastSync: lastSyncAt() || Date.now() }));
+      return true;
+    } catch (e) {
+      setCloud((c) => ({ ...c, busy: false, error: errMsg(e) }));
+      return false;
+    }
+  }, []);
+
+  const schedulePush = useCallback(() => {
+    if (!sessionRef.current || !vaultRef.current || !cfgRef.current) return;
+    if (pushTimerRef.current) window.clearTimeout(pushTimerRef.current);
+    pushTimerRef.current = window.setTimeout(() => void doPush(), 2500);
+  }, [doPush]);
+
+  const reconcile = useCallback(async (): Promise<'pushed' | 'pulled' | 'skipped'> => {
+    const cfg = cfgRef.current;
+    const session = sessionRef.current;
+    const vault = vaultRef.current;
+    if (!cfg || !session || !vault) return 'skipped';
+    try {
+      const row = await fetchVault(cfg, session);
+      if (decideSync(row) === 'push') {
+        await doPush();
+        return 'pushed';
+      }
+      await doPull();
+      return 'pulled';
+    } catch (e) {
+      setCloud((c) => ({ ...c, error: errMsg(e) }));
+      return 'skipped';
+    }
+  }, [doPush, doPull]);
+
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
       /* quota — ignore */
     }
-  }, [state]);
+    // First run is the initial hydration (not a user change); a pull is flagged
+    // so it never bounces straight back up as a "newer" local write.
+    if (firstSaveRef.current) {
+      firstSaveRef.current = false;
+      return;
+    }
+    if (suppressSyncRef.current) {
+      suppressSyncRef.current = false;
+      return;
+    }
+    markDirty();
+    schedulePush();
+  }, [state, schedulePush]);
+
+  /* Restore an existing session on boot and reconcile cloud vs device. */
+  useEffect(() => {
+    if (initRanRef.current) return;
+    initRanRef.current = true;
+    void (async () => {
+      try {
+        const cfg = await loadCloudConfig();
+        if (!cfg) {
+          setCloud({ status: 'disabled' });
+          return;
+        }
+        cfgRef.current = cfg;
+        let session = loadSession();
+        if (!session) {
+          setCloud({ status: 'signedout' });
+          return;
+        }
+        if (Date.now() > session.expiresAt - 60_000) {
+          session = await refreshSession(cfg);
+          if (!session) {
+            setCloud({ status: 'signedout' });
+            return;
+          }
+        }
+        const vault = await restoreVault(session.userId);
+        if (!vault) {
+          localStorage.removeItem('nexus:session');
+          setCloud({ status: 'signedout', error: 'Session expired — sign in again to unlock your vault.' });
+          return;
+        }
+        sessionRef.current = session;
+        vaultRef.current = vault;
+        setCloud({ status: 'signedin', email: session.email, lastSync: lastSyncAt() || undefined });
+        await reconcile();
+      } catch (e) {
+        setCloud({ status: 'signedout', error: errMsg(e) });
+      }
+    })();
+  }, [reconcile]);
 
   const pushToast = useCallback((t: Omit<Toast, 'id'>) => {
     const id = ++toastSeq;
@@ -397,6 +548,113 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
     pushToast({ emoji: '🛰️', title: 'Demo pilot loaded', body: "Saurav's CEMK state restored." });
   }, [pushToast]);
 
+  /* ── Private Cloud actions ─────────────────────────────────────── */
+
+  const cloudSignIn = useCallback(
+    async (email: string, password: string) => {
+      setCloud((c) => ({ ...c, busy: true, error: undefined }));
+      const cfg = await loadCloudConfig();
+      if (!cfg) {
+        setCloud({ status: 'disabled' });
+        return { ok: false, error: 'Private Cloud is not configured yet.', pulled: false };
+      }
+      cfgRef.current = cfg;
+      const r = await login(cfg, email, password);
+      if (!r.ok) {
+        setCloud((c) => ({ ...c, busy: false, error: r.error }));
+        return { ok: false, error: r.error, pulled: false };
+      }
+      sessionRef.current = r.session;
+      vaultRef.current = r.vault;
+      setCloud({ status: 'signedin', email: r.session.email, busy: true, lastSync: lastSyncAt() || undefined });
+      let pulled = false;
+      try {
+        if (decideSync(r.remote) === 'pull' && r.remote) pulled = await doPull();
+        else await doPush();
+      } catch (e) {
+        setCloud((c) => ({ ...c, error: errMsg(e) }));
+      }
+      setCloud((c) => ({ ...c, busy: false, lastSync: lastSyncAt() || c.lastSync }));
+      if (pulled) pushToast({ emoji: '☁️', title: 'Cloud data restored', body: 'Your vault from another device is now active here.' });
+      else pushToast({ emoji: '🔐', title: 'Signed in', body: 'Progress is encrypted and syncing to your vault.' });
+      return { ok: true, pulled };
+    },
+    [doPull, doPush, pushToast],
+  );
+
+  const cloudSignUp = useCallback(
+    async (email: string, password: string) => {
+      setCloud((c) => ({ ...c, busy: true, error: undefined }));
+      const cfg = await loadCloudConfig();
+      if (!cfg) {
+        setCloud({ status: 'disabled' });
+        return { ok: false, error: 'Private Cloud is not configured yet.', needsConfirm: false };
+      }
+      cfgRef.current = cfg;
+      const r = await register(cfg, email, password);
+      if (!r.ok) {
+        setCloud((c) => ({ ...c, busy: false, error: r.error }));
+        return { ok: false, error: r.error, needsConfirm: false };
+      }
+      if (r.needsConfirm) {
+        setCloud({ status: 'signedout' });
+        return { ok: true, needsConfirm: true };
+      }
+      sessionRef.current = r.session;
+      vaultRef.current = r.vault;
+      setCloud({ status: 'signedin', email: r.session.email, busy: true });
+      await doPush(); // seal current device progress into the new vault
+      pushToast({ emoji: '🛰️', title: 'Vault created', body: 'Your progress is encrypted and backed up forever.' });
+      return { ok: true, needsConfirm: false };
+    },
+    [doPush, pushToast],
+  );
+
+  const cloudSignOut = useCallback(async () => {
+    const cfg = cfgRef.current;
+    if (pushTimerRef.current) window.clearTimeout(pushTimerRef.current);
+    if (cfg) await signOut(cfg);
+    sessionRef.current = null;
+    vaultRef.current = null;
+    clearDirty();
+    setCloud({ status: 'signedout' });
+    pushToast({ emoji: '🔓', title: 'Signed out', body: 'Vault locked. Your data stays safe on this device.' });
+  }, [pushToast]);
+
+  const cloudSyncNow = useCallback(async () => {
+    const out = await reconcile();
+    if (out === 'pushed') pushToast({ emoji: '☁️', title: 'Backed up', body: 'Latest progress sealed into your cloud vault.' });
+    else if (out === 'pulled') pushToast({ emoji: '📥', title: 'Restored', body: 'Cloud vault applied to this device.' });
+    else pushToast({ emoji: '😴', title: 'Nothing to sync', body: 'Device and cloud already match.' });
+  }, [reconcile, pushToast]);
+
+  const exportBackup = useCallback(() => {
+    const blob = new Blob([JSON.stringify(stateRef.current, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nexus-backup-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    pushToast({ emoji: '💾', title: 'Backup exported', body: 'A full JSON copy was downloaded.' });
+  }, [pushToast]);
+
+  const importBackup = useCallback(
+    async (file: File) => {
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text) as StudentState;
+        if (!(parsed && parsed.version === 1 && parsed.profile)) throw new Error('Not a valid NEXUS backup file.');
+        backupLocalState();
+        setState(parsed);
+        pushToast({ emoji: '📥', title: 'Backup imported', body: 'Your state was restored from the file.' });
+      } catch (e) {
+        pushToast({ emoji: '⚠️', title: 'Import failed', body: errMsg(e) });
+      }
+    },
+    [pushToast],
+  );
+
   const value = useMemo<NexusContextValue>(
     () => ({
       state,
@@ -422,11 +680,19 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       awardXp,
       resetAll,
       loadDemo,
+      cloud,
+      cloudSignIn,
+      cloudSignUp,
+      cloudSignOut,
+      cloudSyncNow,
+      exportBackup,
+      importBackup,
     }),
     [
       state, toasts, dismissToast, commit, startOnboarding, updateProfile, ensureMission,
       completeMissionItem, completeMissionAll, addSession, setConcept, setLabExperiment,
       markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, markNoteRead, markDppSolved, awardXp, resetAll, loadDemo,
+      cloud, cloudSignIn, cloudSignUp, cloudSignOut, cloudSyncNow, exportBackup, importBackup,
     ],
   );
 
