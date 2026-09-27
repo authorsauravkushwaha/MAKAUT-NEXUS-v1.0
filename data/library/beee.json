@@ -46,7 +46,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits Vol 1 (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "All About Circuits — DC analysis", "url": "https://www.allaboutcircuits.com/", "kind": "book" }
+            { "title": "All About Circuits — DC analysis", "url": "https://www.allaboutcircuits.com/", "kind": "book" },
+            { "title": "Video lectures — DC Circuit Fundamentals", "url": "https://www.youtube.com/results?search_query=DC+Circuit+Fundamentals+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — DC Circuit Fundamentals", "url": "https://www.youtube.com/results?search_query=NPTEL+DC+Circuit+Fundamentals", "kind": "video" }
           ]
         }
       ],
@@ -106,7 +108,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits — network theorems (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "NPTEL — Basic Electrical Circuits video course", "url": "https://nptel.ac.in/", "kind": "course" }
+            { "title": "NPTEL — Basic Electrical Circuits video course", "url": "https://nptel.ac.in/", "kind": "course" },
+            { "title": "Video lectures — Network Theorems", "url": "https://www.youtube.com/results?search_query=Network+Theorems+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Network Theorems", "url": "https://www.youtube.com/results?search_query=NPTEL+Network+Theorems", "kind": "video" }
           ]
         }
       ],
@@ -116,7 +120,7 @@
           "title": "DPP-02 · Thevenin, Norton & superposition",
           "questions": [
             { "id": "dpp-be-m2-q1", "prompt": "Find Thevenin voltage across the open terminals of a 10 V source in series with 2 kΩ (terminals after the resistor).", "answer": "V_TH = 10 V, R_TH = 2 kΩ", "solution": ["Open terminals ⇒ no current ⇒ no drop across 2 kΩ.", "V_TH = 10 V.", "Kill source (short) ⇒ look-in sees 2 kΩ ⇒ R_TH = 2 kΩ."] },
-            { "id": "dpp-be-m2-q2", "prompt": "Network seen from load has V_TH = 12 V, R_TH = 3 Ω. Load R_L = 6 Ω — current and load power?", "answer": "I = 0.8 A, P_L = 3.84 W", "solution": ["I = 12/(3+6) = 1.33... compute: 12/9 = 1.333 A? Recompute: 12/9 = 1.33 A.", "P_L = I²R = (1.33)² × 6 ≈ 10.67 W."] },
+            { "id": "dpp-be-m2-q2", "prompt": "Network seen from load has V_TH = 12 V, R_TH = 3 Ω. Load R_L = 6 Ω — current and load power?", "answer": "I ≈ 1.33 A, P_L ≈ 10.67 W", "solution": ["I = V_TH/(R_TH + R_L) = 12/(3 + 6) = 12/9 ≈ 1.33 A.", "P_L = I²·R_L = (1.33)² × 6 ≈ 10.67 W."] },
             { "id": "dpp-be-m2-q3", "prompt": "Two batteries 10 V/1 Ω and 6 V/1 Ω drive a 7 Ω load in the SAME aiding direction. Superpose current.", "answer": "≈ 1.78 A (16/9 A)", "solution": ["Only the 10 V source active (6 V shorted): I′ = 10/(1+1+7) = 10/9 A.", "Only the 6 V source active (10 V shorted): I″ = 6/(1+1+7) = 6/9 A.", "Aiding direction: I = I′ + I″ = 16/9 ≈ 1.78 A — same as direct (10+6)/9 ✓"] },
             { "id": "dpp-be-m2-q4", "prompt": "For max power, R_L must equal…? State P_max when V_TH = 20 V, R_TH = 10 Ω.", "answer": "R_L = 10 Ω; P_max = 10 W", "solution": ["Matched load: R_L = R_TH = 10 Ω.", "P_max = V_TH²/(4R_TH) = 400/40 = 10 W."] }
           ]
@@ -161,7 +165,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits — Semiconductors (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "HyperPhysics — diode basics", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+            { "title": "HyperPhysics — diode basics", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
+            { "title": "Video lectures — Diodes & Rectifiers", "url": "https://www.youtube.com/results?search_query=Diodes+%26+Rectifiers+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Diodes & Rectifiers", "url": "https://www.youtube.com/results?search_query=NPTEL+Diodes+%26+Rectifiers", "kind": "video" }
           ]
         }
       ],
@@ -214,7 +220,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits — BJT chapters (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "OpenStax / OER — digital & device notes", "url": "https://openstax.org/", "kind": "reference" }
+            { "title": "OpenStax / OER — digital & device notes", "url": "https://openstax.org/", "kind": "reference" },
+            { "title": "Video lectures — Transistors (BJT) & Biasing", "url": "https://www.youtube.com/results?search_query=Transistors+%28BJT%29+%26+Biasing+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Transistors (BJT) & Biasing", "url": "https://www.youtube.com/results?search_query=NPTEL+Transistors+%28BJT%29+%26+Biasing", "kind": "video" }
           ]
         }
       ],
@@ -267,7 +275,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits — FET chapters (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "All About Circuits — FETs section", "url": "https://www.allaboutcircuits.com/", "kind": "book" }
+            { "title": "All About Circuits — FETs section", "url": "https://www.allaboutcircuits.com/", "kind": "book" },
+            { "title": "Video lectures — MOSFET & Applications", "url": "https://www.youtube.com/results?search_query=MOSFET+%26+Applications+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — MOSFET & Applications", "url": "https://www.youtube.com/results?search_query=NPTEL+MOSFET+%26+Applications", "kind": "video" }
           ]
         }
       ],
@@ -331,7 +341,9 @@
           ],
           "resources": [
             { "title": "Lessons In Electric Circuits — Op-Amp chapter (free)", "url": "https://www.ibiblio.org/kuphaldt/electriccircuits/", "kind": "book" },
-            { "title": "NPTEL — Analog Electronic Circuits course", "url": "https://nptel.ac.in/", "kind": "course" }
+            { "title": "NPTEL — Analog Electronic Circuits course", "url": "https://nptel.ac.in/", "kind": "course" },
+            { "title": "Video lectures — Operational Amplifiers", "url": "https://www.youtube.com/results?search_query=Operational+Amplifiers+basic+electrical+electronics+engineering+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Operational Amplifiers", "url": "https://www.youtube.com/results?search_query=NPTEL+Operational+Amplifiers", "kind": "video" }
           ]
         }
       ],

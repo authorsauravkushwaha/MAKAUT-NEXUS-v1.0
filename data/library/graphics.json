@@ -38,7 +38,9 @@
           ],
           "resources": [
             { "title": "NPTEL — Engineering Graphics (search on NPTEL)", "url": "https://nptel.ac.in/", "kind": "course" },
-            { "title": "GeoGebra — free drawing tools", "url": "https://www.geogebra.org/", "kind": "tool" }
+            { "title": "GeoGebra — free drawing tools", "url": "https://www.geogebra.org/", "kind": "tool" },
+            { "title": "Video lectures — Engineering Drawing Fundamentals", "url": "https://www.youtube.com/results?search_query=Engineering+Drawing+Fundamentals+engineering+graphics+technical+drawing+class", "kind": "video" },
+            { "title": "NPTEL course videos — Engineering Drawing Fundamentals", "url": "https://www.youtube.com/results?search_query=NPTEL+Engineering+Drawing+Fundamentals", "kind": "video" }
           ]
         }
       ],
@@ -91,7 +93,9 @@
           ],
           "resources": [
             { "title": "Khan Academy — descriptive geometry foundations", "url": "https://www.khanacademy.org/math/geometry", "kind": "course" },
-            { "title": "GeoGebra — project solids and views", "url": "https://www.geogebra.org/", "kind": "tool" }
+            { "title": "GeoGebra — project solids and views", "url": "https://www.geogebra.org/", "kind": "tool" },
+            { "title": "Video lectures — Orthographic Projections", "url": "https://www.youtube.com/results?search_query=Orthographic+Projections+engineering+graphics+technical+drawing+class", "kind": "video" },
+            { "title": "NPTEL course videos — Orthographic Projections", "url": "https://www.youtube.com/results?search_query=NPTEL+Orthographic+Projections", "kind": "video" }
           ]
         }
       ],
@@ -144,7 +148,9 @@
           ],
           "resources": [
             { "title": "NPTEL — Engineering Graphics sections module", "url": "https://nptel.ac.in/", "kind": "course" },
-            { "title": "FreeCAD — unfold practice (open source)", "url": "https://www.freecad.org/", "kind": "tool" }
+            { "title": "FreeCAD — unfold practice (open source)", "url": "https://www.freecad.org/", "kind": "tool" },
+            { "title": "Video lectures — Sections & Development of Surfaces", "url": "https://www.youtube.com/results?search_query=Sections+%26+Development+of+Surfaces+engineering+graphics+technical+drawing+class", "kind": "video" },
+            { "title": "NPTEL course videos — Sections & Development of Surfaces", "url": "https://www.youtube.com/results?search_query=NPTEL+Sections+%26+Development+of+Surfaces", "kind": "video" }
           ]
         }
       ],
@@ -198,7 +204,9 @@
           ],
           "resources": [
             { "title": "Khan Academy — 3D & perspective geometry", "url": "https://www.khanacademy.org/math/geometry", "kind": "course" },
-            { "title": "GeoGebra 3D — rotate isometric solids", "url": "https://www.geogebra.org/", "kind": "tool" }
+            { "title": "GeoGebra 3D — rotate isometric solids", "url": "https://www.geogebra.org/", "kind": "tool" },
+            { "title": "Video lectures — Isometric & Perspective Views", "url": "https://www.youtube.com/results?search_query=Isometric+%26+Perspective+Views+engineering+graphics+technical+drawing+class", "kind": "video" },
+            { "title": "NPTEL course videos — Isometric & Perspective Views", "url": "https://www.youtube.com/results?search_query=NPTEL+Isometric+%26+Perspective+Views", "kind": "video" }
           ]
         }
       ],

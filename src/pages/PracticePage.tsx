@@ -50,6 +50,11 @@ export function PracticePage() {
         (difficulty === 'all' || q.difficulty === difficulty),
     );
   }, [subjectId, moduleId, difficulty]);
+  const subjectPool = useMemo(() => QUESTIONS.filter((q) => q.courseId === subjectId), [subjectId]);
+  const outOfFilter = useMemo(
+    () => subjectPool.filter((q) => !pool.some((p) => p.id === q.id)),
+    [subjectPool, pool],
+  );
 
   useEffect(() => {
     if (phase !== 'exam' || showExplain) return;
@@ -67,8 +72,22 @@ export function PracticePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, idx, showExplain]);
 
+  /** Always deliver `count` questions: filtered pool first, then the rest of the
+   *  subject, then the rest of the bank — the narrow filter can be smaller than the slider. */
+  const buildQueue = (): BankQuestion[] => {
+    const sh = (arr: BankQuestion[]): BankQuestion[] => [...arr].sort(() => Math.random() - 0.5);
+    const ordered = [...sh(pool), ...sh(outOfFilter), ...sh(QUESTIONS.filter((q) => q.courseId !== subjectId))];
+    const picked: BankQuestion[] = [];
+    for (const q of ordered) {
+      if (picked.length >= count) break;
+      if (picked.some((p) => p.id === q.id)) continue;
+      picked.push(q);
+    }
+    return picked;
+  };
+
   const generate = () => {
-    const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(count, pool.length));
+    const shuffled = buildQueue();
     if (!shuffled.length) return;
     setQueue(shuffled);
     setIdx(0);
@@ -196,12 +215,17 @@ export function PracticePage() {
                       <span className="font-mono text-cyan-300">{count}</span>
                     </div>
                     <input type="range" min={3} max={15} value={count} onChange={(e) => setCount(Number(e.target.value))} className="w-full accent-cyan-400" />
-                    <div className="mt-1 text-[10px] text-slate-600">{pool.length} available in this filter</div>
+                    <div className="mt-1 text-[10px] text-slate-600">
+                      {pool.length} in filter · {subjectPool.length} in subject
+                      {count > pool.length && (
+                        <span className="text-violet-300/80"> — set topped up with {count - pool.length} extra from this subject</span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-center gap-3">
-                  <Button size="lg" onClick={generate} disabled={pool.length === 0}>
+                  <Button size="lg" onClick={generate} disabled={subjectPool.length === 0}>
                     <Sparkles size={16} /> Generate
                   </Button>
                   <span className="text-[12px] text-slate-500">→ launches EXAM MODE with a 240s per-question timer.</span>
@@ -214,7 +238,8 @@ export function PracticePage() {
                   {[
                     ['Course', COURSE_MAP[subjectId]?.title ?? subjectId],
                     ['Modules', String(modules.length)],
-                    ['Pool size', String(QUESTIONS.length)],
+                    ['Subject pool', String(subjectPool.length)],
+                    ['Bank total', String(QUESTIONS.length)],
                     ['Bloom tags', 'Remember → Create'],
                     ['Paper groups', 'A / B marked per item'],
                     ['CO mapping', 'CO1–CO4 per module'],

@@ -38,7 +38,9 @@
           ],
           "resources": [
             { "title": "Purdue OWL — grammar & style", "url": "https://owl.purdue.edu/", "kind": "reference" },
-            { "title": "British Council LearnEnglish", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" }
+            { "title": "British Council LearnEnglish", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" },
+            { "title": "Video lectures — Technical Communication Fundamentals", "url": "https://www.youtube.com/results?search_query=Technical+Communication+Fundamentals+technical+english+communication+skills+class", "kind": "video" },
+            { "title": "NPTEL course videos — Technical Communication Fundamentals", "url": "https://www.youtube.com/results?search_query=NPTEL+Technical+Communication+Fundamentals", "kind": "video" }
           ]
         }
       ],
@@ -92,7 +94,9 @@
           ],
           "resources": [
             { "title": "British Council — speaking courses", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" },
-            { "title": "Purdue OWL — presentation aids", "url": "https://owl.purdue.edu/", "kind": "reference" }
+            { "title": "Purdue OWL — presentation aids", "url": "https://owl.purdue.edu/", "kind": "reference" },
+            { "title": "Video lectures — Speaking & Presentation Skills", "url": "https://www.youtube.com/results?search_query=Speaking+%26+Presentation+Skills+technical+english+communication+skills+class", "kind": "video" },
+            { "title": "NPTEL course videos — Speaking & Presentation Skills", "url": "https://www.youtube.com/results?search_query=NPTEL+Speaking+%26+Presentation+Skills", "kind": "video" }
           ]
         }
       ],
@@ -147,7 +151,9 @@
           ],
           "resources": [
             { "title": "Purdue OWL — technical report formatting", "url": "https://owl.purdue.edu/", "kind": "reference" },
-            { "title": "Hemingway Editor — plain-English pass", "url": "https://hemingwayapp.com/", "kind": "tool" }
+            { "title": "Hemingway Editor — plain-English pass", "url": "https://hemingwayapp.com/", "kind": "tool" },
+            { "title": "Video lectures — Technical Writing & Documentation", "url": "https://www.youtube.com/results?search_query=Technical+Writing+%26+Documentation+technical+english+communication+skills+class", "kind": "video" },
+            { "title": "NPTEL course videos — Technical Writing & Documentation", "url": "https://www.youtube.com/results?search_query=NPTEL+Technical+Writing+%26+Documentation", "kind": "video" }
           ]
         }
       ],
@@ -200,7 +206,9 @@
           ],
           "resources": [
             { "title": "British Council — workplace English", "url": "https://learnenglish.britishcouncil.org/", "kind": "course" },
-            { "title": "Purdue OWL — professional correspondence", "url": "https://owl.purdue.edu/", "kind": "reference" }
+            { "title": "Purdue OWL — professional correspondence", "url": "https://owl.purdue.edu/", "kind": "reference" },
+            { "title": "Video lectures — Workplace Communication & Ethics", "url": "https://www.youtube.com/results?search_query=Workplace+Communication+%26+Ethics+technical+english+communication+skills+class", "kind": "video" },
+            { "title": "NPTEL course videos — Workplace Communication & Ethics", "url": "https://www.youtube.com/results?search_query=NPTEL+Workplace+Communication+%26+Ethics", "kind": "video" }
           ]
         }
       ],

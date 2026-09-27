@@ -95,3 +95,356 @@ canvas {
 .drei-HTML-label {
   user-select: none;
 }
+
+/* ───────────────────────── Print / PDF sheets (A4) ───────────────────────── */
+
+.print-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: auto;
+  background: #141824;
+  padding: 18px 14px 48px;
+}
+
+.print-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 210mm;
+  margin: 0 auto 14px;
+  padding: 10px 14px;
+  background: rgba(6, 8, 16, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(148, 163, 184, 0.08);
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.print-btn:hover {
+  border-color: rgba(148, 163, 184, 0.8);
+  color: #f1f5f9;
+}
+.print-btn--primary {
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+}
+.print-btn--primary:hover {
+  background: rgba(34, 211, 238, 0.22);
+  color: #a5f3fc;
+}
+
+/* The white A4 paper */
+.sheet {
+  width: 210mm;
+  min-height: 296mm;
+  margin: 0 auto;
+  padding: 15mm 15mm 18mm;
+  background: #ffffff;
+  color: #12161c;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.6;
+  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.55);
+}
+
+.sheet h1 {
+  font-family: 'Space Grotesk', Inter, ui-sans-serif, sans-serif;
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 6px 0 4px;
+  color: #0b0f14;
+}
+.sheet h2 {
+  font-family: 'Space Grotesk', Inter, ui-sans-serif, sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  margin: 16px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid #d8dde5;
+  color: #0f172a;
+}
+
+.sheet-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #475569;
+  border-bottom: 2px solid #111827;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+.sheet-brand {
+  font-weight: 700;
+  color: #0e7490;
+}
+.sheet-sub {
+  font-size: 11.5px;
+  color: #5b6472;
+  margin-bottom: 6px;
+}
+.sheet-note {
+  font-size: 11.5px;
+  background: #f3f5f8;
+  border-left: 3px solid #0e7490;
+  padding: 7px 10px;
+  margin: 8px 0 12px;
+  border-radius: 0 6px 6px 0;
+}
+.sheet-foot {
+  margin-top: 22px;
+  padding-top: 7px;
+  border-top: 1px solid #d8dde5;
+  font-size: 10px;
+  color: #64748b;
+}
+.sheet-mute {
+  color: #5b6472;
+}
+.sheet-block ul {
+  margin: 4px 0 2px;
+  padding-left: 18px;
+}
+.sheet-block li {
+  margin-bottom: 5px;
+  text-align: justify;
+}
+
+/* Paper header rows (name / date / marks) */
+.paper-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.paper-meta {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0e7490;
+  border: 1.5px solid #0e7490;
+  border-radius: 6px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+.paper-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 12px 0 4px;
+  padding: 9px 10px;
+  border: 1.5px solid #94a3b8;
+  border-radius: 8px;
+}
+
+/* Question list */
+.paper-qs {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  counter-reset: paperq;
+}
+.paper-q {
+  margin-bottom: 14px;
+}
+.q-prompt {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #111827;
+}
+.q-prompt::before {
+  counter-increment: paperq;
+  content: counter(paperq) '. ';
+  font-weight: 700;
+}
+.opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 22px;
+  margin-top: 7px;
+  font-size: 12.5px;
+}
+.lines {
+  margin-top: 8px;
+}
+.lines span {
+  display: block;
+  border-bottom: 1px dotted #a8b0bc;
+  height: 26px;
+}
+
+/* Answer keys */
+.key-item {
+  margin: 12px 0;
+}
+.key-ans {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0e7490;
+}
+.key-item ol {
+  margin: 3px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #374151;
+}
+.key-item ol li {
+  margin-bottom: 2px;
+}
+.key-list {
+  margin-top: 8px;
+}
+.key-row {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px dashed #d8dde5;
+  font-size: 12px;
+}
+.key-row b {
+  flex-shrink: 0;
+  min-width: 34px;
+  color: #0e7490;
+}
+
+/* Slide deck pages */
+.slide {
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 26px 30px 30px;
+  margin: 12px 0;
+  min-height: 150mm;
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+}
+.slide h1 {
+  font-size: 30px;
+  margin-top: 24px;
+}
+.slide h2 {
+  font-size: 22px;
+  border-bottom: 2px solid #0e7490;
+  margin-top: 0;
+  padding-bottom: 6px;
+}
+.slide ul {
+  margin-top: 16px;
+  padding-left: 22px;
+  font-size: 16.5px;
+  line-height: 1.7;
+}
+.slide li {
+  margin-bottom: 12px;
+}
+.slide-kicker {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0e7490;
+  font-weight: 700;
+}
+.slide-sub {
+  font-size: 18px;
+  color: #334155;
+  margin-top: 10px;
+}
+.slide-meta {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 6px;
+}
+.slide-no {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.slide--cover,
+.slide--end {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  min-height: 220mm;
+}
+
+/* Page-break helpers (screen preview + print) */
+.page-break {
+  break-after: page;
+  page-break-after: always;
+}
+.page-break-inside {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* ── Print: only the white sheet goes to paper ── */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  #root {
+    display: none !important;
+  }
+  .print-overlay {
+    position: static !important;
+    overflow: visible !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .sheet {
+    width: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    font-size: 11.5px;
+  }
+  .slide {
+    min-height: auto;
+    border: none;
+    border-top: 3px solid #0e7490;
+    border-radius: 0;
+    padding: 14px 6px;
+    background: none;
+  }
+  .slide--cover,
+  .slide--end {
+    min-height: 240mm;
+  }
+}

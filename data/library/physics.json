@@ -39,7 +39,9 @@
           ],
           "resources": [
             { "title": "OpenStax University Physics Vol 1 — oscillations", "url": "https://openstax.org/details/books/university-physics-volume-1", "kind": "book" },
-            { "title": "HyperPhysics — SHM quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+            { "title": "HyperPhysics — SHM quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
+            { "title": "Video lectures — Oscillations & Waves", "url": "https://www.youtube.com/results?search_query=Oscillations+%26+Waves+engineering+physics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Oscillations & Waves", "url": "https://www.youtube.com/results?search_query=NPTEL+Oscillations+%26+Waves", "kind": "video" }
           ]
         }
       ],
@@ -94,7 +96,9 @@
           ],
           "resources": [
             { "title": "OpenStax University Physics Vol 2 — E&M", "url": "https://openstax.org/details/books/university-physics-volume-2", "kind": "book" },
-            { "title": "HyperPhysics — electromagnetism maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+            { "title": "HyperPhysics — electromagnetism maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
+            { "title": "Video lectures — Electromagnetic Theory", "url": "https://www.youtube.com/results?search_query=Electromagnetic+Theory+engineering+physics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Electromagnetic Theory", "url": "https://www.youtube.com/results?search_query=NPTEL+Electromagnetic+Theory", "kind": "video" }
           ]
         }
       ],
@@ -148,7 +152,9 @@
           ],
           "resources": [
             { "title": "OpenStax University Physics Vol 2 — optics chapters", "url": "https://openstax.org/details/books/university-physics-volume-2", "kind": "book" },
-            { "title": "HyperPhysics — optics quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" }
+            { "title": "HyperPhysics — optics quick maps", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
+            { "title": "Video lectures — Optics", "url": "https://www.youtube.com/results?search_query=Optics+engineering+physics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Optics", "url": "https://www.youtube.com/results?search_query=NPTEL+Optics", "kind": "video" }
           ]
         }
       ],
@@ -203,7 +209,9 @@
           ],
           "resources": [
             { "title": "HyperPhysics — quantum concepts", "url": "http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html", "kind": "reference" },
-            { "title": "Feynman Lectures — Quantum behaviour (free)", "url": "https://www.feynmanlectures.caltech.edu/", "kind": "book" }
+            { "title": "Feynman Lectures — Quantum behaviour (free)", "url": "https://www.feynmanlectures.caltech.edu/", "kind": "book" },
+            { "title": "Video lectures — Quantum & Semiconductor Physics", "url": "https://www.youtube.com/results?search_query=Quantum+%26+Semiconductor+Physics+engineering+physics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Quantum & Semiconductor Physics", "url": "https://www.youtube.com/results?search_query=NPTEL+Quantum+%26+Semiconductor+Physics", "kind": "video" }
           ]
         }
       ],

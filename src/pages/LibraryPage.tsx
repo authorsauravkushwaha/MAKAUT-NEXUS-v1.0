@@ -3,17 +3,19 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight, BookOpen, Check, ChevronRight, ExternalLink, FileText,
-  HelpCircle, Lightbulb, Puzzle, Target, GraduationCap,
+  HelpCircle, Lightbulb, Printer, Puzzle, Target, GraduationCap, Youtube,
 } from 'lucide-react';
 import { useNexus } from '@/state/context';
 import { COURSE_MAP, THEORY_COURSES } from '@/data';
 import { QUESTIONS } from '@/ai/questionBank';
+import { PrintSheet } from '@/components/PrintSheet';
+import { NotePaper, SlidesPaper, DppPaper, McqTestPaper } from '@/components/PrintPapers';
 import {
   booksForSubject, dppQuestionSolved, getChapterLibrary, getSubjectLibrary,
   libraryProgress, librarySubjects, libraryTotals, noteIsRead, subjectLibraryStats,
 } from '@/lib/library';
 import { Button, GlassPanel, PageHeader, ProgressRing, SectionLabel, StatusPill, cn } from '@/components/ui';
-import type { ChapterNote } from '@/types';
+import type { ChapterNote, Dpp } from '@/types';
 
 /* ────────────────────────────── HUB ─────────────────────────────── */
 
@@ -22,13 +24,16 @@ function LibraryHub() {
   const totals = libraryTotals();
   const progress = libraryProgress(state);
   const subjects = librarySubjects();
+  const [paperSubject, setPaperSubject] = useState<string | null>(null);
+  const paperCourse = paperSubject ? COURSE_MAP[paperSubject] : undefined;
+  const paperQs = paperSubject ? QUESTIONS.filter((q) => q.courseId === paperSubject) : [];
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow="Free for every student"
         title="The Student Library"
-        sub="Chapter-wise notes & DPPs, top free books, solved questions and timed mock tests — every resource free, forever. Built so nobody pays for education."
+        sub="Chapter-wise notes & DPPs, top free books, video lectures, printable test papers and timed mock tests — every resource free, forever. Built so nobody pays for education."
         right={<ProgressRing value={progress.pct} size={110} stroke={8} sublabel="explored" color="#22d3ee" />}
       />
 
@@ -87,9 +92,46 @@ function LibraryHub() {
             <ul className="mt-3 space-y-2 text-[13px] leading-relaxed text-slate-400">
               <li className="flex gap-2"><Lightbulb size={14} className="mt-0.5 shrink-0 text-amber-400" /> Notes & DPPs are written in-app — no paywalled PDFs, no pirated scans.</li>
               <li className="flex gap-2"><BookOpen size={14} className="mt-0.5 shrink-0 text-cyan-400" /> Books are genuinely free/legal: OpenStax (CC), Project Gutenberg, MIT OCW, NPTEL, Caltech.</li>
+              <li className="flex gap-2"><Printer size={14} className="mt-0.5 shrink-0 text-sky-400" /> Print notes, slide decks, DPPs and MCQ test papers on A4 — give your test on hard copy.</li>
               <li className="flex gap-2"><GraduationCap size={14} className="mt-0.5 shrink-0 text-emerald-400" /> Mock tests run on the in-app question bank — attempt, review, improve offline too.</li>
             </ul>
           </GlassPanel>
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel className="mb-3">Printable test papers — download, print & attempt on hard copy</SectionLabel>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {subjects.map((s, i) => {
+            const course = COURSE_MAP[s.id];
+            const qCount = QUESTIONS.filter((q) => q.courseId === s.id).length;
+            return (
+              <motion.div key={s.id} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
+                <GlassPanel className="h-full p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="font-display font-bold text-white">{s.title}</div>
+                      <div className="mt-0.5 text-[11.5px] text-slate-500">
+                        {qCount} MCQs · A4 paper · answer key on last page
+                      </div>
+                    </div>
+                    <Printer size={18} className="mt-0.5 shrink-0 text-sky-300" />
+                  </div>
+                  <p className="mt-3 text-[12.5px] leading-relaxed text-slate-400">
+                    A ready exam paper with name/roll/date blanks — print it, attempt it, then self-mark with the key.
+                  </p>
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <span className="rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wider" style={{ color: s.color, background: `${s.color}18` }}>
+                      {course?.short ?? s.id}
+                    </span>
+                    <Button size="sm" variant="primary" onClick={() => setPaperSubject(s.id)}>
+                      <Printer size={14} /> Print / PDF
+                    </Button>
+                  </div>
+                </GlassPanel>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
@@ -162,6 +204,12 @@ function LibraryHub() {
           ))}
         </div>
       </div>
+
+      {paperSubject && paperCourse && (
+        <PrintSheet open onClose={() => setPaperSubject(null)} label={`${paperCourse.title} — printable test paper`}>
+          <McqTestPaper courseTitle={paperCourse.title} courseShort={paperCourse.short} questions={paperQs} />
+        </PrintSheet>
+      )}
     </div>
   );
 }
@@ -238,6 +286,7 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
   const [activeNote, setActiveNote] = useState(0);
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [choices, setChoices] = useState<Record<string, number>>({});
+  const [sheet, setSheet] = useState<null | { type: 'note' | 'slides' } | { type: 'dpp'; dpp: Dpp }>(null);
   const mod = (course?.modules ?? []).find((m) => m.id === moduleId);
 
   const bankQs = useMemo(
@@ -247,6 +296,7 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
 
   if (!course || !chapter) return <UnknownLibrary id={`${subjectId}/${moduleId}`} />;
   const note: ChapterNote | undefined = chapter.notes[activeNote];
+  const printCtx = { courseTitle: course.title, courseShort: course.short, chapterTitle: mod?.title ?? moduleId };
 
   return (
     <div className="space-y-6">
@@ -303,19 +353,27 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
           </div>
 
           <GlassPanel className="p-6">
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="font-display text-xl font-bold text-white">{note.title}</h2>
                 <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-slate-500">{note.readMinutes} min read · free forever</div>
               </div>
-              <Button
-                variant={noteIsRead(state, note) ? 'ghost' : 'primary'}
-                size="sm"
-                onClick={() => markNoteRead(note.id)}
-                disabled={noteIsRead(state, note)}
-              >
-                {noteIsRead(state, note) ? <><Check size={14} /> Read</> : 'Mark as read'}
-              </Button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setSheet({ type: 'note' })}>
+                  <Printer size={14} /> Print note
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setSheet({ type: 'slides' })}>
+                  Slides ▸ PDF
+                </Button>
+                <Button
+                  variant={noteIsRead(state, note) ? 'ghost' : 'primary'}
+                  size="sm"
+                  onClick={() => markNoteRead(note.id)}
+                  disabled={noteIsRead(state, note)}
+                >
+                  {noteIsRead(state, note) ? <><Check size={14} /> Read</> : 'Mark as read'}
+                </Button>
+              </div>
             </div>
 
             <div className="mt-5 space-y-5">
@@ -346,8 +404,15 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
                       href={r.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[12px] text-slate-300 transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                      className={cn(
+                        'inline-flex items-center gap-1.5 rounded-lg border bg-white/[0.03] px-3 py-1.5 text-[12px] transition-colors',
+                        r.kind === 'video'
+                          ? 'border-rose-400/30 text-rose-100 hover:border-rose-400/60 hover:text-rose-50'
+                          : 'border-white/10 text-slate-300 hover:border-cyan-400/40 hover:text-cyan-200',
+                      )}
                     >
+                      {r.kind === 'video' && <Youtube size={13} className="shrink-0 text-rose-400" />}
+                      {r.kind !== 'video' && r.kind === 'book' && <BookOpen size={13} className="shrink-0 text-cyan-400" />}
                       {r.title} <ExternalLink size={11} />
                     </a>
                   ))}
@@ -370,7 +435,12 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
                     Daily Practice Problems · {dpp.questions.filter((q) => dppQuestionSolved(state, q.id)).length}/{dpp.questions.length} solved
                   </div>
                 </div>
-                <span className="rounded-full border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-violet-300">Free · in-app</span>
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" onClick={() => setSheet({ type: 'dpp', dpp })}>
+                    <Printer size={14} /> Print paper
+                  </Button>
+                  <span className="rounded-full border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-violet-300">Free · in-app</span>
+                </div>
               </div>
 
               <div className="mt-4 space-y-3">
@@ -476,6 +546,23 @@ function ChapterDetail({ subjectId, moduleId }: { subjectId: string; moduleId: s
             );
           })}
         </div>
+      )}
+
+      {/* ── Print sheets (A4 / PDF) ── */}
+      {sheet?.type === 'note' && note && (
+        <PrintSheet open onClose={() => setSheet(null)} label={`${note.title} — chapter notes`}>
+          <NotePaper ctx={printCtx} note={note} />
+        </PrintSheet>
+      )}
+      {sheet?.type === 'slides' && note && (
+        <PrintSheet open onClose={() => setSheet(null)} label={`${printCtx.chapterTitle} — slide deck`}>
+          <SlidesPaper ctx={printCtx} note={note} />
+        </PrintSheet>
+      )}
+      {sheet?.type === 'dpp' && (
+        <PrintSheet open onClose={() => setSheet(null)} label={`${sheet.dpp.title} — DPP paper`}>
+          <DppPaper ctx={printCtx} dpp={sheet.dpp} />
+        </PrintSheet>
       )}
     </div>
   );

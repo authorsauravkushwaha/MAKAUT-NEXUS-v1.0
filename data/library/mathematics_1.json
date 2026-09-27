@@ -49,7 +49,9 @@
           ],
           "resources": [
             { "title": "OpenStax Calculus Vol 1 (free)", "url": "https://openstax.org/details/books/calculus-volume-1", "kind": "book" },
-            { "title": "Calculus Made Easy — free Gutenberg text", "url": "https://www.gutenberg.org/ebooks/33283", "kind": "book" }
+            { "title": "Calculus Made Easy — free Gutenberg text", "url": "https://www.gutenberg.org/ebooks/33283", "kind": "book" },
+            { "title": "Video lectures — Calculus of a Single Variable", "url": "https://www.youtube.com/results?search_query=Calculus+of+a+Single+Variable+engineering+mathematics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Calculus of a Single Variable", "url": "https://www.youtube.com/results?search_query=NPTEL+Calculus+of+a+Single+Variable", "kind": "video" }
           ]
         }
       ],
@@ -103,7 +105,9 @@
           ],
           "resources": [
             { "title": "OpenStax Calculus Vol 2 — multivariable chapters", "url": "https://openstax.org/details/books/calculus-volume-2", "kind": "book" },
-            { "title": "Khan Academy — multivariable calculus", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" }
+            { "title": "Khan Academy — multivariable calculus", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" },
+            { "title": "Video lectures — Calculus of Several Variables", "url": "https://www.youtube.com/results?search_query=Calculus+of+Several+Variables+engineering+mathematics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Calculus of Several Variables", "url": "https://www.youtube.com/results?search_query=NPTEL+Calculus+of+Several+Variables", "kind": "video" }
           ]
         }
       ],
@@ -156,7 +160,9 @@
           ],
           "resources": [
             { "title": "OpenStax Calculus Vol 2 — integration techniques", "url": "https://openstax.org/details/books/calculus-volume-2", "kind": "book" },
-            { "title": "Khan Academy — double/triple integrals", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" }
+            { "title": "Khan Academy — double/triple integrals", "url": "https://www.khanacademy.org/math/multivariable-calculus", "kind": "course" },
+            { "title": "Video lectures — Multiple Integrals", "url": "https://www.youtube.com/results?search_query=Multiple+Integrals+engineering+mathematics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Multiple Integrals", "url": "https://www.youtube.com/results?search_query=NPTEL+Multiple+Integrals", "kind": "video" }
           ]
         }
       ],
@@ -217,7 +223,9 @@
           ],
           "resources": [
             { "title": "MIT OCW 18.06 — Linear Algebra (Strang)", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/", "kind": "course" },
-            { "title": "Khan Academy — Linear algebra", "url": "https://www.khanacademy.org/math/linear-algebra", "kind": "course" }
+            { "title": "Khan Academy — Linear algebra", "url": "https://www.khanacademy.org/math/linear-algebra", "kind": "course" },
+            { "title": "Video lectures — Matrices & Linear Algebra", "url": "https://www.youtube.com/results?search_query=Matrices+%26+Linear+Algebra+engineering+mathematics+1+full+lecture", "kind": "video" },
+            { "title": "NPTEL course videos — Matrices & Linear Algebra", "url": "https://www.youtube.com/results?search_query=NPTEL+Matrices+%26+Linear+Algebra", "kind": "video" }
           ]
         }
       ],
