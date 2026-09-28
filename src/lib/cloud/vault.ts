@@ -3,7 +3,7 @@
  *
  * Storage policy on the device:
  *   makaut-nexus:v1          plaintext app state (as always — this device is yours)
- *   nexus:session             Supabase auth session (short-lived access + refresh token)
+ *   nexus:session             Nhost auth session (short-lived access + refresh token)
  *   nexus:vaultkey            unlocked AES key + salt after sign-in (re-locks on sign-out)
  *   nexus:v1:dirtyAt          epoch ms of the last local change (drives sync conflicts)
  *   nexus:v1:lastSync         epoch ms of the last successful cloud sync

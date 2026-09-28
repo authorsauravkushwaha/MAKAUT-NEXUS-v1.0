@@ -80,13 +80,13 @@ export function AuthPage() {
           </div>
           <h2 className="mt-4 font-display text-xl font-bold text-white">Private Cloud not configured</h2>
           <p className="mx-auto mt-2 max-w-xl text-[13px] leading-relaxed text-slate-400">
-            Login and cloud backup activate after the project owner links a free Supabase database —
+            Login and cloud backup activate after the project owner links a free Nhost database —
             a five-minute, no-code setup. Everything below keeps working offline in the meantime.
           </p>
           <div className="mx-auto mt-5 grid max-w-xl gap-2 text-left text-[12px] leading-relaxed text-slate-400">
             <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
-              <b className="text-cyan-300">1 ·</b> Create a free project at supabase.com → copy the{' '}
-              <b>Project URL</b> and <b>anon key</b>.
+              <b className="text-cyan-300">1 ·</b> Create a free project at nhost.io → copy the{' '}
+              <b>Subdomain</b> and <b>region</b>.
             </div>
             <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
               <b className="text-cyan-300">2 ·</b> Run the one-time SQL in{' '}
@@ -189,7 +189,7 @@ export function AuthPage() {
             <div className="mt-4 space-y-3 text-[12.5px] leading-relaxed text-slate-400">
               {[
                 ['🔒', 'Zero-knowledge', 'Your data is AES-256-GCM encrypted in this browser. The database stores ciphertext only — it cannot read a single mark or streak.'],
-                ['🧱', 'Row-level isolation', 'Database policies bind every row to your user ID — no query can reach another student\u2019s vault, even with the public anon key.'],
+                ['🧱', 'Row-level isolation', 'Row permissions bind every row to your user ID — no query can reach another student\u2019s vault, even from a stolen token.'],
                 ['🗝️', 'Your password is the key', 'The encryption key is derived from your password (PBKDF2, 600,000 rounds). It never leaves the device.'],
                 ['📉', 'No tracking', 'No cookies, no analytics, no third-party pixels. One optional account — solely so you never lose your data.'],
                 ['🗑️', 'Delete means deleted', 'One tap erases your cloud vault forever. Export a full JSON backup any time.'],
