@@ -51,6 +51,10 @@ export function LandingPage() {
             </span>
           </div>
           <div className="flex items-center gap-3">
+            {/* SIGNIN_BUTTONS_V1 */}
+            <Link to="/auth" className="text-[12px] font-semibold uppercase tracking-[0.16em] text-cyan-300 hover:text-cyan-100 transition-colors">
+              Sign in
+            </Link>
             <Link to="/dashboard" className="hidden text-[12px] uppercase tracking-[0.16em] text-slate-400 hover:text-white transition-colors">
               Demo cockpit
             </Link>
@@ -108,6 +112,13 @@ export function LandingPage() {
               className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-medium uppercase tracking-[0.14em] text-slate-200 backdrop-blur-md transition-all hover:border-cyan-400/40 hover:bg-white/[0.07]"
             >
               Enter demo cockpit
+            </Link>
+            <Link
+              to="/auth"
+              className="group inline-flex items-center gap-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/15 px-7 py-4 text-sm font-medium uppercase tracking-[0.14em] text-emerald-100 backdrop-blur-md transition-all hover:border-emerald-300/70 hover:bg-emerald-500/25"
+            >
+              <ShieldCheck size={16} />
+              Sign in
             </Link>
           </motion.div>
 
