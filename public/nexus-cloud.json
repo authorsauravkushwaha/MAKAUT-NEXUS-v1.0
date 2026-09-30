@@ -1,5 +1,4 @@
 {
-  "subdomain": "",
-  "region": "",
-  "_setup": "Paste your Nhost project subdomain and region here, then push. Steps: docs/CLOUD_SETUP.md"
+  "repo": "authorsauravkushwaha/MAKAUT-NEXUS-v1.0",
+  "dbPath": "data/nexus-db"
 }

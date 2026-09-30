@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "engine": "nexus-repodb",
+  "note": "Database = JSON files in this repository. Accounts hold PBKDF2-keyed IDs and masked display only; vaults hold AES-256-GCM ciphertext only.",
+  "accounts": 0,
+  "vaults": 0
+}

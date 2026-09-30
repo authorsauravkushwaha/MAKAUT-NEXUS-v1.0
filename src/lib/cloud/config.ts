@@ -1,25 +1,24 @@
 /**
- * NEXUS Private Cloud — runtime configuration.
- * Values live in /public/nexus-cloud.json so credentials can be updated
- * without a rebuild (see docs/CLOUD_SETUP.md).
- *
- * Backend: Nhost (email/password auth + Postgres exposed through GraphQL).
- * All protection comes from role-based row permissions + client-side
- * end-to-end encryption; the server never sees plaintext.
+ * NEXUS RepoDB — runtime configuration.
+ * Values live in /public/nexus-cloud.json (3 lines, pushed by the setup block).
+ * Backend: this GitHub repository itself — no third-party service.
  */
 export interface CloudConfig {
-  /** Nhost project subdomain (shown on the project overview). */
-  subdomain: string;
-  /** Nhost region, e.g. ap-south-1 (shown on the project overview). */
-  region: string;
-  /** Explicit service URLs — used by tests; win over subdomain/region when both set. */
-  authUrl?: string;
-  graphqlUrl?: string;
+  /** "owner/name" of the repository that IS the database */
+  repo: string;
+  /** folder inside the repo that holds the database files */
+  dbPath: string;
+  /** branch to read/write (default "main") */
+  branch?: string;
+  /** test hooks — explicit API bases win over the public defaults */
+  apiBase?: string;
+  rawBase?: string;
 }
 
 let cached: CloudConfig | null | undefined;
 
-const TAG = /^[a-z0-9][a-z0-9-]*$/i;
+const REPO_SLUG = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
+const DB_PATH = /^[A-Za-z0-9._/-]+$/;
 
 export async function loadCloudConfig(): Promise<CloudConfig | null> {
   if (cached !== undefined) return cached;
@@ -27,22 +26,14 @@ export async function loadCloudConfig(): Promise<CloudConfig | null> {
     const res = await fetch('nexus-cloud.json', { cache: 'no-store' });
     if (!res.ok) throw new Error('config missing');
     const json = (await res.json()) as Partial<CloudConfig>;
-    const subdomain = String(json.subdomain || '').trim();
-    const region = String(json.region || '').trim();
-    const authUrl = String(json.authUrl || '').trim().replace(/\/+$/, '');
-    const graphqlUrl = String(json.graphqlUrl || '').trim().replace(/\/+$/, '');
-    const explicit =
-      Boolean(authUrl && graphqlUrl) &&
-      (authUrl.startsWith('https://') ||
-        authUrl.startsWith('http://127.0.0.1') ||
-        authUrl.startsWith('http://localhost'));
-    const pair =
-      Boolean(subdomain && region) && TAG.test(subdomain) && TAG.test(region);
-    cached = explicit
-      ? { subdomain, region, authUrl, graphqlUrl }
-      : pair
-        ? { subdomain, region }
-        : null;
+    const repo = String(json.repo || '').trim().replace(/\.git$/, '');
+    const dbPath = String(json.dbPath || '').trim().replace(/^\/+|\/+$/g, '');
+    const branch = String(json.branch || 'main').trim() || 'main';
+    const apiBase = String(json.apiBase || '').trim();
+    const rawBase = String(json.rawBase || '').trim();
+    cached = REPO_SLUG.test(repo) && DB_PATH.test(dbPath) && dbPath.length > 0
+      ? { repo, dbPath, branch, ...(apiBase ? { apiBase } : {}), ...(rawBase ? { rawBase } : {}) }
+      : null;
   } catch {
     cached = null;
   }

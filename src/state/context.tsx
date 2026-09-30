@@ -7,12 +7,10 @@ import { deriveContext } from '@/lib/derive';
 import { evaluateAchievements, diffNewAchievements } from '@/lib/achievements';
 import { levelFromXp, levelTitle, sessionXp, XP_REWARDS } from '@/lib/gamify';
 import { loadCloudConfig, type CloudConfig } from '@/lib/cloud/config';
-import type { Session } from '@/lib/cloud/client';
-import { fetchVault } from '@/lib/cloud/client';
 import {
-  clearDirty, decideSync, lastSyncAt, loadSession, login, markDirty, pushVault,
+  clearDirty, decideSync, fetchVault, lastSyncAt, loadSession, login, markDirty, pushVault,
   pullVault, refreshSession, register, restoreVault, signOut, backupLocalState,
-  type UnlockedVault,
+  type AuthMethod, type Session, type UnlockedVault,
 } from '@/lib/cloud/vault';
 
 const STORAGE_KEY = 'makaut-nexus:v1';
@@ -85,8 +83,18 @@ interface NexusContextValue {
   loadDemo: () => void;
   /** Private Cloud (NEXUS ID) — zero-knowledge encrypted backup. */
   cloud: CloudView;
-  cloudSignIn: (email: string, password: string) => Promise<{ ok: boolean; error?: string; pulled: boolean }>;
-  cloudSignUp: (email: string, password: string) => Promise<{ ok: boolean; error?: string; needsConfirm: boolean }>;
+  cloudSignIn: (
+    identifier: string,
+    password: string,
+    method: AuthMethod,
+    opts?: { dial?: string; syncPat?: string },
+  ) => Promise<{ ok: boolean; error?: string; pulled: boolean; note?: string }>;
+  cloudSignUp: (
+    identifier: string,
+    password: string,
+    method: AuthMethod,
+    opts?: { dial?: string; syncPat?: string },
+  ) => Promise<{ ok: boolean; error?: string; needsConfirm: boolean; note?: string }>;
   cloudSignOut: () => Promise<void>;
   cloudSyncNow: () => Promise<void>;
   exportBackup: () => void;
@@ -551,15 +559,20 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
   /* ── Private Cloud actions ─────────────────────────────────────── */
 
   const cloudSignIn = useCallback(
-    async (email: string, password: string) => {
+    async (
+      identifier: string,
+      password: string,
+      method: AuthMethod,
+      opts?: { dial?: string; syncPat?: string },
+    ) => {
       setCloud((c) => ({ ...c, busy: true, error: undefined }));
       const cfg = await loadCloudConfig();
       if (!cfg) {
         setCloud({ status: 'disabled' });
-        return { ok: false, error: 'Private Cloud is not configured yet.', pulled: false };
+        return { ok: false, error: 'The repository database is not configured yet.', pulled: false };
       }
       cfgRef.current = cfg;
-      const r = await login(cfg, email, password);
+      const r = await login(cfg, { identifier, password, method, ...opts });
       if (!r.ok) {
         setCloud((c) => ({ ...c, busy: false, error: r.error }));
         return { ok: false, error: r.error, pulled: false };
@@ -576,22 +589,27 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       }
       setCloud((c) => ({ ...c, busy: false, lastSync: lastSyncAt() || c.lastSync }));
       if (pulled) pushToast({ emoji: '☁️', title: 'Cloud data restored', body: 'Your vault from another device is now active here.' });
-      else pushToast({ emoji: '🔐', title: 'Signed in', body: 'Progress is encrypted and syncing to your vault.' });
-      return { ok: true, pulled };
+      else pushToast({ emoji: '🔐', title: 'Signed in', body: 'Progress is encrypted and safe on this device.' });
+      return { ok: true, pulled, note: r.note };
     },
     [doPull, doPush, pushToast],
   );
 
   const cloudSignUp = useCallback(
-    async (email: string, password: string) => {
+    async (
+      identifier: string,
+      password: string,
+      method: AuthMethod,
+      opts?: { dial?: string; syncPat?: string },
+    ) => {
       setCloud((c) => ({ ...c, busy: true, error: undefined }));
       const cfg = await loadCloudConfig();
       if (!cfg) {
         setCloud({ status: 'disabled' });
-        return { ok: false, error: 'Private Cloud is not configured yet.', needsConfirm: false };
+        return { ok: false, error: 'The repository database is not configured yet.', needsConfirm: false };
       }
       cfgRef.current = cfg;
-      const r = await register(cfg, email, password);
+      const r = await register(cfg, { identifier, password, method, ...opts });
       if (!r.ok) {
         setCloud((c) => ({ ...c, busy: false, error: r.error }));
         return { ok: false, error: r.error, needsConfirm: false };
@@ -604,8 +622,8 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       vaultRef.current = r.vault;
       setCloud({ status: 'signedin', email: r.session.email, busy: true });
       await doPush(); // seal current device progress into the new vault
-      pushToast({ emoji: '🛰️', title: 'Vault created', body: 'Your progress is encrypted and backed up forever.' });
-      return { ok: true, needsConfirm: false };
+      pushToast({ emoji: '🛰️', title: 'Vault created', body: 'Your progress is encrypted and safe on this device.' });
+      return { ok: true, needsConfirm: false, note: r.note };
     },
     [doPush, pushToast],
   );
@@ -623,7 +641,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
 
   const cloudSyncNow = useCallback(async () => {
     const out = await reconcile();
-    if (out === 'pushed') pushToast({ emoji: '☁️', title: 'Backed up', body: 'Latest progress sealed into your cloud vault.' });
+    if (out === 'pushed') pushToast({ emoji: '💾', title: 'Saved', body: 'Latest progress encrypted on this device.' });
     else if (out === 'pulled') pushToast({ emoji: '📥', title: 'Restored', body: 'Cloud vault applied to this device.' });
     else pushToast({ emoji: '😴', title: 'Nothing to sync', body: 'Device and cloud already match.' });
   }, [reconcile, pushToast]);
