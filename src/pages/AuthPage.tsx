@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Cloud, CloudOff, Github, KeyRound, Lock, LogOut, Mail, Phone, ShieldCheck, Upload, Download,
   Trash2, RefreshCw, Sparkles, AlertTriangle, Smartphone,
@@ -7,59 +7,19 @@ import {
 import { useNexus } from '@/state/context';
 import { GlassPanel, PageHeader, SectionLabel, Button, cn } from '@/components/ui';
 import type { AuthMethod } from '@/lib/cloud/vault';
+import { createPasskey, passkeyReady } from '@/lib/cloud/webauthn';
+import { COUNTRIES } from '@/data/countries';
 
 type Mode = 'signin' | 'signup';
-
-/** Country dial codes — identity only; SMS codes are intentionally not used. */
-const COUNTRIES: { iso: string; dial: string; flag: string; name: string }[] = [
-  { iso: 'IN', dial: '+91', flag: '🇮🇳', name: 'India' },
-  { iso: 'BD', dial: '+880', flag: '🇧🇩', name: 'Bangladesh' },
-  { iso: 'NP', dial: '+977', flag: '🇳🇵', name: 'Nepal' },
-  { iso: 'LK', dial: '+94', flag: '🇱🇰', name: 'Sri Lanka' },
-  { iso: 'US', dial: '+1', flag: '🇺🇸', name: 'USA' },
-  { iso: 'GB', dial: '+44', flag: '🇬🇧', name: 'UK' },
-  { iso: 'AE', dial: '+971', flag: '🇦🇪', name: 'UAE' },
-  { iso: 'SA', dial: '+966', flag: '🇸🇦', name: 'Saudi Arabia' },
-  { iso: 'QA', dial: '+974', flag: '🇶🇦', name: 'Qatar' },
-  { iso: 'KW', dial: '+965', flag: '🇰🇼', name: 'Kuwait' },
-  { iso: 'OM', dial: '+968', flag: '🇴🇲', name: 'Oman' },
-  { iso: 'SG', dial: '+65', flag: '🇸🇬', name: 'Singapore' },
-  { iso: 'MY', dial: '+60', flag: '🇲🇾', name: 'Malaysia' },
-  { iso: 'AU', dial: '+61', flag: '🇦🇺', name: 'Australia' },
-  { iso: 'CA', dial: '+1', flag: '🇨🇦', name: 'Canada' },
-  { iso: 'DE', dial: '+49', flag: '🇩🇪', name: 'Germany' },
-  { iso: 'FR', dial: '+33', flag: '🇫🇷', name: 'France' },
-  { iso: 'IT', dial: '+39', flag: '🇮🇹', name: 'Italy' },
-  { iso: 'ES', dial: '+34', flag: '🇪🇸', name: 'Spain' },
-  { iso: 'NL', dial: '+31', flag: '🇳🇱', name: 'Netherlands' },
-  { iso: 'PT', dial: '+351', flag: '🇵🇹', name: 'Portugal' },
-  { iso: 'RU', dial: '+7', flag: '🇷🇺', name: 'Russia' },
-  { iso: 'TR', dial: '+90', flag: '🇹🇷', name: 'Turkey' },
-  { iso: 'ZA', dial: '+27', flag: '🇿🇦', name: 'South Africa' },
-  { iso: 'NG', dial: '+234', flag: '🇳🇬', name: 'Nigeria' },
-  { iso: 'KE', dial: '+254', flag: '🇰🇪', name: 'Kenya' },
-  { iso: 'EG', dial: '+20', flag: '🇪🇬', name: 'Egypt' },
-  { iso: 'JP', dial: '+81', flag: '🇯🇵', name: 'Japan' },
-  { iso: 'KR', dial: '+82', flag: '🇰🇷', name: 'South Korea' },
-  { iso: 'CN', dial: '+86', flag: '🇨🇳', name: 'China' },
-  { iso: 'TH', dial: '+66', flag: '🇹🇭', name: 'Thailand' },
-  { iso: 'ID', dial: '+62', flag: '🇮🇩', name: 'Indonesia' },
-  { iso: 'PH', dial: '+63', flag: '🇵🇭', name: 'Philippines' },
-  { iso: 'PK', dial: '+92', flag: '🇵🇰', name: 'Pakistan' },
-  { iso: 'BR', dial: '+55', flag: '🇧🇷', name: 'Brazil' },
-  { iso: 'MX', dial: '+52', flag: '🇲🇽', name: 'Mexico' },
-  { iso: 'AR', dial: '+54', flag: '🇦🇷', name: 'Argentina' },
-  { iso: 'IE', dial: '+353', flag: '🇮🇪', name: 'Ireland' },
-  { iso: 'SE', dial: '+46', flag: '🇸🇪', name: 'Sweden' },
-  { iso: 'CH', dial: '+41', flag: '🇨🇭', name: 'Switzerland' },
-];
 
 const INPUT =
   'w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-[14px] text-white placeholder:text-slate-600 outline-none transition-colors focus:border-cyan-400/50';
 
 export function AuthPage() {
   const nav = useNavigate();
-  const { cloud, cloudSignIn, cloudSignUp, cloudSignOut, cloudSyncNow, exportBackup, importBackup } =
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from || '/dashboard';
+  const { cloud, cloudSignIn, cloudSignUp, cloudSignOut, cloudEnableDeviceLock, cloudSyncNow, exportBackup, importBackup } =
     useNexus();
   const [mode, setMode] = useState<Mode>('signin');
   const [method, setMethod] = useState<AuthMethod>('github');
@@ -72,6 +32,9 @@ export function AuthPage() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [backup, setBackup] = useState('');
+  const [backupCode, setBackupCode] = useState<string | null>(null);
+  const [lockBusy, setLockBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -92,7 +55,7 @@ export function AuthPage() {
         if (!r.ok) setLocalError(r.error || 'Sign-in failed.');
         else {
           setInfo(r.note || 'Signed in with GitHub — vault unlocked.');
-          setTimeout(() => nav('/dashboard'), 700);
+          setTimeout(() => nav(from), 700);
         }
         return;
       }
@@ -107,18 +70,37 @@ export function AuthPage() {
       const opts = { dial, syncPat: syncPat.trim() || undefined };
       setBusy(true);
       if (mode === 'signin') {
-        const r = await cloudSignIn(identifier.trim(), password, method, opts);
+        const r = await cloudSignIn(identifier.trim(), password, method, {
+          ...opts,
+          passkeyBackup: backup.trim() || undefined,
+        });
         if (!r.ok) setLocalError(r.error || 'Sign-in failed.');
         else {
           setInfo(r.note || 'Signed in — vault unlocked.');
-          setTimeout(() => nav('/dashboard'), 700);
+          setTimeout(() => nav(from), 700);
         }
       } else {
-        const r = await cloudSignUp(identifier.trim(), password, method, opts);
+        // Device Lock: one fingerprint/face/PIN prompt — the zero-third-party
+        // OTP. Cancel keeps the account working (lock stays optional).
+        let passkey: { credId: string; pub: string } | undefined;
+        let skipped = false;
+        if (await passkeyReady()) {
+          const label = method === 'email' ? identifier.trim() : `${dial} ${identifier.trim()}`;
+          try {
+            passkey = await createPasskey(`nexus:${label}`, label);
+          } catch {
+            skipped = true;
+          }
+        }
+        const r = await cloudSignUp(identifier.trim(), password, method, { ...opts, passkey });
         if (!r.ok) setLocalError(r.error || 'Sign-up failed.');
         else {
-          setInfo(r.note || 'Account created — progress sealed into your encrypted vault.');
-          setTimeout(() => nav('/dashboard'), 900);
+          const base = r.note || 'Account created — progress sealed into your encrypted vault.';
+          if (r.backupCode) setBackupCode(r.backupCode);
+          else {
+            setInfo(skipped ? `${base} Device lock skipped — enable it any time from your account.` : base);
+            setTimeout(() => nav(from), 900);
+          }
         }
       }
     } finally {
@@ -150,7 +132,7 @@ export function AuthPage() {
         sub={
           signedIn
             ? 'Your vault is encrypted in this browser — the repository only ever holds ciphertext and hashed IDs.'
-            : 'Three ways in, zero third parties: your GitHub key, your email, or your phone number. The database lives inside this GitHub repository.'
+            : 'Three ways in, zero third parties: your GitHub key, your email, or your phone number. The database lives in its own dedicated NEXUS-DB repository, separate from the website code.'
         }
       />
 
@@ -222,7 +204,7 @@ export function AuthPage() {
                     >
                       github.com/settings/tokens/new
                     </a>{' '}
-                    — fine-grained: <b>Contents: Read and write</b> on this repository (classic:{' '}
+                    — fine-grained: <b>Contents: Read and write</b> on the NEXUS-DB repository (classic:{' '}
                     <code className="text-cyan-300">repo</code>). It stays in this tab only and is never
                     written to any file.
                   </span>
@@ -322,8 +304,28 @@ export function AuthPage() {
                     className={`${INPUT} mt-3`}
                   />
                   <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-                    With a key, your account + encrypted vault are committed to this repository (saved
-                    forever). Skip it and everything stays on this device — you can Export a backup any time.
+                    With a key, your account + encrypted vault are committed to the NEXUS-DB repository
+                    (saved forever). Skip it and everything stays on this device — you can Export a backup any time.
+                  </p>
+                </details>
+              )}
+
+              {method !== 'github' && mode === 'signin' && (
+                <details className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-3">
+                  <summary className="cursor-pointer text-[11px] uppercase tracking-[0.14em] text-slate-500">
+                    Device lock backup code
+                  </summary>
+                  <input
+                    type="text"
+                    autoComplete="one-time-code"
+                    value={backup}
+                    onChange={(e) => setBackup(e.target.value)}
+                    placeholder="XXXXX-XXXXX"
+                    className={`${INPUT} mt-3 uppercase`}
+                  />
+                  <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+                    Only when this account has Device Lock on and the fingerprint/face/PIN prompt
+                    cannot run here — your password alone never opens a locked account.
                   </p>
                 </details>
               )}
@@ -357,7 +359,8 @@ export function AuthPage() {
             </SectionLabel>
             <div className="mt-4 space-y-3 text-[12.5px] leading-relaxed text-slate-400">
               {[
-                ['🗄️', 'The database is this repository', 'Accounts and encrypted vaults are JSON files under data/nexus-db, versioned forever by git — no outside server exists.'],
+                ['🗄️', 'Two repos, split on purpose', 'Website code lives in MAKAUT-NEXUS-v1.0; accounts and encrypted vaults live under data/nexus-db in the separate NEXUS-DB repository — versioned forever by git, no outside server, and a token for one never opens the other.'],
+                ['🔐', 'Device Lock instead of SMS/email codes', 'A one-time fingerprint/face/PIN challenge replaces OTP texts: it works with every email provider and every country, needs no SMS gateway or mail service, and cannot be phished. Lost device? Your one-time backup code gets you in.'],
                 ['🔒', 'Zero-knowledge vaults', 'Your data is AES-256-GCM encrypted in this browser. The repository stores ciphertext only.'],
                 ['🪪', 'Identities are hashed', 'Emails and phone numbers are never stored — only PBKDF2-keyed IDs and a masked hint like jo***@gm***.com.'],
                 ['🗝️', 'Passwords are proven, not stored', 'PBKDF2-SHA256, 600,000 rounds, per-account salt. The plaintext never leaves your device.'],
@@ -377,7 +380,37 @@ export function AuthPage() {
         </div>
       )}
 
-      {signedIn && (
+      {signedIn && backupCode && (
+        <GlassPanel className="mt-6 border border-amber-400/30 p-7 text-center">
+          <SectionLabel className="flex items-center justify-center gap-1.5">
+            <ShieldCheck size={12} /> Save your Device Lock backup code
+          </SectionLabel>
+          <div className="mx-auto mt-4 select-all rounded-xl border border-amber-400/30 bg-amber-500/10 px-6 py-3 font-mono text-2xl tracking-[0.3em] text-amber-200">
+            {backupCode}
+          </div>
+          <p className="mx-auto mt-4 max-w-lg text-[12.5px] leading-relaxed text-slate-400">
+            Shown exactly once. Together with your password this is the only way back in if your
+            fingerprint / face / PIN is ever unavailable. Write it down, then continue.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { void navigator.clipboard?.writeText(backupCode); setInfo('Backup code copied.'); }}
+            >
+              Copy code
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => { setBackupCode(null); nav(from); }}
+            >
+              I saved it — enter NEXUS
+            </Button>
+          </div>
+        </GlassPanel>
+      )}
+
+      {signedIn && !backupCode && (
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <GlassPanel className="p-7">
             <SectionLabel className="flex items-center gap-1.5">
@@ -419,6 +452,29 @@ export function AuthPage() {
                   e.target.value = '';
                 }}
               />
+              {!cloud.deviceLock && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-amber-400/40 text-amber-200 hover:bg-amber-500/10"
+                  disabled={lockBusy}
+                  onClick={() => {
+                    void (async () => {
+                      setLockBusy(true);
+                      try {
+                        const r = await cloudEnableDeviceLock();
+                        if (r.ok && r.backupCode) setBackupCode(r.backupCode);
+                        else if (r.ok && r.note) setInfo(r.note);
+                        else if (!r.ok) setLocalError(r.error || 'Device Lock setup failed.');
+                      } finally {
+                        setLockBusy(false);
+                      }
+                    })();
+                  }}
+                >
+                  <ShieldCheck size={13} /> {lockBusy ? 'Waiting for device…' : 'Enable Device Lock'}
+                </Button>
+              )}
               <Button variant="ghost" size="sm" onClick={() => void cloudSignOut()}>
                 <LogOut size={13} /> Sign out
               </Button>
@@ -479,7 +535,7 @@ export function AuthPage() {
       {cloud.status === 'signedout' && (
         <GlassPanel className="mt-6 flex flex-wrap items-center gap-3 p-5 text-[12px] text-slate-500">
           <Sparkles size={14} className="text-violet-300" />
-          Guests keep full functionality — an account only adds encrypted backup into the repository.
+          The inside of NEXUS opens only after you sign in — accounts are free, encrypted, and involve zero third parties.
           <span className="ml-auto flex items-center gap-1.5 text-[11px] uppercase tracking-[0.16em]">
             <Lock size={11} /> end-to-end encrypted
           </span>

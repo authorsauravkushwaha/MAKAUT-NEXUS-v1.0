@@ -22,6 +22,17 @@ export interface AccountRecord {
   gh?: { login: string; id: number };
   /** PBKDF2 password proof — the password itself is never stored */
   auth?: { salt: string; hash: string };
+  /**
+   * Device Lock (WebAuthn passkey — the zero-third-party OTP equivalent).
+   * Public material only: credential id, SPKI public key, and a PBKDF2 hash
+   * of the one-time backup code. No secret is ever stored.
+   */
+  pk?: {
+    credId: string;
+    pub: string;
+    backup?: { salt: string; hash: string };
+    created: string;
+  };
   created: string;
   updated: string;
 }

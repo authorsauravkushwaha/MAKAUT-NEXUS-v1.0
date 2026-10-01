@@ -8,7 +8,7 @@ import { evaluateAchievements, diffNewAchievements } from '@/lib/achievements';
 import { levelFromXp, levelTitle, sessionXp, XP_REWARDS } from '@/lib/gamify';
 import { loadCloudConfig, type CloudConfig } from '@/lib/cloud/config';
 import {
-  clearDirty, decideSync, fetchVault, lastSyncAt, loadSession, login, markDirty, pushVault,
+  clearDirty, decideSync, enrollDeviceLock, fetchVault, hasDeviceLock, lastSyncAt, loadSession, login, markDirty, pushVault,
   pullVault, refreshSession, register, restoreVault, signOut, backupLocalState,
   type AuthMethod, type Session, type UnlockedVault,
 } from '@/lib/cloud/vault';
@@ -21,6 +21,8 @@ export interface CloudView {
   lastSync?: number;
   busy?: boolean;
   error?: string;
+  /** account has Device Lock (passkey) enrolled */
+  deviceLock?: boolean;
 }
 
 function loadState(): StudentState {
@@ -87,15 +89,16 @@ interface NexusContextValue {
     identifier: string,
     password: string,
     method: AuthMethod,
-    opts?: { dial?: string; syncPat?: string },
-  ) => Promise<{ ok: boolean; error?: string; pulled: boolean; note?: string }>;
+    opts?: { dial?: string; syncPat?: string; passkeyBackup?: string },
+  ) => Promise<{ ok: boolean; error?: string; pulled: boolean; note?: string; deviceLock?: boolean }>;
   cloudSignUp: (
     identifier: string,
     password: string,
     method: AuthMethod,
-    opts?: { dial?: string; syncPat?: string },
-  ) => Promise<{ ok: boolean; error?: string; needsConfirm: boolean; note?: string }>;
+    opts?: { dial?: string; syncPat?: string; passkey?: { credId: string; pub: string } },
+  ) => Promise<{ ok: boolean; error?: string; needsConfirm: boolean; note?: string; backupCode?: string; deviceLock?: boolean }>;
   cloudSignOut: () => Promise<void>;
+  cloudEnableDeviceLock: () => Promise<{ ok: boolean; error?: string; backupCode?: string; note?: string }>;
   cloudSyncNow: () => Promise<void>;
   exportBackup: () => void;
   importBackup: (file: File) => Promise<void>;
@@ -238,7 +241,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
         }
         sessionRef.current = session;
         vaultRef.current = vault;
-        setCloud({ status: 'signedin', email: session.email, lastSync: lastSyncAt() || undefined });
+        setCloud({ status: 'signedin', email: session.email, lastSync: lastSyncAt() || undefined, deviceLock: hasDeviceLock(session.userId) });
         await reconcile();
       } catch (e) {
         setCloud({ status: 'signedout', error: errMsg(e) });
@@ -563,7 +566,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       identifier: string,
       password: string,
       method: AuthMethod,
-      opts?: { dial?: string; syncPat?: string },
+      opts?: { dial?: string; syncPat?: string; passkeyBackup?: string },
     ) => {
       setCloud((c) => ({ ...c, busy: true, error: undefined }));
       const cfg = await loadCloudConfig();
@@ -579,7 +582,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       }
       sessionRef.current = r.session;
       vaultRef.current = r.vault;
-      setCloud({ status: 'signedin', email: r.session.email, busy: true, lastSync: lastSyncAt() || undefined });
+      setCloud({ status: 'signedin', email: r.session.email, busy: true, lastSync: lastSyncAt() || undefined, deviceLock: r.deviceLock });
       let pulled = false;
       try {
         if (decideSync(r.remote) === 'pull' && r.remote) pulled = await doPull();
@@ -590,7 +593,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       setCloud((c) => ({ ...c, busy: false, lastSync: lastSyncAt() || c.lastSync }));
       if (pulled) pushToast({ emoji: '☁️', title: 'Cloud data restored', body: 'Your vault from another device is now active here.' });
       else pushToast({ emoji: '🔐', title: 'Signed in', body: 'Progress is encrypted and safe on this device.' });
-      return { ok: true, pulled, note: r.note };
+      return { ok: true, pulled, note: r.note, deviceLock: r.deviceLock };
     },
     [doPull, doPush, pushToast],
   );
@@ -600,7 +603,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       identifier: string,
       password: string,
       method: AuthMethod,
-      opts?: { dial?: string; syncPat?: string },
+      opts?: { dial?: string; syncPat?: string; passkey?: { credId: string; pub: string } },
     ) => {
       setCloud((c) => ({ ...c, busy: true, error: undefined }));
       const cfg = await loadCloudConfig();
@@ -620,10 +623,10 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       }
       sessionRef.current = r.session;
       vaultRef.current = r.vault;
-      setCloud({ status: 'signedin', email: r.session.email, busy: true });
+      setCloud({ status: 'signedin', email: r.session.email, busy: true, deviceLock: r.deviceLock });
       await doPush(); // seal current device progress into the new vault
       pushToast({ emoji: '🛰️', title: 'Vault created', body: 'Your progress is encrypted and safe on this device.' });
-      return { ok: true, needsConfirm: false, note: r.note };
+      return { ok: true, needsConfirm: false, note: r.note, backupCode: r.backupCode, deviceLock: r.deviceLock };
     },
     [doPush, pushToast],
   );
@@ -637,6 +640,29 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
     clearDirty();
     setCloud({ status: 'signedout' });
     pushToast({ emoji: '🔓', title: 'Signed out', body: 'Vault locked. Your data stays safe on this device.' });
+  }, [pushToast]);
+
+  const cloudEnableDeviceLock = useCallback(async (): Promise<
+    { ok: boolean; error?: string; backupCode?: string; note?: string }
+  > => {
+    const session = sessionRef.current;
+    const cfg = cfgRef.current;
+    if (!session || !cfg) return { ok: false, error: 'Sign in first to enable Device Lock.' };
+    try {
+      const { createPasskey, passkeyReady } = await import('@/lib/cloud/webauthn');
+      if (!(await passkeyReady())) {
+        return { ok: false, error: 'No device-lock hardware available in this browser.' };
+      }
+      const cred = await createPasskey(session.userId, session.email);
+      const r = await enrollDeviceLock(cfg, session, cred);
+      if (r.ok) {
+        setCloud((c) => ({ ...c, deviceLock: true }));
+        pushToast({ emoji: '🔐', title: 'Device Lock enabled', body: 'Sign-in now asks for your fingerprint / face / PIN — or the backup code.' });
+      }
+      return r;
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : 'Device Lock setup failed.' };
+    }
   }, [pushToast]);
 
   const cloudSyncNow = useCallback(async () => {
@@ -702,6 +728,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       cloudSignIn,
       cloudSignUp,
       cloudSignOut,
+      cloudEnableDeviceLock,
       cloudSyncNow,
       exportBackup,
       importBackup,
@@ -710,7 +737,7 @@ export function NexusProvider({ children }: { children: React.ReactNode }) {
       state, toasts, dismissToast, commit, startOnboarding, updateProfile, ensureMission,
       completeMissionItem, completeMissionAll, addSession, setConcept, setLabExperiment,
       markExperimentComplete, setMarks, resetMarks, setNonTheory, setMooc, logStudy, markNoteRead, markDppSolved, awardXp, resetAll, loadDemo,
-      cloud, cloudSignIn, cloudSignUp, cloudSignOut, cloudSyncNow, exportBackup, importBackup,
+      cloud, cloudSignIn, cloudSignUp, cloudSignOut, cloudEnableDeviceLock, cloudSyncNow, exportBackup, importBackup,
     ],
   );
 

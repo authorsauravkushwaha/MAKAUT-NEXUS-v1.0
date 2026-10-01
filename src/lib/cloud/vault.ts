@@ -27,6 +27,10 @@ import {
   vaultRowOf, type AccountRecord, type AccountsFile, type VaultFile, type VaultRow,
 } from './db';
 import { decryptJson, deriveVaultKey, encryptJson, exportKeyB64, importKeyB64, randomB64 } from './crypto';
+import {
+  assertPasskey, generateBackupCode, normalizeBackupCode,
+  passkeyAvailable, verifyAssertion,
+} from './webauthn';
 
 const SESSION_KEY = 'nexus:session';
 const VAULT_KEY = 'nexus:vaultkey';
@@ -249,11 +253,50 @@ export interface AuthInput {
   dial?: string;
   /** optional GitHub sync key (PAT) for repo persistence */
   syncPat?: string;
+  /** freshly created passkey to enroll at sign-up (email/phone) */
+  passkey?: { credId: string; pub: string };
+  /** one-time backup code — alternative to the device prompt at sign-in */
+  passkeyBackup?: string;
 }
 
 export type LoginResult =
-  | { ok: true; session: Session; vault: UnlockedVault; remote: VaultRow | null; note?: string }
+  | { ok: true; session: Session; vault: UnlockedVault; remote: VaultRow | null; note?: string; deviceLock?: boolean }
   | { ok: false; error: string };
+
+/**
+ * Second-factor gate for accounts with Device Lock enabled: a one-time
+ * WebAuthn challenge (fingerprint/face/PIN) or the written backup code.
+ * Password has already been proven when this runs.
+ */
+async function deviceGate(
+  record: AccountRecord,
+  input: AuthInput,
+): Promise<{ ok: boolean; error?: string }> {
+  const pk = record.pk;
+  if (!pk) return { ok: true };
+  if (input.passkeyBackup) {
+    if (!pk.backup) return { ok: false, error: 'This account has no backup code on file.' };
+    const h = await passwordHash(normalizeBackupCode(input.passkeyBackup), pk.backup.salt);
+    if (h !== pk.backup.hash) return { ok: false, error: 'Wrong backup code for this account.' };
+    return { ok: true };
+  }
+  if (!passkeyAvailable()) {
+    return {
+      ok: false,
+      error: 'Device Lock is required for this account — enter your backup code, or open it in a browser with device-lock support.',
+    };
+  }
+  try {
+    const parts = await assertPasskey(pk.credId);
+    if (!(await verifyAssertion(pk.credId, pk.pub, parts))) {
+      return { ok: false, error: 'Device check failed — try again or use your backup code.' };
+    }
+    return { ok: true };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Device check failed.';
+    return { ok: false, error: `${msg} — try again or use your backup code.` };
+  }
+}
 
 export async function login(cfg: CloudConfig, input: AuthInput): Promise<LoginResult> {
   try {
@@ -305,6 +348,10 @@ export async function login(cfg: CloudConfig, input: AuthInput): Promise<LoginRe
       cacheAccount(record);
     }
 
+    // Device Lock (OTP-equivalent): one-time challenge before the vault opens.
+    const gate = await deviceGate(record, input);
+    if (!gate.ok) return { ok: false, error: gate.error || 'Device check failed.' };
+
     // The vault salt proves which key opens the remote ciphertext.
     const existing = await loadVault(cfg, id, pat || undefined);
     const salt = existing?.salt || randomB64(16);
@@ -325,14 +372,18 @@ export async function login(cfg: CloudConfig, input: AuthInput): Promise<LoginRe
     const session = makeSession(input.method, id, display, pat);
     saveSession(session);
     storeVault(id, { key, salt });
-    return { ok: true, session, vault: { key, salt }, remote: existing ? vaultRowOf(existing) : null, note };
+    return {
+      ok: true, session, vault: { key, salt },
+      remote: existing ? vaultRowOf(existing) : null, note,
+      deviceLock: !!record.pk,
+    };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Sign-in failed.' };
   }
 }
 
 export type RegisterResult =
-  | { ok: true; needsConfirm: false; session: Session; vault: UnlockedVault; note?: string }
+  | { ok: true; needsConfirm: false; session: Session; vault: UnlockedVault; note?: string; backupCode?: string; deviceLock?: boolean }
   | { ok: false; error: string };
 
 export async function register(cfg: CloudConfig, input: AuthInput): Promise<RegisterResult> {
@@ -359,6 +410,19 @@ export async function register(cfg: CloudConfig, input: AuthInput): Promise<Regi
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
     };
+    // Device Lock enrollment — backup code is returned to the UI exactly once.
+    let backupCode: string | undefined;
+    if (input.passkey) {
+      const code = generateBackupCode();
+      const bsalt = randomB64(16);
+      record.pk = {
+        credId: input.passkey.credId,
+        pub: input.passkey.pub,
+        backup: { salt: bsalt, hash: await passwordHash(code, bsalt) },
+        created: new Date().toISOString(),
+      };
+      backupCode = code;
+    }
     file.accounts.push(record);
     cacheAccount(record);
 
@@ -378,7 +442,11 @@ export async function register(cfg: CloudConfig, input: AuthInput): Promise<Regi
     const session = makeSession(input.method, id, display, input.syncPat || '');
     saveSession(session);
     storeVault(id, { key, salt: vaultSalt });
-    return { ok: true, needsConfirm: false as const, session, vault: { key, salt: vaultSalt }, note };
+    return {
+      ok: true, needsConfirm: false as const, session,
+      vault: { key, salt: vaultSalt }, note, backupCode,
+      deviceLock: !!record.pk,
+    };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Sign-up failed.' };
   }
@@ -397,6 +465,51 @@ export async function refreshSession(_cfg: CloudConfig): Promise<Session | null>
 export async function signOut(_cfg: CloudConfig): Promise<void> {
   clearSession();
   relockVault(); // vault re-locks; local data stays on the device
+}
+
+/** Whether the current device cache shows Device Lock for this user. */
+export function hasDeviceLock(userId: string): boolean {
+  return !!readLocalAccounts().accounts.find((a) => a.id === userId)?.pk;
+}
+
+/**
+ * Enroll (or refresh) Device Lock for the signed-in account. The backup code
+ * is generated here and returned once — the UI must show it immediately.
+ */
+export async function enrollDeviceLock(
+  cfg: CloudConfig,
+  session: Session,
+  credential: { credId: string; pub: string },
+): Promise<{ ok: boolean; error?: string; backupCode?: string; note?: string }> {
+  try {
+    const file = await loadAccounts(cfg, session.pat || undefined);
+    const record = file.accounts.find((a) => a.id === session.userId);
+    if (!record) return { ok: false, error: 'Account not found — sign in again.' };
+    if (record.pk?.credId === credential.credId) return { ok: true };
+    const code = generateBackupCode();
+    const bsalt = randomB64(16);
+    record.pk = {
+      credId: credential.credId,
+      pub: credential.pub,
+      backup: { salt: bsalt, hash: await passwordHash(code, bsalt) },
+      created: new Date().toISOString(),
+    };
+    record.updated = new Date().toISOString();
+    cacheAccount(record);
+    let note: string | undefined;
+    if (session.pat) {
+      try {
+        await writeAccounts(cfg, file, `db: device-lock ${session.method}:${session.email}`, session.pat);
+      } catch {
+        note = 'Saved on this device — add a GitHub sync key to share the lock across devices.';
+      }
+    } else {
+      note = 'Saved on this device — add a GitHub sync key to share the lock across devices.';
+    }
+    return { ok: true, backupCode: code, note };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Device Lock setup failed.' };
+  }
 }
 
 /* ── sync primitives ────────────────────────────────────────────── */
